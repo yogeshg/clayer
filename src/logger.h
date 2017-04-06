@@ -5,18 +5,20 @@
 #include <memory>
 
 namespace logger {
-template <LogFmt F, Severity S, char *D> class Logger {
+
+enum Severity { INFO, DEBUG, WARN, ERROR, CRIT };
+template <Severity S, char *D> class Logger {
 public:
-  Logger &operator<<(string s) { LogStream<D>::get().log(F::format(s)); }
+  Logger &operator<<(string s) { LogStream<D>::get().log(s); }
 };
 
 template <char *D> class FileStream {
-  static LogStream instance;
   ofstream o;
-  LogStream() { o(D); }
+  FileStream() { o(D); }
 
 public:
   static LogStream &get() {
+    static FileStream<D> instance;
     return instance;
   }
   void log(string s) { o << s; }

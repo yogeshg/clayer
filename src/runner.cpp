@@ -1,13 +1,8 @@
 #include "logger.h"
 
 int main() {
-    logger::Logger << "hey";
-	logger::Logger* l;
-	l = logger::Logger::getInstance();
-	l->log() << "Logging 1\n";
-
-	logger::Logger* l2 = logger::Logger::getInstance();
-	l2->log() << "logging 2\n";
-    return 0;
+  logger::Logger<DEBUG, "mylog.txt"> l;
+  l << "hey" << 2+2 << " what is up";
+  return 0;
 }
 
