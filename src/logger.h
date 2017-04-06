@@ -1,23 +1,26 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
-#include <memory>
 #include <iostream>
+#include <memory>
 
 namespace logger {
-	class Logger {
-	private:
-		static bool is_instantiated;
-		static Logger* instance;
-		static int id;
-		Logger() {id+=1;};
-	public:
-		static Logger* getInstance();
-		std::ostream& log();
-		~Logger() {
-			is_instantiated = false;
-		}
-	};
+template <LogFmt F, Severity S, char *D> class Logger {
+public:
+  Logger &operator<<(string s) { LogStream<D>::get().log(F::format(s)); }
+};
+
+template <char *D> class FileStream {
+  static LogStream instance;
+  ofstream o;
+  LogStream() { o(D); }
+
+public:
+  static LogStream &get() {
+    return instance;
+  }
+  void log(string s) { o << s; }
+};
 }
 
 #endif /*__LOGGER_H__*/

@@ -1,6 +1,7 @@
 #include "logger.h"
 
 int main() {
+    logger::Logger << "hey";
 	logger::Logger* l;
 	l = logger::Logger::getInstance();
 	l->log() << "Logging 1\n";
