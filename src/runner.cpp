@@ -1,7 +1,8 @@
 #include "logger.h"
 
+
 int main() {
-  logger::Logger<DEBUG, "mylog.txt"> l;
+  logger::Logger<logger::DEBUG, ST("mylog.txt")> l;
   l << "hey" << 2+2 << " what is up";
   return 0;
 }
