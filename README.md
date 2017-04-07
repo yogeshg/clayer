@@ -20,7 +20,7 @@ Logging and analysis facility in C++ using compile time template meta programmin
 
 ### Version 1.2
 
-# Links
+## Links
 * [Proposal] contains
 * We will follow this [Project Structure]
 

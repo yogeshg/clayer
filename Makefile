@@ -30,6 +30,9 @@ clean:
 tester:
 	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
 
+valgrind : $(TARGET)
+	valgrind -v --num-callers=20 --leak-check=yes --leak-resolution=high --show-reachable=yes $(TARGET)
+
 #  # Spikes
 #  ticket:
 #  	$(CC) $(CFLAGS) spikes/ticket.cpp $(INC) $(LIB) -o bin/ticket
