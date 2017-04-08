@@ -4,9 +4,9 @@
 #include <memory>
 #include <iostream>
 #include <type_traits>
+// TODO: how do you specify defaults? add a logconfig.h to the library
 
 namespace logger {
-    constexpr int THRESHOLD = 30;
 	class Logger {
 	private:
 		Logger() {};
@@ -15,17 +15,15 @@ namespace logger {
             static Logger instance;
             return instance;
         }
+
+        template <unsigned int N, typename std::enable_if <N >= THRESHOLD> :: type* = nullptr>
         std::ostream& log() {
             return std::cerr << "LOG ";
         }
 
-        template <unsigned int N, typename std::enable_if <N >= THRESHOLD> :: type* = nullptr>
-        std::ostream& log2() {
-            return std::cerr << "LOG ";
-        }
-
         template <unsigned int N, typename std::enable_if <N < THRESHOLD> :: type* = nullptr>
-        std::ostream& log2() {
+        std::ostream& log() {
+            // TODO: need to return a dev/null like stream
             return std::cerr << "SHOULDNT ACTUALLY LOG ";
         }
 
