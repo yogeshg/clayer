@@ -1,12 +1,13 @@
+#include "logconfig.h"
 #include "logger.h"
 
 int main() {
-	logger::Logger* l;
-	l = logger::Logger::getInstance();
-	l->log() << "Logging 1\n";
 
-	logger::Logger* l2 = logger::Logger::getInstance();
-	l2->log() << "logging 2\n";
-    return 0;
+  logger::Logger::getInstance().log<logger::DEBUG>() << "logging\n";
+  logger::Logger::getInstance().log<logger::INFO>() << "logging";
+  logger::Logger::getInstance().log<logger::WARNING>() << "logging";
+  // logger::Logger2<100>::getInstance()->log() << "logging 3\n";
+
+  return 0;
 }
 

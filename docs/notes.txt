@@ -1,0 +1,56 @@
+#include "logger.h"
+
+
+int main() {
+  logger::Logger<logger::DEBUG, ST("mylog.txt")> l;
+  l << "hey" << somecrazyoutput(username, userid) << " what is up";
+  return 0;
+}
+
+
+1. "\n"; // no merit
+2. logger::endl;
+3. 
+
+l() << item1 << item2 << item3;
+
+l() << "string 1" << i;
+
+l() << "bad username" << (username) << endl;
+
+l() << "bad username" << pi << logger::disablehash() << username << logger::enablehash();
+l() << logger::hashfirst(2) <<  "bad username" << "abc" << pi << username << endl;
+
+l() << do_some_computation(cond ? item1 : item2) << item3;
+
+Log {
+
+    () {
+        return();
+    }
+    start_record() {
+        tag = 0;
+        return ss << Format
+    }
+    continue_record(const &&item) {
+        return ss << item;
+    }
+    continue_record(const &item) {
+        tag ^= &item;
+        return ss << item;
+    }
+}
+
+<<(Log &ss, item) {
+        return(ss << item);
+}
+
+
+
+
+
+
+
+
+
+
