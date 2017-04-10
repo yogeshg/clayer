@@ -1,8 +1,8 @@
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <type_traits>
 // TODO: how do you specify defaults? add a logconfig.h to the library
 
@@ -12,66 +12,58 @@
 
 namespace logger {
 
-    // TODO: how to specify THRESHOLD in terms of these? make two header files? NO!
-    enum Severity {
-        NOTSET = 0, DEBUG = 10, INFO = 20, WARNING = 30, ERROR = 40, CRITICAL = 50
-    };
+// TODO: how to specify THRESHOLD in terms of these? make two header files? NO!
+enum Severity {
+  NOTSET = 0,
+  DEBUG = 10,
+  INFO = 20,
+  WARNING = 30,
+  ERROR = 40,
+  CRITICAL = 50
+};
 
-    class Date {
+class Format {
+  std::ostream &stream;
 
-    };
+public:
+  explicit Format(std::ostream &s) : stream(s) { stream << "LOG "; }
+  ~Format() { stream << "\n"; }
 
-    class Name {
+  template <typename T> Format &operator<<(const T &s) {
+    stream << s;
+    return *this;
+  }
+};
 
-    };
+class NoFormat {
+public:
+  template <typename T> NoFormat &operator<<(const T &s) { return *this; }
+};
 
-    class Format {
-        std::ostream &stream;
-    public:
-        explicit Format(std::ostream &s) : stream(s) {
-            stream << "LOG ";
-        }
-        ~Format() {
-            stream << "\n";
-        }
+class Logger {
+private:
+  Logger(){};
 
-        template <typename T> Format &operator<<(const T &s) {
-             stream << s;
-             return *this;
-        }
-    };
+public:
+  static Logger &getInstance() {
+    static Logger instance;
+    return instance;
+  }
 
-    class NoFormat {
-    public:
-        template <typename T> NoFormat &operator<<(const T &s) {
-             return *this;
-        }
-    };
+  template <unsigned int N,
+            typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
+  Format log() {
+    return Format(std::cerr);
+  }
 
-	class Logger {
-	private:
-		Logger() {};
-	public:
-		static Logger &getInstance() {
-            static Logger instance;
-            return instance;
-        }
+  template <unsigned int N,
+            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoFormat
+                log() {
+    return {};
+  }
 
-        template <unsigned int N, typename std::enable_if <N >= THRESHOLD> :: type* = nullptr>
-        Format log() {
-            return Format(std::cerr);
-        }
-
-        template <unsigned int N, typename std::enable_if <N < THRESHOLD> :: type* = nullptr>
-        NoFormat log() {
-            return {};
-        }
-
-		~Logger() {
-
-		}
-	};
-
+  ~Logger() {}
+};
 }
 
 #endif /*__LOGGER_H__*/
