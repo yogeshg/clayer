@@ -1,16 +1,18 @@
 #include "logconfig.h"
 #include "logger.h"
 
+void bar(){
+  LOG(ERROR) << "this should be logged in bar()";
+}
+
+void foo(){
+  LOG(DEBUG) << "this should be logged in foo()";
+  bar();
+}
+
 int main() {
-
-  LOG(DEBUG) << "logging";
-  LOG(INFO) << "logging2";
-  LOG(WARNING) << "logging3";
-  //logger::Logger::getInstance().log<logger::DEBUG>() << "logging\n";
-  //logger::Logger::getInstance().log<logger::INFO>() << "logging";
-  //logger::Logger::getInstance().log<logger::WARNING>() << "logging";
-  // logger::Logger2<100>::getInstance()->log() << "logging 3\n";
-
+  LOG(INFO) << "this should be logged in the main function";
+  foo(); 
   return 0;
 }
 
