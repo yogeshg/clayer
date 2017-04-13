@@ -1,18 +1,33 @@
+#include <iostream>
+#include <thread>
+
 #include "logconfig.h"
 #include "logger.h"
 
-void bar(){
-  LOG(ERROR) << "this should be logged in bar()";
+const int iterations = 1000;
+void withdraw(int &account){
+  for(int i = 0; i < iterations; i++){
+    account--;
+    LOG(WARNING) << account;
+  }
 }
 
-void foo(){
-  LOG(DEBUG) << "this should be logged in foo()";
-  bar();
+void deposit(int &account){
+  for(int i = 0; i < iterations; i++){
+    account++;
+    LOG(INFO) << account;
+  }
 }
 
-int main() {
-  LOG(INFO) << "this should be logged in the main function";
-  foo(); 
+int main(){
+  LOG(DEBUG) << "Begin logging";
+  int balance = 10000;
+
+  std::thread withdrawer(withdraw,std::ref(balance));
+  std::thread depositor(deposit,std::ref(balance));
+
+  withdrawer.join();
+  depositor.join();
+
   return 0;
 }
-
