@@ -1,7 +1,7 @@
 # http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 
-CC=g++ -g --std=c++1z -fconcepts
-CXX=g++ -g --std=c++1z -fconcepts
+CC=g++ -g --std=c++1z -fconcepts -lpthread
+CXX=g++ -g --std=c++1z -fconcepts -lpthread
 # CC := clang --analyze # and comment out the linker last line for sanity
 SRCDIR := src
 BUILDDIR := build
