@@ -4,6 +4,8 @@
 namespace logger {
 constexpr int THRESHOLD = 0;
 constexpr char filename[] = "hey.txt";
+constexpr char format[] = "%(%:%)";
+// Format("(%s:%s:%s)", date, line, ip);
 // constexpr FORMAT
 }
 
