@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <mutex>
 // TODO: how do you specify defaults? add a logconfig.h to the library
 
 // * Log record : each line of the log
@@ -28,13 +29,13 @@ enum Severity {
 class Format {
   std::ostream &stream;
   const char *fn, *file; int line;
-
+  std::lock_guard<std::mutex> lock;
 public:
   // TODO: refrain from passing in 3 things, rather just 1 thing that has all
   // the info we need
-  explicit Format(std::ostream &s, const char *Fn, const char *File,
-                  int Line)
-      : stream(s), fn(Fn), file(File), line(Line) {
+  Format(std::ostream &s, const char *Fn, const char *File,
+                  int Line, std::mutex &Logging_lock)
+      : stream(s), fn(Fn), file(File), line(Line), lock(Logging_lock) {
     stream << file << ":" << line << "(" << fn << ")" << ": ";
   }
   ~Format() { stream << std::endl; }
@@ -52,6 +53,7 @@ public:
 
 class Logger {
 private:
+  std::mutex logging_lock;
   Logger(){};
 
 public:
@@ -63,7 +65,7 @@ public:
   template <unsigned int N,
             typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
   Format log(const char *fn, const char *file, int line) {
-    return Format(std::cerr, fn, file, line);
+    return {std::clog, fn, file, line, (logging_lock)};
   }
 
   template <unsigned int N,
