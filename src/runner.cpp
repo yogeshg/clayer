@@ -1,13 +1,33 @@
+#include <iostream>
+#include <thread>
+
 #include "logconfig.h"
 #include "logger.h"
 
-int main() {
+const int iterations = 1000;
+void withdraw(int &account){
+  for(int i = 0; i < iterations; i++){
+    account--;
+    LOG(WARNING) << account;
+  }
+}
 
-  logger::Logger::getInstance().log<logger::DEBUG>() << "logging\n";
-  logger::Logger::getInstance().log<logger::INFO>() << "logging";
-  logger::Logger::getInstance().log<logger::WARNING>() << "logging";
-  // logger::Logger2<100>::getInstance()->log() << "logging 3\n";
+void deposit(int &account){
+  for(int i = 0; i < iterations; i++){
+    account++;
+    LOG(INFO) << account;
+  }
+}
+
+int main(){
+  LOG(DEBUG) << "Begin logging";
+  int balance = 10000;
+
+  std::thread withdrawer(withdraw,std::ref(balance));
+  std::thread depositor(deposit,std::ref(balance));
+
+  withdrawer.join();
+  depositor.join();
 
   return 0;
 }
-

@@ -4,11 +4,15 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <mutex>
 // TODO: how do you specify defaults? add a logconfig.h to the library
 
 // * Log record : each line of the log
 // * log format : tuple like <Date, Name, Message>
 // * log entity : Date, Name, Message
+#define LOG(severity)                                                          \
+  logger::Logger::getInstance().log<logger::severity>(__func__, __FILE__,      \
+                                                      __LINE__)
 
 namespace logger {
 
@@ -24,10 +28,17 @@ enum Severity {
 
 class Format {
   std::ostream &stream;
-
+  const char *fn, *file; int line;
+  std::lock_guard<std::mutex> lock;
 public:
-  explicit Format(std::ostream &s) : stream(s) { stream << "LOG "; }
-  ~Format() { stream << "\n"; }
+  // TODO: refrain from passing in 3 things, rather just 1 thing that has all
+  // the info we need
+  Format(std::ostream &s, const char *Fn, const char *File,
+                  int Line, std::mutex &Logging_lock)
+      : stream(s), fn(Fn), file(File), line(Line), lock(Logging_lock) {
+    stream << file << ":" << line << "(" << fn << ")" << ": ";
+  }
+  ~Format() { stream << std::endl; }
 
   template <typename T> Format &operator<<(const T &s) {
     stream << s;
@@ -42,6 +53,7 @@ public:
 
 class Logger {
 private:
+  std::mutex logging_lock;
   Logger(){};
 
 public:
@@ -52,13 +64,13 @@ public:
 
   template <unsigned int N,
             typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
-  Format log() {
-    return Format(std::cerr);
+  Format log(const char *fn, const char *file, int line) {
+    return {std::clog, fn, file, line, (logging_lock)};
   }
 
   template <unsigned int N,
             typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoFormat
-                log() {
+                log(const char *fn, const char *file, int line) {
     return {};
   }
 
