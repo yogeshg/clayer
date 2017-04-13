@@ -33,8 +33,8 @@ tester:
 valgrind : $(TARGET)
 	valgrind -v --num-callers=20 --leak-check=yes --leak-resolution=high --show-reachable=yes $(TARGET)
 
-#  # Spikes
-#  ticket:
-#  	$(CC) $(CFLAGS) spikes/ticket.cpp $(INC) $(LIB) -o bin/ticket
-
 .PHONY: clean
+
+.PHONY: runner
+runner:
+	bin/runner
