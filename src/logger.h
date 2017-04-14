@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <memory>
-#include <type_traits>
 #include <mutex>
+#include <type_traits>
 
 // * Log record : each line of the log
 // * log format : tuple like <Date, Name, Message>
@@ -37,19 +37,16 @@ struct InputInfo {
 
 // Format("(%:%:%)", date, line, ip);
 // Format(const char *, f -> string...);
-template <const char *Fmt>
-class Format {
+template <const char *Fmt> class Format {
   std::ostream &stream;
   std::lock_guard<std::mutex> lock;
   InputInfo info;
   const char *format = Fmt;
 
   // adapted from cppreference parameter_pack page
-  void print_prefix() {
-    stream << format;
-  }
+  void print_prefix() { stream << format; }
 
-  template<typename T, typename... Targs>
+  template <typename T, typename... Targs>
   void print_prefix(T head, Targs... tail) {
     while (*format != '\0') {
       if (*(format++) == '%') {
@@ -57,15 +54,14 @@ class Format {
         print_prefix(tail...);
         return;
       }
-      stream << *(format-1);
+      stream << *(format - 1);
     }
   }
 
 public:
-  Format(std::ostream &s, InputInfo input_info,
-                  std::mutex &Logging_lock)
+  Format(std::ostream &s, InputInfo input_info, std::mutex &Logging_lock)
       : stream(s), info(input_info), lock(Logging_lock) {
-      print_prefix(info.file, info.fn, info.line);
+    print_prefix(info.file, info.fn, info.line);
   }
   ~Format() { stream << std::endl; }
 
