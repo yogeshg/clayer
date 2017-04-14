@@ -5,7 +5,6 @@
 #include <memory>
 #include <type_traits>
 #include <mutex>
-// TODO: how do you specify defaults? add a logconfig.h to the library
 
 // * Log record : each line of the log
 // * log format : tuple like <Date, Name, Message>
@@ -28,9 +27,6 @@ enum Severity {
 
 enum Info { DATE, SEVERITY, LINE };
 
-// Format(std::variant<char *, Info>...);
-// Format("(", DATE, ":", LINE, ")");
-
 // auto date = []() { return std::to_string(GetDate()); }
 // auto line = [](const Format &f) { return std::to_string(f.line); }
 
@@ -39,20 +35,37 @@ struct InputInfo {
   int line;
 };
 
-// Format("(%s:%s:%s)", date, line, ip);
+// Format("(%:%:%)", date, line, ip);
 // Format(const char *, f -> string...);
-// TODO: typename to a function returning string
-// template <const char *, typename T, T ... Fns>
+template <const char *Fmt>
 class Format {
   std::ostream &stream;
   std::lock_guard<std::mutex> lock;
   InputInfo info;
+  const char *format = Fmt;
+
+  // adapted from cppreference parameter_pack page
+  void print_prefix() {
+    stream << format;
+  }
+
+  template<typename T, typename... Targs>
+  void print_prefix(T head, Targs... tail) {
+    while (*format != '\0') {
+      if (*(format++) == '%') {
+        stream << head;
+        print_prefix(tail...);
+        return;
+      }
+      stream << *(format-1);
+    }
+  }
 
 public:
   Format(std::ostream &s, InputInfo input_info,
                   std::mutex &Logging_lock)
       : stream(s), info(input_info), lock(Logging_lock) {
-    stream << info.file << ":" << info.line << "(" << info.fn << ")" << ": ";
+      print_prefix(info.file, info.fn, info.line);
   }
   ~Format() { stream << std::endl; }
 
