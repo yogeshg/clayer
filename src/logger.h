@@ -11,7 +11,7 @@
 // * log entity : Date, Name, Message
 #define LOG(severity)                                                          \
   logger::Logger::getInstance().log<logger::severity>(                         \
-      {__func__, __FILE__, __LINE__})
+      {__FILE__, __func__, __LINE__})
 
 namespace logger {
 
