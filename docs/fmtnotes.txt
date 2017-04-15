@@ -1,0 +1,14 @@
+
+template <LogType T> enum Info<Regular> { DATE, SEVERITY, LINE };
+template <LogType T> enum Info<Server> { DATE, SEVERITY, LINE, IP };
+
+Format(std::variant<char *, Info>...);
+Format("(", DATE, ":", LINE, ")");
+
+auto date = []() { return std::to_string(GetDate()); }
+auto line = [](const Format &f) { return std::to_string(f.line); }
+
+Format(const char *, f -> string...);
+
+auto ip = [](const Format &f) { return std::to_string(getip()); }
+Format("(%s:%s:%s)", date, line, ip);

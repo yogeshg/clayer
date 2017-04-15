@@ -3,16 +3,15 @@
 
 #include <iostream>
 #include <memory>
-#include <type_traits>
 #include <mutex>
-// TODO: how do you specify defaults? add a logconfig.h to the library
+#include <type_traits>
 
 // * Log record : each line of the log
 // * log format : tuple like <Date, Name, Message>
 // * log entity : Date, Name, Message
 #define LOG(severity)                                                          \
-  logger::Logger::getInstance().log<logger::severity>(__func__, __FILE__,      \
-                                                      __LINE__)
+  logger::Logger::getInstance().log<logger::severity>(                         \
+      {__func__, __FILE__, __LINE__})
 
 namespace logger {
 
@@ -26,29 +25,53 @@ enum Severity {
   CRITICAL = 50
 };
 
-class Format {
-  std::ostream &stream;
-  const char *fn, *file; int line;
-  std::lock_guard<std::mutex> lock;
-public:
-  // TODO: refrain from passing in 3 things, rather just 1 thing that has all
-  // the info we need
-  Format(std::ostream &s, const char *Fn, const char *File,
-                  int Line, std::mutex &Logging_lock)
-      : stream(s), fn(Fn), file(File), line(Line), lock(Logging_lock) {
-    stream << file << ":" << line << "(" << fn << ")" << ": ";
-  }
-  ~Format() { stream << std::endl; }
+// auto date = []() { return std::to_string(GetDate()); }
+// auto line = [](const Record &f) { return std::to_string(f.line); }
 
-  template <typename T> Format &operator<<(const T &s) {
+struct ContextInfo {
+  const char *file, *fn;
+  int line;
+};
+
+// Record("(%:%:%)", date, line, ip);
+// Record(const char *, f -> string...);
+template <const char *Fmt> class Record {
+  std::ostream &stream;
+  std::lock_guard<std::mutex> lock;
+  ContextInfo info;
+  const char *format = Fmt;
+
+  // adapted from cppreference parameter_pack page
+  void print_prefix() { stream << format; }
+
+  template <typename T, typename... Targs>
+  void print_prefix(T head, Targs... tail) {
+    while (*format != '\0') {
+      if (*(format++) == '%') {
+        stream << head;
+        print_prefix(tail...);
+        return;
+      }
+      stream << *(format - 1);
+    }
+  }
+
+public:
+  Record(std::ostream &s, ContextInfo input_info, std::mutex &Logging_lock)
+      : stream(s), info(input_info), lock(Logging_lock) {
+    print_prefix(info.file, info.fn, info.line);
+  }
+  ~Record() { stream << std::endl; }
+
+  template <typename S> Record &operator<<(const S &s) {
     stream << s;
     return *this;
   }
 };
 
-class NoFormat {
+class NoRecord {
 public:
-  template <typename T> NoFormat &operator<<(const T &s) { return *this; }
+  template <typename T> NoRecord &operator<<(const T &s) { return *this; }
 };
 
 class Logger {
@@ -64,13 +87,13 @@ public:
 
   template <unsigned int N,
             typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
-  Format log(const char *fn, const char *file, int line) {
-    return {std::clog, fn, file, line, (logging_lock)};
+  Record<format> log(ContextInfo info) {
+    return {std::clog, info, logging_lock};
   }
 
   template <unsigned int N,
-            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoFormat
-                log(const char *fn, const char *file, int line) {
+            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoRecord
+                log(ContextInfo info) {
     return {};
   }
 
