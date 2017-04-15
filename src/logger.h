@@ -25,8 +25,6 @@ enum Severity {
   CRITICAL = 50
 };
 
-enum Info { DATE, SEVERITY, LINE };
-
 // auto date = []() { return std::to_string(GetDate()); }
 // auto line = [](const Format &f) { return std::to_string(f.line); }
 
@@ -89,7 +87,7 @@ public:
 
   template <unsigned int N,
             typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
-  Format log(InputInfo info) {
+  Format<format> log(InputInfo info) {
     return {std::clog, info, logging_lock};
   }
 
