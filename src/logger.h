@@ -26,19 +26,19 @@ enum Severity {
 };
 
 // auto date = []() { return std::to_string(GetDate()); }
-// auto line = [](const Format &f) { return std::to_string(f.line); }
+// auto line = [](const Record &f) { return std::to_string(f.line); }
 
-struct InputInfo {
+struct ContextInfo {
   const char *file, *fn;
   int line;
 };
 
-// Format("(%:%:%)", date, line, ip);
-// Format(const char *, f -> string...);
-template <const char *Fmt> class Format {
+// Record("(%:%:%)", date, line, ip);
+// Record(const char *, f -> string...);
+template <const char *Fmt> class Record {
   std::ostream &stream;
   std::lock_guard<std::mutex> lock;
-  InputInfo info;
+  ContextInfo info;
   const char *format = Fmt;
 
   // adapted from cppreference parameter_pack page
@@ -57,21 +57,21 @@ template <const char *Fmt> class Format {
   }
 
 public:
-  Format(std::ostream &s, InputInfo input_info, std::mutex &Logging_lock)
+  Record(std::ostream &s, ContextInfo input_info, std::mutex &Logging_lock)
       : stream(s), info(input_info), lock(Logging_lock) {
     print_prefix(info.file, info.fn, info.line);
   }
-  ~Format() { stream << std::endl; }
+  ~Record() { stream << std::endl; }
 
-  template <typename S> Format &operator<<(const S &s) {
+  template <typename S> Record &operator<<(const S &s) {
     stream << s;
     return *this;
   }
 };
 
-class NoFormat {
+class NoRecord {
 public:
-  template <typename T> NoFormat &operator<<(const T &s) { return *this; }
+  template <typename T> NoRecord &operator<<(const T &s) { return *this; }
 };
 
 class Logger {
@@ -87,13 +87,13 @@ public:
 
   template <unsigned int N,
             typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
-  Format<format> log(InputInfo info) {
+  Record<format> log(ContextInfo info) {
     return {std::clog, info, logging_lock};
   }
 
   template <unsigned int N,
-            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoFormat
-                log(InputInfo info) {
+            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoRecord
+                log(ContextInfo info) {
     return {};
   }
 
