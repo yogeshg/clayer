@@ -1,19 +1,5 @@
 #include "t3.h"
 
-void print(Streamable o) {
-    std::cout << o << std::endl;
-}
-
-void printall(){
-    
-}
-
-template<Streamable T, typename... Targs>
-void printall(T o, Targs... tail) {
-    std::cout << o <<" ";
-    printall(tail...);
-}
-
 class C {
 
     public:
@@ -30,9 +16,7 @@ std::ostream& operator<<(std::ostream& s, C c) {
 
 int main() {
     C c(4,2);
-    printall(42, 21, 7);
-    print(42);
-    print(c);
+    print(42, 21, 7, c, 3, c, 2, "#", '#');
     std::cout << c << 42 << "\n";
     std::cout << 42 << "\n";
 }
