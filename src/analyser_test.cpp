@@ -6,24 +6,24 @@ using namespace clayer;
 
 int run(std::string filename) {
 
-    analyser::Parser parser {};
+  analyser::Parser parser{};
 
-    auto recs = parser.read_file(filename);
-    for(auto r : recs) {
-        std::cout << r << std::endl;
-    }
+  auto recs = parser.read_file(filename);
+  for (auto r : recs) {
+    std::cout << r << std::endl;
+  }
 
-    auto states = parser.get_states();
-    for(auto s : states) {
-        std::cout << s << std::endl;
-    }
+  auto states = parser.get_states();
+  for (auto s : states) {
+    std::cout << s << std::endl;
+  }
 
-    return 0;
+  return 0;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
-  if(argc < 2) {
+  if (argc < 2) {
     std::cout << "usage:\n\t" << argv[0] << " <logfilename>\n";
     return 1;
   }

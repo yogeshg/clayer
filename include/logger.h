@@ -13,7 +13,6 @@
   logger::Logger::getInstance().log<logger::severity>(                         \
       {__FILE__, __func__, __LINE__})
 
-
 std::string hex(intptr_t v) {
   std::stringstream ss;
   ss << std::hex << "0x" << v;
