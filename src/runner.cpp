@@ -8,14 +8,14 @@ const int iterations = 1000;
 void withdraw(int &account) {
   for (int i = 0; i < iterations; i++) {
     account--;
-    LOG(WARNING) << account;
+    LOG(WARNING) << "Balance after withdraw: "<< account;
   }
 }
 
 void deposit(int &account) {
   for (int i = 0; i < iterations; i++) {
     account++;
-    LOG(INFO) << account;
+    LOG(INFO) << "Balance after deposit: " << account;
   }
 }
 
