@@ -1,6 +1,6 @@
+#include "analyser.h"
 #include "logconfig.h"
 #include "property.h"
-#include "analyser.h"
 
 using namespace clayer;
 
@@ -18,6 +18,9 @@ int run(std::string filename) {
     std::cout << s << std::endl;
   }
 
+  auto domain_stats = analyser::DomainStat(recs);
+  // domain_stats.print_domain_stats();
+  std::cout << domain_stats << std::endl;
   return 0;
 }
 
