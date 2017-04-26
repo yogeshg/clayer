@@ -2,16 +2,10 @@
 #define __LOGGER_H__
 
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include <mutex>
 #include <type_traits>
-
-// * Log record : each line of the log
-// * log format : tuple like <Date, Name, Message>
-// * log property : Date, Name, Message
-#define LOG(severity)                                                          \
-  logger::Logger::getInstance().log<logger::severity>(                         \
-      {__FILE__, __func__, __LINE__})
 
 std::string hex(intptr_t v) {
   std::stringstream ss;
@@ -21,44 +15,58 @@ std::string hex(intptr_t v) {
 
 namespace logger {
 
-// TODO: how to specify THRESHOLD in terms of these? make two header files? NO!
-// TODO: JEB suggested we should put these in the log config
-enum Severity {
-  NOTSET = 0,
-  DEBUG = 10,
-  INFO = 20,
-  WARNING = 30,
-  ERROR = 40,
-  CRITICAL = 50
+template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
+  { s << o } -> std::ostream &;
 };
-
-// auto date = []() { return std::to_string(GetDate()); }
-// auto line = [](const Record &f) { return std::to_string(f.line); }
 
 struct ContextInfo {
   const char *file, *fn;
   int line;
 };
 
-// Record("(%:%:%)", date, line, ip);
-// Record(const char *, f -> string...);
-template <const char *Fmt> class Record {
+enum property {
+  FILE, // - File name (CodeContext)
+  FUNC, // - Function name (CodeContext)
+  LINE, // - Line number (CodeContext)
+  // LEVEL
+  // NAME
+  // THREAD
+  // HASH
+  DATE, // - Date a Log Record is created (RunContext)
+  TIME, // - Time a Log Record is created (RunContext)
+  MESG  // - Added by the user
+};
+
+template <property prop> void stream_prop(std::ostream &o, const ContextInfo &i) {}
+template <> void stream_prop<FILE>(std::ostream &o, const ContextInfo &i) {
+  o << i.file;
+}
+template <> void stream_prop<FUNC>(std::ostream &o, const ContextInfo &i) {
+  o << i.fn;
+}
+template <> void stream_prop<LINE>(std::ostream &o, const ContextInfo &i) {
+  o << i.line;
+}
+
+// unfortunately can't do template<auto> yet; approved though
+// www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0127r1.html
+template <const char *fmt, property... props>
+class Record {
   std::ostream &stream;
   std::lock_guard<std::mutex> lock;
   ContextInfo info;
   intptr_t hash;
 
-  const char *format = Fmt;
+  const char *format = fmt;
 
   // adapted from cppreference parameter_pack page
   void print_prefix() { stream << format; }
 
-  template <typename T, typename... Targs>
-  void print_prefix(T head, Targs... tail) {
+  template <property Head, property... Tail> void print_prefix() {
     while (*format != '\0') {
       if (*(format++) == '%') {
-        stream << head;
-        print_prefix(tail...);
+        stream_prop<Head>(stream, info);
+        print_prefix<Tail...>();
         return;
       }
       stream << *(format - 1);
@@ -68,7 +76,7 @@ template <const char *Fmt> class Record {
 public:
   Record(std::ostream &s, ContextInfo input_info, std::mutex &Logging_lock)
       : stream(s), info(input_info), lock(Logging_lock), hash(0) {
-    print_prefix(info.file, info.fn, info.line);
+    print_prefix<props...>();
   }
   //  << std::hex
   ~Record() { stream << " " << hex(hash) << std::endl; }
@@ -86,6 +94,7 @@ public:
   template <typename T> NoRecord &operator<<(const T &s) { return *this; }
 };
 
+template <int threshold, const char *fmt, property... props>
 class Logger {
 private:
   std::mutex logging_lock;
@@ -98,13 +107,13 @@ public:
   }
 
   template <unsigned int N,
-            typename std::enable_if<N >= THRESHOLD>::type * = nullptr>
-  Record<format> log(ContextInfo info) {
+            typename std::enable_if<N >= threshold>::type * = nullptr>
+  Record<fmt, props...> log(ContextInfo info) {
     return {std::clog, info, logging_lock};
   }
 
   template <unsigned int N,
-            typename std::enable_if<N<THRESHOLD>::type * = nullptr> NoRecord
+            typename std::enable_if<N<threshold>::type * = nullptr> NoRecord
                 log(ContextInfo info) {
     return {};
   }
