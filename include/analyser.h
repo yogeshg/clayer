@@ -62,8 +62,6 @@ public:
         domain_stats[domain_name] += 1;
       }
     }
-    std::cerr << records_to_analyze.size() << " records to analyze"
-              << std::endl;
   }
 
   std::string domain_abstraction(CodeContext state) {
@@ -82,8 +80,8 @@ public:
   std::ostream &print_domain_stats(std::ostream &s) {
     // iterate thru the map and print the count
     for (auto domain_stat : domain_stats) {
-      s << "Inside \"" << domain_stat.first
-        << "\": " << domain_stat.second << " logs captured" << std::endl;
+      s << "Inside \"" << domain_stat.first << "\": " << domain_stat.second
+        << " logs captured" << std::endl;
     }
     return s;
   }
