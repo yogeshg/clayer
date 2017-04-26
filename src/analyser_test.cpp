@@ -1,6 +1,6 @@
-#include "logconfig.h"
 #include "property.h"
 #include "analyser.h"
+#include "logconfig.h"
 
 using namespace clayer;
 
