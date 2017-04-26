@@ -16,16 +16,16 @@ enum Severity {
   CRITICAL = 50
 };
 
-constexpr const char format[] = "%(%:%):";
-using MainLogger = Logger<DEBUG, std::ostream, std::clog,
-                          format, prop_file, prop_func, prop_line>;
+std::ofstream log_stream("log.txt");
+constexpr const char format[] = "\033[1;31m%\033[0m(%:%): [%]";
+using MainLogger = Logger<DEBUG, std::ostream, std::clog, format,
+                          prop_file, prop_func, prop_line, prop_msg>;
 
 // Example extended logger
-std::ofstream log_stream("log.txt");
-constexpr const char alt_fmt[] = "[%] %(%:%):";
+constexpr const char alt_fmt[] = "%(%:%): % [%]";
 void prop_ip(std::ostream &o, const ContextInfo &i) { o << "127.0.0.1"; }
-using AltLogger = Logger<DEBUG, std::ofstream, log_stream,
-                         alt_fmt, prop_ip, prop_file, prop_func, prop_line>;
+using AltLogger = Logger<DEBUG, std::ofstream, log_stream, alt_fmt,
+                         prop_file, prop_func, prop_line, prop_msg, prop_ip>;
 
 #define LOG(severity)                                                          \
   logger::MainLogger::getInstance().log<logger::severity>(                     \
