@@ -9,6 +9,8 @@
 
 namespace clayer {
 
+std::regex format_regex = std::regex("(.*)\\((.*):(.*)\\):(.*)");
+
 // Concepts used for property reading and writing
 template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
   { s << o } -> std::ostream &;
@@ -116,7 +118,7 @@ void read_props(LogRecord &p, PS ps) {
 template <log_properties... I>
 void parse_props(LogRecord &p, std::string &line) {
   std::smatch m;
-  std::regex_match(line, m, logger::format_regex);
+  std::regex_match(line, m, format_regex);
   read_props<std::smatch::iterator, I...>(p, m.begin() + 1);
 }
 
