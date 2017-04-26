@@ -1,9 +1,10 @@
 #ifndef __ANALYSER_H__
 #define __ANALYSER_H__
 
-#include "property.h"
 #include <fstream>
 #include <set>
+
+#include "property.h"
 
 namespace clayer {
 namespace analyser {
