@@ -69,9 +69,9 @@ public:
     case log_properties::FILE:
       return state.file;
     case log_properties::FUNC:
-      return state.func;
+      return state.file+" "+state.func;
     case log_properties::LINE:
-      return std::to_string(state.line);
+      return state.file+" "+state.func+":"+std::to_string(state.line);
     default:
       return state.file;
     }
