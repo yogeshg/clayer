@@ -18,6 +18,12 @@ enum Severity {
 constexpr const char format[] = "%(%:%):";
 using MainLogger = Logger<DEBUG, format, prop_file, prop_func, prop_line>;
 
+// Example extended logger
+constexpr const char alt_fmt[] = "[%] %(%:%):";
+void prop_ip(std::ostream &o, const ContextInfo &i) { o << "127.0.0.1"; }
+using AltLogger =
+    Logger<DEBUG, alt_fmt, prop_ip, prop_file, prop_func, prop_line>;
+
 #define LOG(severity)                                                          \
   logger::MainLogger::getInstance().log<logger::severity>(                     \
       {__FILE__, __func__, __LINE__})
