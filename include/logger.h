@@ -13,12 +13,6 @@
   logger::Logger::getInstance().log<logger::severity>(                         \
       {__FILE__, __func__, __LINE__})
 
-std::string hex(intptr_t v) {
-  std::stringstream ss;
-  ss << std::hex << "0x" << v;
-  return ss.str();
-}
-
 namespace logger {
 
 // TODO: how to specify THRESHOLD in terms of these? make two header files? NO!
@@ -34,6 +28,12 @@ enum Severity {
 
 // auto date = []() { return std::to_string(GetDate()); }
 // auto line = [](const Record &f) { return std::to_string(f.line); }
+
+static void stream_hex(std::ostream &ss, intptr_t v) {
+  auto ff = ss.flags();
+  ss << std::hex << std::showbase << v;
+  ss.flags(ff);
+}
 
 struct ContextInfo {
   const char *file, *fn;
@@ -70,8 +70,7 @@ public:
       : stream(s), info(input_info), lock(Logging_lock), hash(0) {
     print_prefix(info.file, info.fn, info.line);
   }
-  //  << std::hex
-  ~Record() { stream << " " << hex(hash) << std::endl; }
+  ~Record() { stream << " "; stream_hex(stream, hash); stream << std::endl; }
 
   template <typename S> Record &operator<<(const S &s) {
     const intptr_t address = reinterpret_cast<intptr_t>(&s);
