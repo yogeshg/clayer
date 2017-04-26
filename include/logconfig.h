@@ -6,9 +6,6 @@
 #include "logger.h"
 
 namespace logger {
-// using MyFormat = Format(date, line, ip);
-
-// Format("(%s:%s:%s)", date, line, ip);
 enum Severity {
   NOTSET = 0,
   DEBUG = 10,
@@ -19,11 +16,8 @@ enum Severity {
 };
 
 constexpr const char format[] = "%(%:%):";
-using MainLogger = Logger<NOTSET, format, FILE, FUNC, LINE>;
+using MainLogger = Logger<DEBUG, format, prop_file, prop_func, prop_line>;
 
-// * Log record : each line of the log
-// * log format : tuple like <Date, Name, Message>
-// * log property : Date, Name, Message
 #define LOG(severity)                                                          \
   logger::MainLogger::getInstance().log<logger::severity>(                     \
       {__FILE__, __func__, __LINE__})

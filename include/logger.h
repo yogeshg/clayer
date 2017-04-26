@@ -15,42 +15,19 @@ std::string hex(intptr_t v) {
 
 namespace logger {
 
-template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
-  { s << o } -> std::ostream &;
-};
-
 struct ContextInfo {
   const char *file, *fn;
   int line;
 };
 
-enum property {
-  FILE, // - File name (CodeContext)
-  FUNC, // - Function name (CodeContext)
-  LINE, // - Line number (CodeContext)
-  // LEVEL
-  // NAME
-  // THREAD
-  // HASH
-  DATE, // - Date a Log Record is created (RunContext)
-  TIME, // - Time a Log Record is created (RunContext)
-  MESG  // - Added by the user
-};
-
-template <property prop> void stream_prop(std::ostream &o, const ContextInfo &i) {}
-template <> void stream_prop<FILE>(std::ostream &o, const ContextInfo &i) {
-  o << i.file;
-}
-template <> void stream_prop<FUNC>(std::ostream &o, const ContextInfo &i) {
-  o << i.fn;
-}
-template <> void stream_prop<LINE>(std::ostream &o, const ContextInfo &i) {
-  o << i.line;
-}
+using Prop = void (*)(std::ostream &, const ContextInfo &);
+void prop_func(std::ostream &o, const ContextInfo &i) { o << i.fn; }
+void prop_file(std::ostream &o, const ContextInfo &i) { o << i.file; }
+void prop_line(std::ostream &o, const ContextInfo &i) { o << i.line; }
 
 // unfortunately can't do template<auto> yet; approved though
 // www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0127r1.html
-template <const char *fmt, property... props>
+template <const char *fmt, Prop... props>
 class Record {
   std::ostream &stream;
   std::lock_guard<std::mutex> lock;
@@ -62,11 +39,12 @@ class Record {
   // adapted from cppreference parameter_pack page
   void print_prefix() { stream << format; }
 
-  template <property Head, property... Tail> void print_prefix() {
+  template <typename T, typename... Targs>
+  void print_prefix(T head, Targs... tail) {
     while (*format != '\0') {
       if (*(format++) == '%') {
-        stream_prop<Head>(stream, info);
-        print_prefix<Tail...>();
+        head(stream, info);
+        print_prefix(tail...);
         return;
       }
       stream << *(format - 1);
@@ -76,7 +54,7 @@ class Record {
 public:
   Record(std::ostream &s, ContextInfo input_info, std::mutex &Logging_lock)
       : stream(s), info(input_info), lock(Logging_lock), hash(0) {
-    print_prefix<props...>();
+    print_prefix(props...);
   }
   //  << std::hex
   ~Record() { stream << " " << hex(hash) << std::endl; }
@@ -94,7 +72,7 @@ public:
   template <typename T> NoRecord &operator<<(const T &s) { return *this; }
 };
 
-template <int threshold, const char *fmt, property... props>
+template <int threshold, const char *fmt, Prop... props>
 class Logger {
 private:
   std::mutex logging_lock;
