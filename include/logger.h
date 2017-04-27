@@ -30,8 +30,8 @@ void prop_line(std::ostream &o, const ContextInfo &i) { o << i.line; }
 template <const char *fmt, Prop... props>
 class Record {
   std::ostream &stream;
-  std::lock_guard<std::mutex> lock;
   ContextInfo info;
+  std::lock_guard<std::mutex> lock;
   intptr_t hash;
 
   const char *format = fmt;
@@ -71,7 +71,9 @@ public:
   template <typename T> NoRecord &operator<<(const T &s) { return *this; }
 };
 
-template <int threshold, const char *fmt, Prop... props>
+// Would like to have template<auto &stream> here too
+// www.open-std.org/jtc2/sc22/wg21/docs/papers/2016/p0127r1.html
+template <int threshold, typename T, T &stream, const char *fmt, Prop... props>
 class Logger {
 private:
   std::mutex logging_lock;
@@ -86,7 +88,7 @@ public:
   template <unsigned int N,
             typename std::enable_if<N >= threshold>::type * = nullptr>
   Record<fmt, props...> log(ContextInfo info) {
-    return {std::clog, info, logging_lock};
+    return {stream, info, logging_lock};
   }
 
   template <unsigned int N,
