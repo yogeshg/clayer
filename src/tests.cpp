@@ -161,13 +161,72 @@ void test_props() {
 
     return (x.str().find("0x") != std::string::npos && x.str() != y.str());
   })();
-  
-  // TODO: test more props
+
+  test::make("Hashes should depend only on enabled msg. segments", []() {
+    // Logger setup
+    std::ostringstream x, y;
+    logger::Logger<DEBUG, decltype(x), my_format, prop_hash> Logger(x),
+        Logger2(y);
+
+    // output twice with differing hashes in ignored areas
+    std::string msg = "hello ", msg2 = msg;
+    CLOG(Logger, ERROR) << logger::hash::off << msg2 << logger::hash::on << msg;
+    CLOG(Logger2, ERROR) << logger::hash::off << msg << logger::hash::on << msg;
+
+    return (x.str().find("0x") != std::string::npos && x.str() == y.str());
+  })();
+
+  test::make("Prints the proper context of the log call", []() {
+    // Logger setup
+    std::ostringstream x;
+    logger::Logger<DEBUG, decltype(x), my_format, prop_line, prop_file,
+                   prop_func>
+        Logger(x);
+
+    CLOG(Logger, ERROR) << "test";
+    auto l = __LINE__ - 1;
+    auto f = __FILE__, n = __func__;
+
+    return (x.str().find(f) != std::string::npos &&
+            x.str().find(n) != std::string::npos &&
+            x.str().find(std::to_string(l)) != std::string::npos);
+  })();
 }
+
+void test_format() {
+  using namespace logger;
+  test::make("Basic logger prints naked messages", []() {
+    std::ostringstream x;
+    BasicLogger<std::ostringstream> Logger(x);
+
+    CLOG(Logger, ERROR) << "broke down";
+    return (x.str() == "broke down\n");
+  })();
+
+  test::make("Doesn't print out properties after the last wildcard", []() {
+    std::ostringstream x;
+    Logger<DEBUG, std::ostringstream, basic_fmt, prop_hash,
+                   prop_msg>
+        Logger(x);
+
+    CLOG(Logger, ERROR) << "broke down";
+    return (x.str().find("broke down") == std::string::npos);
+  })();
+
+  test::make("Wildcards not associated with property printed raw", []() {
+    std::ostringstream x;
+    Logger<DEBUG, std::ostringstream, basic_fmt> Logger(x);
+
+    CLOG(Logger, ERROR) << "broke up";
+    return (x.str() == "%\n");
+  })();
+}
+
 
 int main() {
   test_basic();
   test_props();
+  test_format();
 
   // TODO: test when #% exceeds arguments
   // TODO: test when arguments exceeds #%
