@@ -15,7 +15,7 @@ void withdraw(int &account) {
 void deposit(int &account) {
   for (int i = 0; i < iterations; i++) {
     account++;
-    LOG(INFO) << "Balance after deposit: " << account;
+    LOG(INFO) << logger::DisableHash << "Balance after deposit: " << logger::EnableHash << account;
   }
 }
 
