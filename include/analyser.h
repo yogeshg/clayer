@@ -69,16 +69,27 @@ public:
     }
   }
 
-  std::string domain_abstraction(CodeContext state) {
+  std::string domain_abstraction(LogRecord::State &state) {
+    CodeContext &c = state.first;
+    RunContext &r = state.second;
+
     switch (p) {
     case log_properties::FILE:
-      return state.file;
+      return c.file;
     case log_properties::FUNC:
-      return state.file+" "+state.func;
+      return c.file+" "+c.func;
     case log_properties::LINE:
-      return state.file+" "+state.func+":"+std::to_string(state.line);
+      return c.file+" "+c.func+":"+std::to_string(c.line);
+    case log_properties::DATE:
+      return r.date;
+    case log_properties::TIME:
+      return r.time;
+    case log_properties::LEVEL:
+      return c.level;
+    case log_properties::THREAD:
+      return r.thread;
     default:
-      return state.file;
+      return c.level;
     }
   }
 

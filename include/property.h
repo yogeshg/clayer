@@ -74,7 +74,8 @@ std::ostream &operator<<(std::ostream &ss, const RunContext &r) {
 
 class LogRecord {
 public:
-  using State = CodeContext;
+  using State = std::pair<CodeContext, RunContext>;
+
   LogRecord() : code(){};
 
   friend std::ostream &operator<<(std::ostream &s, const LogRecord &c);
@@ -83,7 +84,8 @@ public:
   RunContext run;
   std::string message;
 
-  State get_state() { return code; }
+  State get_state() { return std::make_pair(code, run); }
+
   // decltype(auto) tie() const { return std::tie(code, message); }
   decltype(auto) tie() const { return std::tie(code, run, message); }
 
@@ -153,6 +155,12 @@ void parse_props(LogRecord &p, std::string &line,
 
 std::ostream &operator<<(std::ostream &ss, const LogRecord &lr) {
   return util::to_string(ss, lr.tie());
+}
+
+std::ostream &operator<<(std::ostream &s,
+                          const std::pair<CodeContext, RunContext> &p){
+
+  return util::to_string(s, std::tuple<CodeContext, RunContext>(p));
 }
 }
 
