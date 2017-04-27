@@ -10,12 +10,17 @@ int run(std::string filename) {
   analyser::Parser parser{};
 
   // [2017-04-27 11:29:05] DEBUG[Thread 0x7fff7317a310:src/runner.cpp(main:23)]: [Begin logging]
-  std::regex format_regex("\\[.*\\] (.*)\\[.*\\]: \\[.*\\]");
+  std::regex log_format(".*\\[(.*) (.*)\\].* (.*)\\[Thread (.*):(.*)\\((.*):(.*)\\)\\]: \\[(.*)\\]");
 
-  auto recs = parser.read_file<clayer::FILE, clayer::FUNC, clayer::LINE, clayer::MESG>(filename, format_regex);
+  auto recs = parser.read_file<clayer::DATE, clayer::TIME,
+                                clayer::LEVEL,
+                                clayer::THREAD, clayer::FILE,
+                                clayer::FUNC, clayer::LINE,
+                                clayer::MESG>(filename, log_format);
 
   for (auto r : recs) {
     std::cout << r << std::endl;
+    break;
   }
 
   auto states = parser.get_states();

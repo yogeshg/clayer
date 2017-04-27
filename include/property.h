@@ -45,8 +45,9 @@ struct CodeContext {
   std::string hash;
 
   CodeContext() = default;
-  CodeContext(const std::string &a, const std::string &b, const int &c)
-      : file(a), func(b), line(c) {}
+  // CodeContext(const std::string &a, const std::string &b, const std::string &c,
+  //           const int &d, const std::string &e)
+  //     : file(a), func(b), level(c), line(d), hash(e) {}
 
   decltype(auto) tie() const { return std::tie(file, func, level, line, hash); }
   bool operator<(const CodeContext &rhs) const { return tie() < rhs.tie(); }
@@ -60,7 +61,16 @@ struct RunContext {
   std::string date;
   std::string time;
   std::string thread;
+  RunContext() = default;
+  // RunContext(const std::string &a, const std::string &b, const std::string &c)
+  //     : date(a), time(b), thread(c) {}
+
+  decltype(auto) tie() const { return std::tie(date, time, thread); }
+  bool operator<(const RunContext &rhs) const { return tie() < rhs.tie(); }
 };
+std::ostream &operator<<(std::ostream &ss, const RunContext &r) {
+  return util::to_string(ss, r.tie());
+}
 
 class LogRecord {
 public:
@@ -70,10 +80,12 @@ public:
   friend std::ostream &operator<<(std::ostream &s, const LogRecord &c);
 
   CodeContext code;
+  RunContext run;
   std::string message;
 
   State get_state() { return code; }
-  decltype(auto) tie() const { return std::tie(code, message); }
+  // decltype(auto) tie() const { return std::tie(code, message); }
+  decltype(auto) tie() const { return std::tie(code, run, message); }
 
 private:
   // TODO: make code private and try to make read_prop friendly
@@ -92,8 +104,28 @@ template <> void read_prop<FUNC>(LogRecord &p, const std::string &s) {
   std::istringstream(s) >> p.code.func;
 }
 
+template <> void read_prop<LEVEL>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.code.level;
+}
+
 template <> void read_prop<LINE>(LogRecord &p, const std::string &s) {
   std::istringstream(s) >> p.code.line;
+}
+
+template <> void read_prop<HASH>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.code.hash;
+}
+
+template <> void read_prop<DATE>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.date;
+}
+
+template <> void read_prop<TIME>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.time;
+}
+
+template <> void read_prop<THREAD>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.thread;
 }
 
 template <> void read_prop<MESG>(LogRecord &p, const std::string &s) {
@@ -115,6 +147,7 @@ void parse_props(LogRecord &p, std::string &line,
     std::regex format_regex = std::regex("(.*)\\((.*):(.*)\\):(.*)")) {
   std::smatch m;
   std::regex_match(line, m, format_regex);
+  // std::cout << m.size() << " " << sizeof...(I) << "\n";
   read_props<std::smatch::iterator, I...>(p, m.begin() + 1);
 }
 

@@ -25,7 +25,7 @@ public:
     for (std::string line; std::getline(f, line);) {
       LogRecord p;
       // std::cout << p <<" -- " << line << "\n";
-      parse_props<I...>(p, line);
+      parse_props<I...>(p, line, log_format);
       // parse_props<FILE, FUNC, LINE, MESG>(p, line);
 
       // std::cout << p <<" -- " << line << "\n";
