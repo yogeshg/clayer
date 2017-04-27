@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8.8)
 project (Simple-Web-Server)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -Wextra -I../../include/ -lpthread -fconcepts")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -Wextra -I../../../include/ -lpthread -fconcepts")
 
 include_directories(.)
 
@@ -28,16 +28,6 @@ target_link_libraries(http_examples ${CMAKE_THREAD_LIBS_INIT})
 #TODO: add requirement for version 1.0.1g (can it be done in one line?)
 find_package(OpenSSL)
 
-if(OPENSSL_FOUND)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_OPENSSL")
-    target_link_libraries(http_examples ${OPENSSL_LIBRARIES})
-    include_directories(SYSTEM ${OPENSSL_INCLUDE_DIR})
-
-    add_executable(https_examples https_examples.cpp)
-    target_link_libraries(https_examples ${Boost_LIBRARIES})
-    target_link_libraries(https_examples ${OPENSSL_LIBRARIES})
-    target_link_libraries(https_examples ${CMAKE_THREAD_LIBS_INIT})
-endif()
 
 if(MSYS) #TODO: Is MSYS true when MSVC is true?
     target_link_libraries(http_examples ws2_32 wsock32)
@@ -47,6 +37,5 @@ if(MSYS) #TODO: Is MSYS true when MSVC is true?
 endif()
 
 enable_testing()
-add_subdirectory(tests)
 
 install(FILES server_http.hpp client_http.hpp server_https.hpp client_https.hpp DESTINATION include/simple-web-server)

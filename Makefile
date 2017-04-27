@@ -33,9 +33,6 @@ clean:
 	@echo " $(RM) -r $(BUILDDIR) $(TARGETS)"; $(RM) -r $(BUILDDIR) $(TARGETS)
 
 # Tests
-tester:
-	$(CC) $(CFLAGS) test/tester.cpp $(INC) $(LIB) -o bin/tester
-
 valgrind : $(TARGETS)
 	valgrind -v --num-callers=20 --leak-check=yes --leak-resolution=high --show-reachable=yes $<
 
