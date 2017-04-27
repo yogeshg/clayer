@@ -6,6 +6,8 @@
 #include <memory>
 #include <mutex>
 #include <type_traits>
+#include <iomanip>
+#include <chrono>
 
 namespace logger {
   
@@ -25,6 +27,11 @@ void prop_msg(std::ostream &o, const ContextInfo &i) { }
 void prop_func(std::ostream &o, const ContextInfo &i) { o << i.fn; }
 void prop_file(std::ostream &o, const ContextInfo &i) { o << i.file; }
 void prop_line(std::ostream &o, const ContextInfo &i) { o << i.line; }
+void prop_time(std::ostream &o, const ContextInfo &i) {
+  using std::chrono::system_clock;
+  auto now = system_clock::to_time_t(system_clock::now());
+  o << std::put_time(std::localtime(&now), "%F %T");
+}
 
 // unfortunately can't do template<auto> yet; approved though
 // www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0127r1.html
