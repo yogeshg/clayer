@@ -21,30 +21,45 @@ struct Line {
   Line(const ContextInfo &i) : info(i), message(), hash(0) {}
 };
 
-using Prop = void (*)(std::ostream &, const Line &);
+template <typename Stream> using Prop = void (*)(Stream &, const Line &);
 using Filter = bool (*)(Line &);
 
-void prop_msg(std::ostream &o, const Line &l) { o << l.message.str(); }
-void prop_hash(std::ostream &o, const Line &l) { o << l.hash; }
-void prop_func(std::ostream &o, const Line &l) { o << l.info.fn; }
-void prop_file(std::ostream &o, const Line &l) { o << l.info.file; }
-void prop_line(std::ostream &o, const Line &l) { o << l.info.line; }
+template <typename Stream>
+void prop_msg(Stream &o, const Line &l) { o << l.message.str(); }
 
-template <bool Flag> class HashFlag {
-  HashFlag() {}
-public:
-  const static HashFlag<Flag> inst;
-};
+template <typename Stream>
+void prop_hash(Stream &o, const Line &l) {
+  auto f = o.flags();
+  o << std::hex << std::showbase << l.hash;
+  o.flags(f);
+}
 
-template <bool Flag> const HashFlag<Flag> HashFlag<Flag>::inst;
-const HashFlag<true> &EnableHash = HashFlag<true>::inst;
-const HashFlag<false> &DisableHash = HashFlag<false>::inst;
+template <typename Stream>
+void prop_func(Stream &o, const Line &l) { o << l.info.fn; }
+
+template <typename Stream>
+void prop_file(Stream &o, const Line &l) { o << l.info.file; }
+
+template <typename Stream>
+void prop_line(Stream &o, const Line &l) { o << l.info.line; }
+
+namespace hash {
+  template <bool Val> class Flag {
+    Flag() {}
+  public:
+    const static Flag<Val> inst;
+  };
+
+  template <bool Val> const Flag<Val> Flag<Val>::inst;
+  const Flag<true> &on = Flag<true>::inst;
+  const Flag<false> &off = Flag<false>::inst;
+}
 
 // unfortunately can't do template<auto> yet; approved though
 // www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0127r1.html
-template <const char *fmt, Prop... props>
+template <const char *fmt, typename Stream, Prop<Stream>... props>
 class Record {
-  std::ostream &stream;
+  Stream &stream;
   Line line;
   bool hash_enabled;
   Filter filter;
@@ -70,7 +85,7 @@ class Record {
   }
 
 public:
-  Record(std::ostream &s, ContextInfo input_info, std::mutex &mutex, Filter filter)
+  Record(Stream &s, ContextInfo input_info, std::mutex &mutex, Filter filter)
       : stream(s), line(input_info), hash_enabled(true), filter(filter),
         logging_mutex(mutex) {}
   ~Record() {
@@ -81,8 +96,8 @@ public:
     }
   }
 
-  template <bool Flag> Record &operator<<(const HashFlag<Flag> &s) {
-    hash_enabled = Flag;
+  template <bool Val> Record &operator<<(const hash::Flag<Val> &s) {
+    hash_enabled = Val;
     return *this;
   }
 
@@ -101,16 +116,18 @@ public:
 
 // Would like to have template<auto &stream> here too
 // www.open-std.org/jtc2/sc22/wg21/docs/papers/2016/p0127r1.html
-template <int threshold, typename T, T &stream, const char *fmt, Prop... props>
+template <int threshold, typename Stream, const char *fmt,
+          Prop<Stream>... props>
 class Logger {
 private:
   std::mutex logging_lock;
   Filter filter;
-  Logger(){ set_filter() };
+  Stream &stream;
 
 public:
+  Logger(Stream &s) : stream(s) { set_filter(); };
   static Logger &getInstance() {
-    static Logger instance;
+    static Logger instance(std::clog);
     return instance;
   }
 
@@ -120,7 +137,7 @@ public:
 
   template <unsigned int N,
             typename std::enable_if<N >= threshold>::type * = nullptr>
-  Record<fmt, props...> log(ContextInfo info) {
+  Record<fmt, Stream, props...> log(ContextInfo info) {
     return {stream, info, logging_lock, filter};
   }
 
