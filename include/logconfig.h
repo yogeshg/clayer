@@ -19,23 +19,24 @@ enum Severity {
   CRITICAL = 50
 };
 
-void prop_time(std::ostream &o, const ContextInfo &i) {
+// Can avoid the Line parameter in GCC 7 with template <auto>
+void prop_time(std::ostream &o, const Line &l) {
   using std::chrono::system_clock;
   auto now = system_clock::to_time_t(system_clock::now());
   o << std::put_time(std::localtime(&now), "%F %T");
 }
 
-void prop_thread(std::ostream &o, const ContextInfo &i) {
+void prop_thread(std::ostream &o, const Line &l) {
   auto f = o.flags();
   o << std::hex << std::showbase << "Thread " << std::hex << std::showbase
     << std::this_thread::get_id();
   o.flags(f);
 }
 
-constexpr const char format[] = "\033[1;31m[%]\033[0m % %(%:%): [%]";
+constexpr const char format[] = "\033[1;31m[%]\033[0m #% %(%:%): [%]";
 using MainLogger =
     Logger<DEBUG, std::ostream, std::clog, format,
-           prop_time, prop_thread, prop_file, prop_func, prop_line, prop_msg>;
+           prop_time, prop_hash, prop_file, prop_func, prop_line, prop_msg>;
 
 // Example extended logger
 // void prop_ip(std::ostream &o, const ContextInfo &i) { o << "127.0.0.1"; }
