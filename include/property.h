@@ -8,8 +8,7 @@
 #include <tuple>
 
 namespace clayer {
-
-std::regex format_regex = std::regex("(.*)\\((.*):(.*)\\):(.*)");
+  std::regex format_regex = std::regex("\\[(.*) (.*)\\] ([A-Z]*) \\[Thread (0x[0-9a-f]*):(.*)\\((.*):(\\d*)\\)\\]: \\[(.*)\\]");
 
 // Concepts used for property reading and writing
 template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
@@ -20,25 +19,15 @@ template <typename T> concept bool StringRef = requires(T o) {
   { *o } -> std::string;
 };
 
-// template<typename T=void>
-// void print<>(){
-//     std::cout << "\n";
-// }
-
-// template<Streamable T, typename... Targs>
-// void print(T o, Targs... tail) {
-//     std::cout << o <<" ";
-//     print(tail...);
-// }
 
 // ## Log LogRecord - Any item that can be printed in a Log Record
 enum log_properties {
   FILE, // - File name (CodeContext)
   FUNC, // - Function name (CodeContext)
   LINE, // - Line number (CodeContext)
-  // LEVEL
+  LEVEL,
   // NAME
-  // THREAD
+  THREAD,
   // HASH
   DATE, // - Date a Log Record is created (RunContext)
   TIME, // - Time a Log Record is created (RunContext)
@@ -66,19 +55,38 @@ std::ostream &operator<<(std::ostream &s, const CodeContext &c) {
            << CodeContextSep << c.line << CodeContextEnd;
 }
 
-// TODO: RunContext
+
+struct RunContext {
+  std::string level;
+  std::string thread;
+  std::string date;
+  std::string time;
+
+  RunContext() = default;
+  RunContext(const std::string &a, const std::string &b,
+             const std::string &c, const std::string &d)
+  : level(a), thread(b), date(c), time(d) {}
+};
+
+static const std::string RunContextStart("");
+static const std::string RunContextSep(" ");
+static const std::string RunContextEnd("");
+std::ostream &operator<<(std::ostream &s, const RunContext &c) {
+  return s << RunContextStart << c.level << RunContextSep << c.thread
+           << RunContextSep << c.date << RunContextSep << c.time << RunContextEnd;
+}
 
 class LogRecord {
 public:
-  using State = CodeContext;
-  LogRecord() : code(){};
+  using State = std::pair<CodeContext, RunContext>;
+  LogRecord() = default;
 
   friend std::ostream &operator<<(std::ostream &s, const LogRecord &c);
-
   CodeContext code;
+  RunContext run;
   std::string message;
 
-  State get_state() { return code; }
+  State get_state() { return std::make_pair(code, run); }
 
 private:
   // TODO: make code private and try to make read_prop friendly
@@ -99,6 +107,19 @@ template <> void read_prop<FUNC>(LogRecord &p, const std::string &s) {
 
 template <> void read_prop<LINE>(LogRecord &p, const std::string &s) {
   std::istringstream(s) >> p.code.line;
+}
+
+template <> void read_prop<LEVEL>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.level;
+}
+template <> void read_prop<THREAD>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.thread;
+}
+template <> void read_prop<DATE>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.date;
+}
+template <> void read_prop<TIME>(LogRecord &p, const std::string &s) {
+  std::istringstream(s) >> p.run.time;
 }
 
 template <> void read_prop<MESG>(LogRecord &p, const std::string &s) {
@@ -126,9 +147,20 @@ static std::string LogRecordStart("(");
 static std::string LogRecordSep(" ");
 static std::string LogRecordEnd(")");
 std::ostream &operator<<(std::ostream &s, const LogRecord &c) {
-  return s << LogRecordStart << c.code << LogRecordSep << c.message
-           << LogRecordEnd;
+  return s << LogRecordStart << c.code << LogRecordSep << c.run <<
+           LogRecordSep << c.message << LogRecordEnd;
 }
+
+static std::string StateStart("(");
+static std::string StateSep(" ; ");
+static std::string StateEnd(")");
+std::ostream  &operator<<(std::ostream &s,
+                          const std::pair<CodeContext, RunContext> &p){
+  return s << StateStart << p.first << StateSep << p.second
+           << StateEnd;
+}
+
+
 }
 
 #endif /*__PROPERTY_H__*/

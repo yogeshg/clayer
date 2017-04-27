@@ -22,18 +22,17 @@ public:
     for (std::string line; std::getline(f, line);) {
       LogRecord p;
       // std::cout << p <<" -- " << line << "\n";
-      parse_props<clayer::FILE, clayer::FUNC, clayer::LINE, clayer::MESG>(p,
-                                                                          line);
+      parse_props<clayer::DATE, clayer::TIME, clayer::LEVEL, clayer::THREAD, clayer::FILE, clayer::FUNC, clayer::LINE, clayer::MESG>(p, line);
       // std::cout << p <<" -- " << line << "\n";
       records.push_back(p);
     }
     return records;
   }
 
-  std::set<LogRecord::State> get_states() {
-    std::set<LogRecord::State> states;
+  std::vector<LogRecord::State> get_states() {
+    std::vector<LogRecord::State> states;
     for (auto r : records) {
-      states.insert(r.get_state());
+      states.push_back(r.get_state());
     }
     return states;
   }
@@ -45,6 +44,8 @@ template <log_properties p> class DomainStat {
   // TODO2: v1.2 consider function hierachy
   std::vector<LogRecord> records_to_analyze;
   std::map<std::string, int> domain_stats;
+
+  //  static std::string DomainSep(";");
 
 public:
   // TODO3: expand this to incorporate more statistics, such as count by levels
@@ -64,17 +65,28 @@ public:
       }
     }
   }
-
-  std::string domain_abstraction(CodeContext state) {
+  
+  std::string domain_abstraction(std::pair<CodeContext, RunContext> &state) {
+    // TODO: we have more runtime domains to identify
+    CodeContext &c = state.first;
+    RunContext &r = state.second;
     switch (p) {
     case log_properties::FILE:
-      return state.file;
+      return c.file;
     case log_properties::FUNC:
-      return state.file+" "+state.func;
+      return c.file+" "+c.func;
     case log_properties::LINE:
-      return state.file+" "+state.func+":"+std::to_string(state.line);
+      return c.file+" "+c.func+" "+std::to_string(c.line);
+    case log_properties::DATE:
+      return r.date;
+    case log_properties::TIME:
+      return r.time;
+    case log_properties::LEVEL:
+      return r.level;
+    case log_properties::THREAD:
+      return r.thread;
     default:
-      return state.file;
+      return r.level;
     }
   }
 

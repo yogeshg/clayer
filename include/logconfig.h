@@ -45,7 +45,7 @@ void prop_thread(std::ostream &o, const Line &l) {
   o.flags(f);
 }
 
-constexpr const char format[] = "\033[1;31m[%]\033[0m %[%:%(%:%)]: [%]";
+constexpr const char format[] = "[%] % [%:%(%:%)]: [%]";
 using MainLogger =
     Logger<DEBUG, std::ostream, std::clog, format,
            prop_time, prop_level, prop_thread, prop_file, prop_func, prop_line, prop_msg>;
