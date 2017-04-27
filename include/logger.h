@@ -11,7 +11,7 @@ namespace logger {
   
 struct ContextInfo {
   const char *file, *fn;
-  int line;
+  int line, level;
 };
 
 struct Line {

@@ -19,6 +19,18 @@ enum Severity {
   CRITICAL = 50
 };
 
+void prop_level(std::ostream &o, const Line &l) {
+  switch (l.info.level) {
+    case 0: o << "NOTSET"; break;
+    case 10: o << "DEBUG"; break;
+    case 20: o << "INFO"; break;
+    case 30: o << "WARNING"; break;
+    case 40: o << "ERROR"; break;
+    case 50: o << "CRITICAL"; break;
+    default: o << l.info.level;
+  }
+}
+
 // Can avoid the Line parameter in GCC 7 with template <auto>
 void prop_time(std::ostream &o, const Line &l) {
   using std::chrono::system_clock;
@@ -33,10 +45,10 @@ void prop_thread(std::ostream &o, const Line &l) {
   o.flags(f);
 }
 
-constexpr const char format[] = "\033[1;31m[%]\033[0m #% %(%:%): [%]";
+constexpr const char format[] = "\033[1;31m[%]\033[0m %[%(%:%)]: [%]";
 using MainLogger =
     Logger<DEBUG, std::ostream, std::clog, format,
-           prop_time, prop_hash, prop_file, prop_func, prop_line, prop_msg>;
+           prop_time, prop_level, prop_file, prop_func, prop_line, prop_msg>;
 
 // Example extended logger
 // void prop_ip(std::ostream &o, const ContextInfo &i) { o << "127.0.0.1"; }
@@ -47,7 +59,7 @@ using MainLogger =
 
 #define LOG(severity)                                                          \
   logger::MainLogger::getInstance().log<logger::severity>(                     \
-      {__FILE__, __func__, __LINE__})
+      {__FILE__, __func__, __LINE__, logger::severity})
 }
 
 #endif /* __LOGCONFIG_H__ */
