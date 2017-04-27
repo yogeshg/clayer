@@ -57,9 +57,14 @@ using MainLogger =
 // using AltLogger = Logger<DEBUG, std::ofstream, log_stream, alt_fmt,
 //                         prop_file, prop_func, prop_line, prop_msg, prop_ip>;
 
-#define LOG(severity)                                                          \
-  logger::MainLogger::getInstance().log<logger::severity>(                     \
-      {__FILE__, __func__, __LINE__, logger::severity})
 }
+
+auto &LOG = logger::MainLogger::getInstance();
+#define LOG(severity)                                                          \
+  LOG.log<logger::severity>({__FILE__, __func__, __LINE__, logger::severity})
+
+#define CLOG(instance, severity)                                               \
+  instance.log<logger::severity>(                                              \
+      {__FILE__, __func__, __LINE__, logger::severity})
 
 #endif /* __LOGCONFIG_H__ */
