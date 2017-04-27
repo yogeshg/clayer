@@ -15,7 +15,9 @@ CFLAGS := -g -Wall
 # LIB := -pthread -lmongoclient -L lib -lboost_thread-mt -lboost_filesystem-mt -lboost_system-mt
 INC := -I include
 
-all:$(TARGETS)
+default: $(TARGETS)
+
+all:clean default
 
 $(TARGETDIR)/%:$(BUILDDIR)/%.o
 	@echo " Linking..."
@@ -27,7 +29,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo " $(CC) $(CFLAGS) $(INC) -c -o $@ $<"; $(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
 clean:
-	@echo " Cleaning..."; 
+	@echo " Cleaning...";
 	@echo " $(RM) -r $(BUILDDIR) $(TARGETS)"; $(RM) -r $(BUILDDIR) $(TARGETS)
 
 # Tests
@@ -40,3 +42,5 @@ valgrind : $(TARGETS)
 .PHONY: clean
 
 .PHONY: all
+
+.PHONY: default

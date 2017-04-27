@@ -7,13 +7,13 @@
 #include <mutex>
 #include <type_traits>
 
-std::string hex(intptr_t v) {
-  std::stringstream ss;
-  ss << std::hex << "0x" << v;
-  return ss.str();
-}
-
 namespace logger {
+  
+static void stream_hex(std::ostream &ss, intptr_t v) {
+  auto ff = ss.flags();
+  ss << std::hex << std::showbase << v;
+  ss.flags(ff);
+}
 
 struct ContextInfo {
   const char *file, *fn;
@@ -76,7 +76,6 @@ public:
       : stream(s), info(input_info), lock(Logging_lock), hash(0) {
     print_prefix(props...);
   }
-  //  << std::hex
   ~Record() { print_suffix(props...); stream << std::endl; }
 
   template <typename S> Record &operator<<(const S &s) {

@@ -1,6 +1,7 @@
 logs
 archive
 
+server/build
 # Compiled Object files
 *.slo
 *.lo
