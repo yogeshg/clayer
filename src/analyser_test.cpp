@@ -20,7 +20,7 @@ int run(std::string filename) {
 
   for (auto r : recs) {
     std::cout << r << std::endl;
-    break;
+
   }
 
   auto states = parser.get_states();
@@ -28,9 +28,12 @@ int run(std::string filename) {
     std::cout << s << std::endl;
   }
 
-  auto domain_stats = analyser::DomainStat<log_properties::FILE>(recs);
+  auto runner_cpp_stats = analyser::DomainStat<log_properties::FILE>(recs);
   // domain_stats.print_domain_stats();
-  std::cout << domain_stats << std::endl;
+  std::cout << runner_cpp_stats << std::endl;
+
+  auto thread_stat = analyser::DomainStat<log_properties::THREAD>(recs);
+  std::cout << thread_stat << std::endl;
   return 0;
 }
 
