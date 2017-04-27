@@ -23,7 +23,7 @@ Logging and analysis facility in C++ using compile time template meta programmin
 ## HTTP Server Tester
 ### Environment Setup
 1. Install Boost Library and set the environment variable `BOOST_ROOT` to be the top level directory of the library.
-2. Create a new directory `build` inside `clayer/server` and run `cmake ..`
+2. Create a new directory `build` inside `clayer/test/server` and run `cmake ..`
 3. Run `make`
 4. The server is already loaded with `clayer` logging library. Run `./http_examples` to start an HTTP server on `127.0.0.1:8080`
 5. Random test - simulating user behavior on the server. Run `./logtest.sh` inside `clayer/server/tests`
