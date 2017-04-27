@@ -106,7 +106,7 @@ class Logger {
 private:
   std::mutex logging_lock;
   Filter filter;
-  Logger(){};
+  Logger(){ set_filter() };
 
 public:
   static Logger &getInstance() {
