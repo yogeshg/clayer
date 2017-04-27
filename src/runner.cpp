@@ -23,7 +23,7 @@ void deposit(int &account) {
 int main() {
   LOG.set_filter([](auto &l) {
     l.info.level += 30;
-    return l.message.str().find("deposit") != std::string::npos;
+    return true;
   });
   LOG(DEBUG) << "Begin logging";
   int balance = 10000;

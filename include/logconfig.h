@@ -37,7 +37,14 @@ template <typename Stream>
 void prop_time(Stream &o, const Line &l) {
   using std::chrono::system_clock;
   auto now = system_clock::to_time_t(system_clock::now());
-  o << std::put_time(std::localtime(&now), "%F %T");
+  o << std::put_time(std::localtime(&now), "%T");
+}
+
+template <typename Stream>
+void prop_date(Stream &o, const Line &l) {
+  using std::chrono::system_clock;
+  auto now = system_clock::to_time_t(system_clock::now());
+  o << std::put_time(std::localtime(&now), "%F");
 }
 
 template <typename Stream>
@@ -47,11 +54,11 @@ void prop_thread(Stream &o, const Line &l) {
   o.flags(f);
 }
 
-constexpr const char full_fmt[] = "\033[1;31m[%]\033[0m %[%:%(%:%)]: [%]";
+constexpr const char full_fmt[] = "\033[1;31m[% %]\033[0m %[Thread %:%(%:%)]: [%] [%]";
 template <typename Stream>
 using FullLogger =
-    Logger<0, Stream, full_fmt, prop_time, prop_level, prop_thread, prop_file,
-           prop_func, prop_line, prop_msg>;
+  Logger<0, Stream, full_fmt, prop_date, prop_time, prop_level, prop_thread, prop_file,
+  prop_func, prop_line, prop_msg, prop_hash>;
 
 constexpr const char basic_fmt[] = "%";
 template <typename Stream>
