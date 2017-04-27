@@ -157,13 +157,10 @@ std::ostream &operator<<(std::ostream &ss, const LogRecord &lr) {
   return util::to_string(ss, lr.tie());
 }
 
-static std::string StateStart("");
-static std::string StateSep(" ; ");
-static std::string StateEnd("");
 std::ostream &operator<<(std::ostream &s,
                           const std::pair<CodeContext, RunContext> &p){
-  return s << StateStart << p.first << StateSep << p.second
-           << StateEnd;
+
+  return util::to_string(s, std::tuple<CodeContext, RunContext>(p));
 }
 }
 
