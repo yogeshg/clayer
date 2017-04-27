@@ -22,6 +22,8 @@ struct Line {
 };
 
 using Prop = void (*)(std::ostream &, const Line &);
+using Filter = bool (*)(Line &);
+
 void prop_msg(std::ostream &o, const Line &l) { o << l.message.str(); }
 void prop_hash(std::ostream &o, const Line &l) { o << l.hash; }
 void prop_func(std::ostream &o, const Line &l) { o << l.info.fn; }
@@ -45,6 +47,7 @@ class Record {
   std::ostream &stream;
   Line line;
   bool hash_enabled;
+  Filter filter;
   std::mutex &logging_mutex;
 
   const char *format = fmt;
@@ -67,13 +70,15 @@ class Record {
   }
 
 public:
-  Record(std::ostream &s, ContextInfo input_info, std::mutex &mutex)
-      : stream(s), line(input_info), hash_enabled(true),
+  Record(std::ostream &s, ContextInfo input_info, std::mutex &mutex, Filter filter)
+      : stream(s), line(input_info), hash_enabled(true), filter(filter),
         logging_mutex(mutex) {}
   ~Record() {
     std::lock_guard<std::mutex> lock(logging_mutex);
-    print_fmt(props...);
-    stream << std::endl;
+    if ((*filter)(line)) {
+      print_fmt(props...);
+      stream << std::endl;
+    }
   }
 
   template <bool Flag> Record &operator<<(const HashFlag<Flag> &s) {
@@ -100,6 +105,7 @@ template <int threshold, typename T, T &stream, const char *fmt, Prop... props>
 class Logger {
 private:
   std::mutex logging_lock;
+  Filter filter;
   Logger(){};
 
 public:
@@ -108,10 +114,14 @@ public:
     return instance;
   }
 
+  void set_filter(Filter f = [](Line &l) { return true; }) {
+    filter = f;
+  }
+
   template <unsigned int N,
             typename std::enable_if<N >= threshold>::type * = nullptr>
   Record<fmt, props...> log(ContextInfo info) {
-    return {stream, info, logging_lock};
+    return {stream, info, logging_lock, filter};
   }
 
   template <unsigned int N,
