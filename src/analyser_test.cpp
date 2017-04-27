@@ -1,6 +1,7 @@
 #include "property.h"
 #include "analyser.h"
 #include "logconfig.h"
+#include <regex>
 
 using namespace clayer;
 
@@ -8,7 +9,11 @@ int run(std::string filename) {
 
   analyser::Parser parser{};
 
-  auto recs = parser.read_file(filename);
+  // [2017-04-27 11:29:05] DEBUG[Thread 0x7fff7317a310:src/runner.cpp(main:23)]: [Begin logging]
+  std::regex format_regex("\\[.*\\] (.*)\\[.*\\]: \\[.*\\]");
+
+  auto recs = parser.read_file<clayer::FILE, clayer::FUNC, clayer::LINE, clayer::MESG>(filename, format_regex);
+
   for (auto r : recs) {
     std::cout << r << std::endl;
   }

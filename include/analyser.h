@@ -12,18 +12,22 @@
 namespace clayer {
 namespace analyser {
 
+
+
 class Parser {
   std::vector<LogRecord> records;
 
 public:
-  const std::vector<LogRecord> read_file(std::string filename) {
+  template <log_properties... I>
+  const std::vector<LogRecord> read_file(std::string filename, std::regex log_format) {
     records.clear();
     std::ifstream f(filename);
     for (std::string line; std::getline(f, line);) {
       LogRecord p;
       // std::cout << p <<" -- " << line << "\n";
-      parse_props<clayer::FILE, clayer::FUNC, clayer::LINE, clayer::MESG>(p,
-                                                                          line);
+      parse_props<I...>(p, line);
+      // parse_props<FILE, FUNC, LINE, MESG>(p, line);
+
       // std::cout << p <<" -- " << line << "\n";
       records.push_back(p);
     }
