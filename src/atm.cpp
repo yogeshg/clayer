@@ -27,11 +27,8 @@ void deposit(int &account) {
 }
 
 int main() {
-  LOG.set_filter([](auto &l) {
-    l.info.level += 30;
-    return true;
-  });
-  LOG(DEBUG) << "Begin logging";
+
+  LOG(DEBUG) << "Start program, begin logging";
   int balance = 10000;
 
   std::thread withdrawer(withdraw, std::ref(balance));
@@ -39,6 +36,8 @@ int main() {
 
   withdrawer.join();
   depositor.join();
+
+  LOG(DEBUG) << "End program, stop logging";
 
   return 0;
 }

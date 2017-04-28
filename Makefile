@@ -6,7 +6,7 @@ CXX=g++ -g --std=c++1z -fconcepts -lpthread -03
 SRCDIR := src
 BUILDDIR := build
 TARGETDIR := bin
-TARGETS := bin/runner bin/analyser_test bin/tests bin/performance_test
+TARGETS := bin/atm bin/analyser_test bin/tests bin/performance_test
 
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
