@@ -1,62 +1,23 @@
-#include <iostream>
-#include <thread>
-
+/**
+ * Unit tests for the logging library, with help from the library itself for
+ * reporting results.
+ * 
+ * Also demonstrates a nontrivial use of custom Props and custom formats.
+ */
 #include "logconfig.h"
 #include "logger.h"
-
-namespace test {
-using namespace logger;
-
-enum Status { PASS, FAIL };
-
-template <typename Stream>
-void prop_testno(Stream &o, const Line &l) {
-  static int test_no = 0;
-  static int success_no = 0;
-  if (l.info.level == PASS) ++success_no;
-  if (l.info.level == PASS || l.info.level == FAIL) ++test_no;
-  o << "\033[1m" << success_no << "/" << test_no << "\033[0m";
-}
-
-template <typename Stream>
-void prop_stat(Stream &o, const Line &l) {
-  switch (l.info.level) {
-    case PASS: o << "\033[1;32mPASS\033[0m"; break;
-    case FAIL: o << "\033[1;31mFAIL\033[0m"; break;
-    default: o << "\033[1;37m????\033[0m"; break;
-  }
-}
-
-constexpr const char min_fmt[] = R"([%] % - "%")";
-Logger<std::ostream, NOTSET, min_fmt, prop_testno, prop_stat, prop_msg>
-    TestLogger(std::cout);
-
-template <typename F>
-class Test {
-  std::string desc_;
-  F test_;
-  public:
-  Test(const std::string &desc, const F &test) : desc_(desc), test_(test) {};
-  void operator()() {
-    if (test_())
-      CLOGL(TestLogger, PASS) << desc_;
-    else
-      CLOGL(TestLogger, FAIL) << desc_;
-  }
-};
-
-template <typename F>
-Test<F> make(const std::string &desc, const F &test) {
-  return Test<F>(desc, test);
-}
-}
+#include "tests.h"
 
 namespace logger {
 constexpr const char my_format[] = "[%] %[%:%(%:%)]: [%]";
-using MyLogger = Logger<std::ostringstream, DEBUG, my_format, prop_time, prop_level,
-                        prop_thread, prop_file, prop_func, prop_line, prop_msg>;
+using MyLogger =
+    Logger<std::ostringstream, DEBUG, my_format, prop_time, prop_level,
+           prop_thread, prop_file, prop_func, prop_line, prop_msg>;
 }
 
+/**
+ * @brief Basic sanity checks for the logging library and static thresholds.
+ */
 void test_basic() {
   test::make("Prints the message normally", []() {
     std::ostringstream x;
@@ -101,6 +62,10 @@ void test_basic() {
   })();
 }
 
+/**
+ * @brief Tests for correctness of the Prop functions that output contextual
+ * information.
+ */
 void test_props() {
   using namespace logger;
   test::make("Can omit messages if not in format", []() {
@@ -194,6 +159,9 @@ void test_props() {
   })();
 }
 
+/**
+ * @brief Tests for correctness of the formatting and substitution procedure.
+ */
 void test_format() {
   using namespace logger;
   test::make("Basic logger prints naked messages", []() {
@@ -221,6 +189,20 @@ void test_format() {
     CLOG(Logger, ERROR) << "broke up";
     return (x.str() == "%\n");
   })();
+
+  test::make("Filters appropriate reject log messages", []() {
+    std::ostringstream x;
+    Logger<std::ostringstream, DEBUG, basic_fmt, prop_msg> Logger(x);
+
+    // Filter out strings that contain "g"
+    Logger.set_filter([](auto &l) {
+      return (l.message.str().find("g") == std::string::npos);
+    });
+
+    CLOG(Logger, ERROR) << "bad";
+    CLOG(Logger, ERROR) << "good";
+    return (x.str() == "bad\n");
+  })();
 }
 
 
@@ -228,9 +210,6 @@ int main() {
   test_basic();
   test_props();
   test_format();
-
-  // TODO: test when #% exceeds arguments
-  // TODO: test when arguments exceeds #%
 
   return 0;
 }
