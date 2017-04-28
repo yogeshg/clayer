@@ -60,7 +60,10 @@ namespace clayer {
                     num(0), mean(0), freq_dist(), precision(p),
                     outlier_count(oc), outlier_fraction(of)
                     {}
-                    // {std::cerr<<"construcor called"<<__func__<<"\n";}
+                    // {std::cerr<<"construcor called"<<__func__<<
+                    //     precision<<" "<<
+                    //     outlier_count<<" "<<
+                    //     outlier_fraction<<" "<< "\n";}
 
             T bucket (T x) {
                 return precision * int(x/precision);
