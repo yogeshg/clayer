@@ -14,7 +14,8 @@ void prop_testno(Stream &o, const Line &l) {
   static int test_no = 0;
   static int success_no = 0;
   if (l.info.level == PASS) ++success_no;
-  o << "\033[1m" << success_no << "/" << ++test_no << "\033[0m";
+  if (l.info.level == PASS || l.info.level == FAIL) ++test_no;
+  o << "\033[1m" << success_no << "/" << test_no << "\033[0m";
 }
 
 template <typename Stream>
@@ -27,7 +28,7 @@ void prop_stat(Stream &o, const Line &l) {
 }
 
 constexpr const char min_fmt[] = R"([%] % - "%")";
-Logger<NOTSET, std::ostream, min_fmt, prop_testno, prop_stat, prop_msg>
+Logger<std::ostream, NOTSET, min_fmt, prop_testno, prop_stat, prop_msg>
     TestLogger(std::cout);
 
 template <typename F>
@@ -52,14 +53,14 @@ Test<F> make(const std::string &desc, const F &test) {
 
 namespace logger {
 constexpr const char my_format[] = "[%] %[%:%(%:%)]: [%]";
-using MyLogger = Logger<DEBUG, std::ostringstream, my_format, prop_time, prop_level,
+using MyLogger = Logger<std::ostringstream, DEBUG, my_format, prop_time, prop_level,
                         prop_thread, prop_file, prop_func, prop_line, prop_msg>;
 }
 
 void test_basic() {
   test::make("Prints the message normally", []() {
     std::ostringstream x;
-    logger::BasicLogger<std::ostringstream> Logger(x);
+    logger::BasicLogger<std::ostringstream, logger::INFO> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down";
     auto p = x.str().find("broke down");
@@ -69,7 +70,7 @@ void test_basic() {
 
   test::make("Prints multiple messages in order", []() {
     std::ostringstream x;
-    logger::BasicLogger<std::ostringstream> Logger(x);
+    logger::BasicLogger<std::ostringstream, logger::INFO> Logger(x);
 
     CLOG(Logger, ERROR) << "broke up";
     CLOG(Logger, WARNING) << "broke down";
@@ -81,7 +82,7 @@ void test_basic() {
 
   test::make("Prints nothing when threshold too high", []() {
     std::ostringstream x;
-    logger::BasicLogger<std::ostringstream> Logger(x);
+    logger::BasicLogger<std::ostringstream, logger::INFO> Logger(x);
 
     CLOG(Logger, DEBUG) << "just telling you";
 
@@ -90,7 +91,7 @@ void test_basic() {
 
   test::make("Should filter out messages below threshold", []() {
     std::ostringstream x;
-    logger::BasicLogger<std::ostringstream> Logger(x);
+    logger::BasicLogger<std::ostringstream, logger::INFO> Logger(x);
 
     CLOG(Logger, WARNING) << "serious";
     CLOG(Logger, NOTSET) << "funny";
@@ -104,7 +105,7 @@ void test_props() {
   using namespace logger;
   test::make("Can omit messages if not in format", []() {
     std::ostringstream x;
-    logger::Logger<DEBUG, std::ostringstream, basic_fmt, prop_level> Logger(x);
+    logger::Logger<std::ostringstream, DEBUG, basic_fmt, prop_level> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down";
 
@@ -113,7 +114,7 @@ void test_props() {
 
   test::make("Correctly prints preset log level strings", []() {
     std::ostringstream x;
-    logger::Logger<DEBUG, std::ostringstream, basic_fmt, prop_level> Logger(x);
+    logger::Logger<std::ostringstream, DEBUG, basic_fmt, prop_level> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down";
     CLOG(Logger, WARNING) << "broke down again";
@@ -124,7 +125,7 @@ void test_props() {
 
   test::make("Correctly prints thread while preserving number format", []() {
     std::ostringstream x;
-    logger::Logger<DEBUG, std::ostringstream, my_format, prop_thread, prop_msg> Logger(x);
+    logger::Logger<std::ostringstream, DEBUG, my_format, prop_thread, prop_msg> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down with error code " << 16;
 
@@ -135,7 +136,7 @@ void test_props() {
   test::make("Prints the same hash for identical object references", []() {
     // Logger setup
     std::ostringstream x, y;
-    logger::Logger<DEBUG, decltype(x), my_format, prop_hash> Logger(x),
+    logger::Logger<decltype(x), DEBUG, my_format, prop_hash> Logger(x),
         Logger2(y);
 
     // print an instance twice, so that the hashes are the same
@@ -149,7 +150,7 @@ void test_props() {
   test::make("Prints different hashes for different object refs", []() {
     // Logger setup
     std::ostringstream x, y;
-    logger::Logger<DEBUG, decltype(x), my_format, prop_hash> Logger(x),
+    logger::Logger<decltype(x), DEBUG, my_format, prop_hash> Logger(x),
         Logger2(y);
 
     // print the same message but from different objects; different hashes
@@ -165,7 +166,7 @@ void test_props() {
   test::make("Hashes should depend only on enabled msg. segments", []() {
     // Logger setup
     std::ostringstream x, y;
-    logger::Logger<DEBUG, decltype(x), my_format, prop_hash> Logger(x),
+    logger::Logger<decltype(x), DEBUG, my_format, prop_hash> Logger(x),
         Logger2(y);
 
     // output twice with differing hashes in ignored areas
@@ -179,7 +180,7 @@ void test_props() {
   test::make("Prints the proper context of the log call", []() {
     // Logger setup
     std::ostringstream x;
-    logger::Logger<DEBUG, decltype(x), my_format, prop_line, prop_file,
+    logger::Logger<decltype(x), DEBUG, my_format, prop_line, prop_file,
                    prop_func>
         Logger(x);
 
@@ -197,7 +198,7 @@ void test_format() {
   using namespace logger;
   test::make("Basic logger prints naked messages", []() {
     std::ostringstream x;
-    BasicLogger<std::ostringstream> Logger(x);
+    logger::BasicLogger<std::ostringstream, logger::INFO> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down";
     return (x.str() == "broke down\n");
@@ -205,7 +206,7 @@ void test_format() {
 
   test::make("Doesn't print out properties after the last wildcard", []() {
     std::ostringstream x;
-    Logger<DEBUG, std::ostringstream, basic_fmt, prop_hash,
+    Logger<std::ostringstream, DEBUG, basic_fmt, prop_hash,
                    prop_msg>
         Logger(x);
 
@@ -215,7 +216,7 @@ void test_format() {
 
   test::make("Wildcards not associated with property printed raw", []() {
     std::ostringstream x;
-    Logger<DEBUG, std::ostringstream, basic_fmt> Logger(x);
+    Logger<std::ostringstream, DEBUG, basic_fmt> Logger(x);
 
     CLOG(Logger, ERROR) << "broke up";
     return (x.str() == "%\n");

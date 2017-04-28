@@ -55,14 +55,14 @@ void prop_thread(Stream &o, const Line &l) {
 }
 
 constexpr const char full_fmt[] = "\033[1;31m[% %]\033[0m %[Thread %:%(%:%)]: [%] [%]";
-template <typename Stream>
+template <typename Stream, int threshold = INFO>
 using FullLogger =
-  Logger<0, Stream, full_fmt, prop_date, prop_time, prop_level, prop_thread, prop_file,
-  prop_func, prop_line, prop_msg, prop_hash>;
+    Logger<Stream, threshold, full_fmt, prop_date, prop_time, prop_level,
+           prop_thread, prop_file, prop_func, prop_line, prop_msg, prop_hash>;
 
 constexpr const char basic_fmt[] = "%";
-template <typename Stream>
-using BasicLogger = Logger<INFO, Stream, basic_fmt, prop_msg>;
+template <typename Stream, int threshold = INFO>
+using BasicLogger = Logger<Stream, threshold, basic_fmt, prop_msg>;
 }
 
 logger::FullLogger<std::ostream> LOG(std::clog);
