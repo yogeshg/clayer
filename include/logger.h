@@ -68,12 +68,12 @@ class Record {
   const char *format = fmt;
 
   // adapted from cppreference parameter_pack page
-  void print_fmt() {
+  inline void print_fmt() {
     stream << format;
   }
 
   template <typename T, typename... Targs>
-  void print_fmt(T head, Targs... tail) {
+  inline void print_fmt(T head, Targs... tail) {
     while (*format != '\0') {
       if (*(format++) == '%') {
         head(stream, line);
