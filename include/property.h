@@ -27,7 +27,6 @@ enum log_properties {
   LINE, // - Line number (CodeContext)
   HASH,
   // NAME
-
   DATE, // - Date a Log Record is created (RunContext)
   TIME, // - Time a Log Record is created (RunContext)
   THREAD,

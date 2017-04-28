@@ -1,3 +1,6 @@
+#ifndef __UTIL_H__
+#define __UTIL_H__
+
 #include <iostream>
 #include <tuple>
 #include <string>
@@ -145,3 +148,5 @@ namespace clayer {
     }
 }
 
+
+#endif /*__UTIL_H__*/
