@@ -30,22 +30,33 @@ enum Severity {
  * @brief A Prop that prints out a string corresponding to the severity level
  * for a given Line.
  */
-template <typename Stream>
-void prop_level(Stream &o, const Line &l) {
+template <typename Stream> void prop_level(Stream &o, const Line &l) {
   switch (l.info.level) {
-    case 0: o << "NOTSET"; break;
-    case 10: o << "DEBUG"; break;
-    case 20: o << "INFO"; break;
-    case 30: o << "WARNING"; break;
-    case 40: o << "ERROR"; break;
-    case 50: o << "CRITICAL"; break;
-    default: o << l.info.level;
+  case 0:
+    o << "NOTSET";
+    break;
+  case 10:
+    o << "DEBUG";
+    break;
+  case 20:
+    o << "INFO";
+    break;
+  case 30:
+    o << "WARNING";
+    break;
+  case 40:
+    o << "ERROR";
+    break;
+  case 50:
+    o << "CRITICAL";
+    break;
+  default:
+    o << l.info.level;
   }
 }
 
 // Can avoid the Line parameter in GCC 7 with template <auto>
-template <typename Stream>
-void prop_time(Stream &o, const Line &l) {
+template <typename Stream> void prop_time(Stream &o, const Line &l) {
   using std::chrono::system_clock;
   auto now = system_clock::to_time_t(system_clock::now());
   o << std::put_time(std::localtime(&now), "%T");
@@ -54,8 +65,7 @@ void prop_time(Stream &o, const Line &l) {
 /**
  * @brief A Prop that prints the current date to the log stream.
  */
-template <typename Stream>
-void prop_date(Stream &o, const Line &l) {
+template <typename Stream> void prop_date(Stream &o, const Line &l) {
   using std::chrono::system_clock;
   auto now = system_clock::to_time_t(system_clock::now());
   o << std::put_time(std::localtime(&now), "%F");
@@ -65,8 +75,7 @@ void prop_date(Stream &o, const Line &l) {
  * @brief A Prop that prints an identifier for the current thread to the log
  * stream.
  */
-template <typename Stream>
-void prop_thread(Stream &o, const Line &l) {
+template <typename Stream> void prop_thread(Stream &o, const Line &l) {
   auto f = o.flags();
   o << std::hex << std::showbase << std::this_thread::get_id();
   o.flags(f);
@@ -99,7 +108,7 @@ using FullLogger =
  */
 template <typename Stream, int threshold = INFO>
 using BasicLogger = Logger<Stream, threshold, basic_fmt, prop_msg>;
-}
+} // namespace logger
 
 /**
  * @brief A default logger LOG, along with macros to call loggers with

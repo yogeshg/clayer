@@ -1,17 +1,16 @@
-#include <iostream>
-#include <thread>
-#include "stdlib.h"
 #include "logconfig.h"
 #include "logger.h"
+#include "stdlib.h"
+#include <iostream>
+#include <thread>
 #include <unistd.h>
-
 
 const int iterations = 1000;
 void withdraw(int &account) {
   for (int i = 0; i < iterations; i++) {
     account--;
     LOG(WARNING) << "Balance after withdraw: " << account
-    << " logging a random integer " << 1000+rand()%100;
+                 << " logging a random integer " << 1000 + rand() % 100;
     usleep(i);
   }
 }
@@ -21,8 +20,8 @@ void deposit(int &account) {
     account++;
     LOG(INFO) << logger::hash::off
               << "Balance after deposit: " << logger::hash::on << account
-              << " logging a random integer " << 1000+rand()%100;
-    usleep(iterations-i);
+              << " logging a random integer " << 1000 + rand() % 100;
+    usleep(iterations - i);
   }
 }
 

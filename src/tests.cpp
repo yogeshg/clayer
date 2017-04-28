@@ -1,7 +1,7 @@
 /**
  * Unit tests for the logging library, with help from the library itself for
  * reporting results.
- * 
+ *
  * Also demonstrates a nontrivial use of custom Props and custom formats.
  */
 #include "tests.h"
@@ -21,7 +21,7 @@
  * Helper function for string tests.
  */
 static bool contains(std::string str, std::string substr) {
-    return str.find(substr)!=std::string::npos;
+  return str.find(substr) != std::string::npos;
 }
 
 namespace logger {
@@ -29,7 +29,7 @@ constexpr const char my_format[] = "[%] %[%:%(%:%)]: [%]";
 using MyLogger =
     Logger<std::ostringstream, DEBUG, my_format, prop_time, prop_level,
            prop_thread, prop_file, prop_func, prop_line, prop_msg>;
-}
+} // namespace logger
 
 /**
  * @brief Basic sanity checks for the logging library and static thresholds.
@@ -106,7 +106,8 @@ void test_props() {
 
   test::make("Correctly prints thread while preserving number format", []() {
     std::ostringstream x;
-    logger::Logger<std::ostringstream, DEBUG, my_format, prop_thread, prop_msg> Logger(x);
+    logger::Logger<std::ostringstream, DEBUG, my_format, prop_thread, prop_msg>
+        Logger(x);
 
     CLOG(Logger, ERROR) << "broke down with error code " << 16;
 
@@ -136,7 +137,8 @@ void test_props() {
 
     // print the same message but from different objects; different hashes
     std::string msg = "test message with one address";
-    x.clear(); y.clear();
+    x.clear();
+    y.clear();
     std::string msg2 = msg;
     CLOG(Logger, ERROR) << msg2;
     CLOG(Logger2, ERROR) << msg;
@@ -190,9 +192,7 @@ void test_format() {
 
   test::make("Doesn't print out properties after the last wildcard", []() {
     std::ostringstream x;
-    Logger<std::ostringstream, DEBUG, basic_fmt, prop_hash,
-                   prop_msg>
-        Logger(x);
+    Logger<std::ostringstream, DEBUG, basic_fmt, prop_hash, prop_msg> Logger(x);
 
     CLOG(Logger, ERROR) << "broke down";
     return (x.str().find("broke down") == std::string::npos);
@@ -250,9 +250,9 @@ void test_analyse() {
 
   test::make("Maps correctly printed", []() {
     std::map<int, std::string> container;
-    std::vector<std::string> v {"Hello", "World", "123"};
+    std::vector<std::string> v{"Hello", "World", "123"};
     for (unsigned int i = 0; i < v.size(); ++i)
-        container.emplace(i, v[i]);
+      container.emplace(i, v[i]);
     std::stringstream ss;
     util::to_string(ss, container.begin(), container.end());
     const std::string str = ss.str();
@@ -261,9 +261,9 @@ void test_analyse() {
 
   test::make("Unordered Maps correctly printed", []() {
     std::unordered_map<int, std::string> container;
-    std::vector<std::string> v {"Hello", "World", "123"};
+    std::vector<std::string> v{"Hello", "World", "123"};
     for (unsigned int i = 0; i < v.size(); ++i)
-        container.emplace(i, v[i]);
+      container.emplace(i, v[i]);
     std::stringstream ss;
     util::to_string(ss, container.begin(), container.end());
     const std::string str = ss.str();
@@ -285,17 +285,16 @@ void test_analyse() {
   })();
 
   test::make("Multiple Stat correctly calculated", []() {
-    std::vector<float> n1 {-100, 5.32, 24};
+    std::vector<float> n1{-100, 5.32, 24};
     std::vector<std::vector<float>> n2(28, {2, 6.32, 25});
 
     util::VectorStat<float> s2{};
     s2.add(n1);
-    for (auto n: n2) {
-        s2.add(n);
+    for (auto n : n2) {
+      s2.add(n);
     }
 
-    return (s2.stats[0].min <= n1[0] &&
-            s2.stats[0].max >= n1[0] &&
+    return (s2.stats[0].min <= n1[0] && s2.stats[0].max >= n1[0] &&
             (unsigned int)(s2.stats[0].num) == 1 + n2.size());
   })();
 }

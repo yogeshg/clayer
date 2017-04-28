@@ -17,12 +17,13 @@ enum Status { PASS, FAIL };
  * @brief A custom Prop that prints out the fraction of passing tests so far by
  * keeping an internal counter.
  */
-template <typename Stream>
-void prop_testno(Stream &o, const Line &l) {
+template <typename Stream> void prop_testno(Stream &o, const Line &l) {
   static int test_no = 0;
   static int success_no = 0;
-  if (l.info.level == PASS) ++success_no;
-  if (l.info.level == PASS || l.info.level == FAIL) ++test_no;
+  if (l.info.level == PASS)
+    ++success_no;
+  if (l.info.level == PASS || l.info.level == FAIL)
+    ++test_no;
   o << "\033[1m" << success_no << "/" << test_no << "\033[0m";
 }
 
@@ -30,12 +31,17 @@ void prop_testno(Stream &o, const Line &l) {
  * @brief A custom Prop that repurposes the info level to report the success
  * status of the test associated with the log.
  */
-template <typename Stream>
-void prop_stat(Stream &o, const Line &l) {
+template <typename Stream> void prop_stat(Stream &o, const Line &l) {
   switch (l.info.level) {
-    case PASS: o << "\033[1;32mPASS\033[0m"; break;
-    case FAIL: o << "\033[1;31mFAIL\033[0m"; break;
-    default: o << "\033[1;37m????\033[0m"; break;
+  case PASS:
+    o << "\033[1;32mPASS\033[0m";
+    break;
+  case FAIL:
+    o << "\033[1;31mFAIL\033[0m";
+    break;
+  default:
+    o << "\033[1;37m????\033[0m";
+    break;
   }
 }
 
@@ -46,10 +52,9 @@ constexpr const char min_fmt[] = R"([%] % - "%")";
 Logger<std::ostream, NOTSET, min_fmt, prop_testno, prop_stat, prop_msg>
     TestLogger(std::cout);
 
-template <typename T>
-concept bool Testable = requires (T t) {
-  { t() } -> bool;
-  { std::is_convertible<decltype(t()), bool>::value == true };
+template <typename T> concept bool Testable = requires(T t) {
+  { t() }->bool;
+  {std::is_convertible<decltype(t()), bool>::value == true};
 };
 
 /**
@@ -93,9 +98,7 @@ public:
  * @param desc The test description.
  * @param test The test procedure.
  */
-template <Testable F>
-Test<F> make(const std::string &desc, const F &test) {
+template <Testable F> Test<F> make(const std::string &desc, const F &test) {
   return Test<F>(desc, test);
 }
-}
-
+} // namespace test

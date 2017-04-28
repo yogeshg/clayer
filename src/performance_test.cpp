@@ -1,10 +1,9 @@
-#include <thread>
-#include <vector>
-#include <utility>
-#include "stdlib.h"
 #include "logconfig.h"
 #include "logger.h"
-
+#include "stdlib.h"
+#include <thread>
+#include <utility>
+#include <vector>
 
 const int iterations = 1000;
 const int thread_count = 50;
@@ -18,16 +17,15 @@ void worker() {
   }
 }
 
-
 int main() {
 
   LOG(DEBUG) << "Begin the performance test";
   std::vector<std::thread> worker_threads;
-  for(int i = 0; i < thread_count; i++){
+  for (int i = 0; i < thread_count; i++) {
     worker_threads.push_back(std::move(std::thread(worker)));
   }
 
-  for(auto &thread : worker_threads){
+  for (auto &thread : worker_threads) {
     thread.join();
   }
 

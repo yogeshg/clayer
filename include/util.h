@@ -140,7 +140,7 @@ std::ostream &operator<<(std::ostream &os, VectorStat<T> vector_stat) {
   os << "}";
   return os;
 }
-}
-}
+} // namespace util
+} // namespace clayer
 
 #endif /*__UTIL_H__*/
