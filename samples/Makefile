@@ -3,7 +3,7 @@
 CC=g++ -g --std=c++1z -fconcepts -lpthread -Wall
 CXX=g++ -g --std=c++1z -fconcepts -lpthread -Wall
 
-exe=t5 t6
+exe=t5 t6 t7
 
 all : $(exe)
 clean :
