@@ -1,3 +1,6 @@
+/**
+ * Class and function definitions to facilitate logging and formatting.
+ */
 #ifndef __LOGGER_H__
 #define __LOGGER_H__
 
