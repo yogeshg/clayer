@@ -30,14 +30,14 @@ int run(std::string filename) {
   auto states = parser.get_states();
   util::to_string(std::cout, states.begin(), states.end(), "\n") << std::endl;
 
-  // print stats by filename
-  std::cout << "stats by filename : \n";
+  // print stats by file name
+  std::cout << "stats by file name : \n";
   auto file_stats = analyser::DomainStat<log_properties::FILE>(recs, 1.0, 3, 0.1);
   std::cout << file_stats << std::endl;
 
-  // print stats by function names
-  std::cout << "stats by function names : \n";
-  auto func_stats = analyser::DomainStat<log_properties::FUNC>(recs, 10, 7, 0.2);
+  // print stats by file and function names
+  std::cout << "stats by file and function names : \n";
+  auto func_stats = analyser::DomainStat<log_properties::FILE, log_properties::FUNC>(recs, 10, 7, 0.2);
   std::cout << func_stats  << std::endl;
 
   // print frequency distribution of deposit function, balance number

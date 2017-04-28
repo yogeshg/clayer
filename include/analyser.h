@@ -61,7 +61,7 @@ public:
   }
 };
 
-template <log_properties p> class DomainStat {
+template <log_properties... p> class DomainStat {
   // TODO1: currently taking a function scope as a domain, want to generalize it
   // to FILE, DATE...
   // TODO2: v1.2 consider function hierachy
@@ -77,37 +77,14 @@ public:
     records_to_analyze(records) {
     for (auto record : records) {
       auto log_stat = record.get_state();
-      // record.numbers;
-      std::string domain_name = domain_abstraction(log_stat);
+      std::stringstream ss;
+      get_props<p...>(ss, record);
+      std::string domain_name = ss.str();
 
       if (domain_stats.find(domain_name) == domain_stats.end()) { // not found
         domain_stats.emplace(domain_name, util::VectorStat<float>(precision, outlier_count, outlier_fraction));
       }
       domain_stats[domain_name].add(record.numbers);
-    }
-  }
-
-  std::string domain_abstraction(LogRecord::State &state) {
-    const CodeContext &c = state.first;
-    const RunContext &r = state.second;
-
-    switch (p) {
-    case log_properties::FILE:
-      return c.file;
-    case log_properties::FUNC:
-      return c.func;
-    case log_properties::LINE:
-      return std::to_string(c.line);
-    case log_properties::DATE:
-      return r.date;
-    case log_properties::TIME:
-      return r.time;
-    case log_properties::LEVEL:
-      return c.level;
-    case log_properties::THREAD:
-      return r.thread;
-    default:
-      return c.level;
     }
   }
 
