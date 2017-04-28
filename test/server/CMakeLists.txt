@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8.8)
 project (Simple-Web-Server)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -Wextra -I../../../include/ -lpthread -fconcepts")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z -Wall -I../../../include/ -lpthread -fconcepts")
 
 include_directories(.)
 
