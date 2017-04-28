@@ -28,12 +28,15 @@ int run(std::string filename) {
     std::cout << s << std::endl;
   }
 
-  auto runner_cpp_stats = analyser::DomainStat<log_properties::FILE>(recs);
-  // domain_stats.print_domain_stats();
-  std::cout << runner_cpp_stats << std::endl;
+  auto file_stats = analyser::DomainStat<log_properties::FILE>(recs, 1.0, 3, 0.001);
+  std::cout << "file_stats : \n" << file_stats << std::endl;
+
+  auto func_stats = analyser::DomainStat<log_properties::FUNC>(recs, 1.0, 7, 0.001);
+  std::cout << "func_stats : \n" << func_stats  << std::endl;
 
   auto thread_stat = analyser::DomainStat<log_properties::THREAD>(recs);
-  std::cout << thread_stat << std::endl;
+  std::cout << "thread_stat : \n" << thread_stat << std::endl;
+
   return 0;
 }
 
