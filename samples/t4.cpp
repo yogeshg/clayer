@@ -47,14 +47,3 @@ void read_props(P p) {
     read_props<P,I...>(p);
 }
 
-int main () {
-    std::vector<std::string> v;
-    v.push_back("Hello");
-    v.push_back("World");
-    v.push_back("123");
-    print(v[0], v[1], v[2]);
-    print(date, func, line);
-    read_props<std::vector<std::string>::iterator, DATE, FUNC, LINE>(v.begin());
-    print(date, func, line);
-    return 0;
-}
