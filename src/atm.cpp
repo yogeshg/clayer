@@ -1,6 +1,5 @@
 #include <iostream>
 #include <thread>
-#include "stdlib.h"
 #include "logconfig.h"
 #include "logger.h"
 #include <unistd.h>
