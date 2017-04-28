@@ -66,8 +66,7 @@ template <log_properties p> class DomainStat {
   // to FILE, DATE...
   // TODO2: v1.2 consider function hierachy
   std::vector<LogRecord> records_to_analyze;
-  std::map<std::string, int> domain_stats;
-  std::map<std::string, util::VectorStat<float>> domain_stats2;
+  std::map<std::string, util::VectorStat<float>> domain_stats;
 
 public:
   // TODO3: expand this to incorporate more statistics, such as count by levels
@@ -80,15 +79,11 @@ public:
       auto log_stat = record.get_state();
       // record.numbers;
       std::string domain_name = domain_abstraction(log_stat);
-      if (domain_stats.find(domain_name) == domain_stats.end()) { // not found
-        domain_stats[domain_name] = 0;
-      }
-      domain_stats[domain_name] += 1;
 
-      if (domain_stats2.find(domain_name) == domain_stats2.end()) { // not found
-        domain_stats2.emplace(domain_name, util::VectorStat<float>(precision, outlier_count, outlier_fraction));
+      if (domain_stats.find(domain_name) == domain_stats.end()) { // not found
+        domain_stats.emplace(domain_name, util::VectorStat<float>(precision, outlier_count, outlier_fraction));
       }
-      domain_stats2[domain_name].add(record.numbers);
+      domain_stats[domain_name].add(record.numbers);
     }
   }
 
@@ -118,11 +113,11 @@ public:
 
   std::ostream &to_string(std::ostream &s) {
     // iterate thru the map and print the count
-    // for (auto domain_stat : domain_stats2) {
+    // for (auto domain_stat : domain_stats) {
     //   s  << domain_stat.first << " : " << domain_stat.second
     //   << std::endl;
     // }
-    util::to_string(s, domain_stats2.begin(), domain_stats2.end(), ",\n");
+    util::to_string(s, domain_stats.begin(), domain_stats.end(), ",\n");
     return s;
   }
 };
