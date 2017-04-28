@@ -1,6 +1,8 @@
 # clayer
-Logging and analysis facility in C++ using compile time template meta programming
-[Project Wiki] (https://github.com/yogeshg/clayer/wiki)
+Logging and analysis facility in C++ using compile time template meta programming.
+
+[Project Wiki]: https://github.com/yogeshg/clayer/wiki
+
 ## Aim
 * Logging Library - full flexibility of logging including levels, formats, logging to different streams
 * Analysis of Logs - millions of log records get created every day, not only should a good library create them
