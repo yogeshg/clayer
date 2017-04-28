@@ -14,6 +14,7 @@
 #include <boost/filesystem.hpp>
 #include <vector>
 #include <algorithm>
+#include <csignal>
 #ifdef HAVE_OPENSSL
 #include "crypto.hpp"
 #endif
@@ -28,8 +29,16 @@ typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
 //Added for the default_resource example
 void default_resource_send(const HttpServer &server, const shared_ptr<HttpServer::Response> &response,
                            const shared_ptr<ifstream> &ifs);
-
+void sig_handler(int signum){
+  LOG(INFO) << "http server gracefully shutting down.";
+  exit(0);
+}
 int main() {
+  if(std::signal(SIGINT, sig_handler) == SIG_ERR){
+    LOG(CRITICAL) << "Can't register a signal handler for SIGINT";
+    return -1;
+  }
+
     HttpServer server;
     server.config.port=8080;
     LOG(INFO) << "http server booting.";
