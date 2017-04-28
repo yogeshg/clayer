@@ -65,7 +65,9 @@ template <typename Stream, int threshold = INFO>
 using BasicLogger = Logger<Stream, threshold, basic_fmt, prop_msg>;
 }
 
-logger::FullLogger<std::ostream> LOG(std::clog);
+std::ofstream output_file("output.log");
+
+logger::FullLogger<std::ostream> LOG(output_file);
 #define LOG(severity) CLOG(LOG, severity)
 #define CLOG(instance, severity) CLOGL(instance, logger::severity)
 #define CLOGL(instance, severity)                                              \

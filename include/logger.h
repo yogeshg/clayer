@@ -223,12 +223,12 @@ class Record {
    * @param head The next Prop argument to print.
    * @param tail The remaining Prop arguments.
    */
-  void print_fmt() {
+  inline void print_fmt() {
     stream << format;
   }
 
   template <typename T, typename... Targs>
-  void print_fmt(T head, Targs... tail) {
+  inline void print_fmt(T head, Targs... tail) {
     while (*format != '\0') {
       if (*(format++) == '%') {
         head(stream, line);

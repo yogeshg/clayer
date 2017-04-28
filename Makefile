@@ -1,13 +1,13 @@
 # http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 
-CC=g++ -g --std=c++1z -fconcepts -lpthread
-CXX=g++ -g --std=c++1z -fconcepts -lpthread
+CC=g++ -g --std=c++1z -fconcepts -lpthread -O3
+CXX=g++ -g --std=c++1z -fconcepts -lpthread -03
 # CC := clang --analyze # and comment out the linker last line for sanity
 SRCDIR := src
 BUILDDIR := build
 TARGETDIR := bin
-TARGETS := bin/runner bin/analyser_test bin/tests
- 
+TARGETS := bin/runner bin/analyser_test bin/tests bin/performance_test
+
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
