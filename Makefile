@@ -21,6 +21,7 @@ all:clean default
 
 $(TARGETDIR)/%:$(BUILDDIR)/%.o
 	@echo " Linking..."
+	@mkdir -p $(TARGETDIR)
 	@echo " $(CC) $^ -o $@ $(LIB)"; $(CC) $^ -o $@ $(LIB)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
