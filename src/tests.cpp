@@ -4,9 +4,25 @@
  * 
  * Also demonstrates a nontrivial use of custom Props and custom formats.
  */
+#include "tests.h"
+
+#include "analyser.h"
 #include "logconfig.h"
 #include "logger.h"
-#include "tests.h"
+#include "property.h"
+#include "util.h"
+
+#include <map>
+#include <regex>
+#include <unordered_map>
+#include <vector>
+
+/**
+ * Helper function for string tests.
+ */
+static bool contains(std::string str, std::string substr) {
+    return str.find(substr)!=std::string::npos;
+}
 
 namespace logger {
 constexpr const char my_format[] = "[%] %[%:%(%:%)]: [%]";
@@ -205,11 +221,90 @@ void test_format() {
   })();
 }
 
+void test_analyse() {
+  using namespace clayer;
+  test::make("Single Property correctly read and written", []() {
+    std::vector<std::string> v{"Hello", "World", "123"};
+    LogRecord lr;
+    read_prop<log_properties::DATE>(lr, v[0]);
+    read_prop<log_properties::FUNC>(lr, v[1]);
+    read_prop<log_properties::LINE>(lr, v[2]);
+    std::stringstream ss;
+    get_props<log_properties::DATE, log_properties::FUNC, log_properties::LINE>(
+        ss, lr);
+    const std::string str = ss.str();
+    return contains(str, v[0]) && contains(str, v[1]) && contains(str, v[2]);
+  })();
+
+  test::make("Multiple properties correctly read and written", []() {
+    std::vector<std::string> v{"Hello", "World", "123"};
+    LogRecord lr;
+    read_props<std::vector<std::string>::iterator, log_properties::DATE,
+               log_properties::FUNC, log_properties::LINE>(lr, v.begin());
+    std::stringstream ss;
+    get_props<log_properties::DATE, log_properties::FUNC, log_properties::LINE>(
+        ss, lr);
+    const std::string str = ss.str();
+    return contains(str, v[0]) && contains(str, v[1]) && contains(str, v[2]);
+  })();
+
+  test::make("Maps correctly printed", []() {
+    std::map<int, std::string> container;
+    std::vector<std::string> v {"Hello", "World", "123"};
+    for (unsigned int i = 0; i < v.size(); ++i)
+        container.emplace(i, v[i]);
+    std::stringstream ss;
+    util::to_string(ss, container.begin(), container.end());
+    const std::string str = ss.str();
+    return contains(str, v[0]) && contains(str, v[1]) && contains(str, v[2]);
+  })();
+
+  test::make("Unordered Maps correctly printed", []() {
+    std::unordered_map<int, std::string> container;
+    std::vector<std::string> v {"Hello", "World", "123"};
+    for (unsigned int i = 0; i < v.size(); ++i)
+        container.emplace(i, v[i]);
+    std::stringstream ss;
+    util::to_string(ss, container.begin(), container.end());
+    const std::string str = ss.str();
+    return contains(str, v[0]) && contains(str, v[1]) && contains(str, v[2]);
+  })();
+
+  test::make("Single Stat correctly printed", []() {
+    util::Stat<float> s1;
+    std::stringstream ss;
+
+    s1.add(1);
+    s1.add(2);
+
+    ss << s1 << "\n";
+    std::string str;
+    str = ss.str();
+
+    return contains(str, "1") && contains(str, "2") && contains(str, "1.5");
+  })();
+
+  test::make("Multiple Stat correctly calculated", []() {
+    std::vector<float> n1 {-100, 5.32, 24};
+    std::vector<std::vector<float>> n2(28, {2, 6.32, 25});
+
+    util::VectorStat<float> s2{};
+    s2.add(n1);
+    for (auto n: n2) {
+        s2.add(n);
+    }
+
+    return (s2.stats[0].min <= n1[0] &&
+            s2.stats[0].max >= n1[0] &&
+            (unsigned int)(s2.stats[0].num) == 1 + n2.size());
+  })();
+}
 
 int main() {
   test_basic();
   test_props();
   test_format();
+  test_analyse();
 
   return 0;
 }
