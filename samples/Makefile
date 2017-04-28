@@ -1,9 +1,9 @@
 # http://hiltmon.com/blog/2013/07/03/a-simple-c-plus-plus-project-structure/
 
-CC=g++ -g --std=c++1z -fconcepts -lpthread
-CXX=g++ -g --std=c++1z -fconcepts -lpthread
+CC=g++ -g --std=c++1z -fconcepts -lpthread -Wall
+CXX=g++ -g --std=c++1z -fconcepts -lpthread -Wall
 
-exe=t1 t2 t3 t4
+exe=t5 t6
 
 all : $(exe)
 clean :

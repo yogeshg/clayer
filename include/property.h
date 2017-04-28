@@ -83,11 +83,12 @@ public:
   CodeContext code;
   RunContext run;
   std::string message;
+  std::vector<float> numbers;
 
   State get_state() { return std::make_pair(code, run); }
 
   // decltype(auto) tie() const { return std::tie(code, message); }
-  decltype(auto) tie() const { return std::tie(code, run, message); }
+  decltype(auto) tie() const { return std::tie(code, run); }
 
 private:
   // TODO: make code private and try to make read_prop friendly
@@ -154,7 +155,7 @@ void parse_props(LogRecord &p, std::string &line,
 }
 
 std::ostream &operator<<(std::ostream &ss, const LogRecord &lr) {
-  return util::to_string(ss, lr.tie());
+  return util::to_string(ss, lr.tie()) << lr.message;
 }
 
 std::ostream &operator<<(std::ostream &s,

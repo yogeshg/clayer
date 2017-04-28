@@ -12,6 +12,27 @@
 namespace clayer {
 namespace analyser {
 
+std::vector<float> get_numbers (const std::string& line, const int maxtokens=100) {
+    std::vector<float> numbers;
+    std::istringstream is(line);
+    float val=0;
+    std::string s;
+    for(int i=0; i<maxtokens; ++i) {
+        is >> val;
+        if(is.fail()) {
+            is.clear();
+            is >> s;
+            if(is.fail()) {
+                break;
+            }
+            // ignored tokens here
+            // std::cout << i << ":" << s <<"\n";
+        } else {
+            numbers.push_back(val);
+        }
+    }
+    return numbers;
+}
 
 
 class Parser {
@@ -24,11 +45,8 @@ public:
     std::ifstream f(filename);
     for (std::string line; std::getline(f, line);) {
       LogRecord p;
-      // std::cout << p <<" -- " << line << "\n";
       parse_props<I...>(p, line, log_format);
-      // parse_props<FILE, FUNC, LINE, MESG>(p, line);
-
-      // std::cout << p <<" -- " << line << "\n";
+      p.numbers = get_numbers(p.message);
       records.push_back(p);
     }
     return records;
@@ -48,24 +66,24 @@ template <log_properties p> class DomainStat {
   // to FILE, DATE...
   // TODO2: v1.2 consider function hierachy
   std::vector<LogRecord> records_to_analyze;
-  std::map<std::string, int> domain_stats;
+  std::map<std::string, util::VectorStat<float>> domain_stats;
 
 public:
   // TODO3: expand this to incorporate more statistics, such as count by levels
 
   DomainStat() = default;
 
-  DomainStat(std::vector<LogRecord> records) : records_to_analyze(records) {
+  DomainStat(std::vector<LogRecord> records, float precision=1.0, int outlier_count=10, float outlier_fraction=0.01) :
+    records_to_analyze(records) {
     for (auto record : records) {
       auto log_stat = record.get_state();
+      // record.numbers;
       std::string domain_name = domain_abstraction(log_stat);
-      if (domain_stats.find(domain_name) == domain_stats.end()) {
-        // not found
-        domain_stats[domain_name] = 1;
-      } else {
-        // found
-        domain_stats[domain_name] += 1;
+
+      if (domain_stats.find(domain_name) == domain_stats.end()) { // not found
+        domain_stats.emplace(domain_name, util::VectorStat<float>(precision, outlier_count, outlier_fraction));
       }
+      domain_stats[domain_name].add(record.numbers);
     }
   }
 
@@ -93,17 +111,18 @@ public:
     }
   }
 
-  std::ostream &print_domain_stats(std::ostream &s) {
+  std::ostream &to_string(std::ostream &s) {
     // iterate thru the map and print the count
-    for (auto domain_stat : domain_stats) {
-      s << "Inside \"" << domain_stat.first << "\": " << domain_stat.second
-        << " logs captured" << std::endl;
-    }
+    // for (auto domain_stat : domain_stats) {
+    //   s  << domain_stat.first << " : " << domain_stat.second
+    //   << std::endl;
+    // }
+    util::to_string(s, domain_stats.begin(), domain_stats.end(), ",\n");
     return s;
   }
 };
 std::ostream &operator<<(std::ostream &s, auto stat) {
-  return stat.print_domain_stats(s);
+  return stat.to_string(s);
 }
 };
 }
