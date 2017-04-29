@@ -24,7 +24,8 @@ static bool contains(std::string str, std::string substr) {
     return str.find(substr)!=std::string::npos;
 }
 
-namespace logger {
+using namespace clayer;
+namespace clayer::logger {
 constexpr const char my_format[] = "[%] %[%:%(%:%)]: [%]";
 using MyLogger =
     Logger<std::ostringstream, DEBUG, my_format, prop_time, prop_level,

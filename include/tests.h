@@ -9,7 +9,7 @@
 #include "logger.h"
 
 namespace test {
-using namespace logger;
+using namespace clayer::logger;
 
 enum Status { PASS, FAIL };
 

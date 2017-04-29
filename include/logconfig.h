@@ -13,6 +13,7 @@
 
 #include "logger.h"
 
+namespace clayer {
 namespace logger {
 /**
  * @brief Sample severity levels for logging commands and classes.
@@ -106,15 +107,15 @@ using BasicLogger = Logger<Stream, threshold, basic_fmt, prop_msg>;
 template <const char *fmt, Prop<std::ostream>... props>
 using FmtLogger = Logger<std::ostream, INFO, fmt, props...>;
 }
-
+}
 /**
  * @brief A default logger LOG, along with macros to call loggers with
  * pre-populated contexts. Macros are necessary since there's no other way to
  * hook into the filename/function name/line number of the calling site.
  */
-logger::FullLogger<std::ostream> LOG(std::clog);
+clayer::logger::FullLogger<std::ostream> LOG(std::clog);
 #define LOG(severity) CLOG(LOG, severity)
-#define CLOG(instance, severity) CLOGL(instance, logger::severity)
+#define CLOG(instance, severity) CLOGL(instance, clayer::logger::severity)
 #define CLOGL(instance, severity)                                              \
   instance.log<severity>({__FILE__, __func__, __LINE__, severity})
 
