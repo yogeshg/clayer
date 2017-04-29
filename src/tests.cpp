@@ -200,7 +200,7 @@ void test_format() {
 
   test::make("Wildcards not associated with property printed raw", []() {
     std::ostringstream x;
-    Logger<std::ostringstream, DEBUG, basic_fmt> Logger(x);
+    FmtLogger<basic_fmt> Logger(x);
 
     CLOG(Logger, ERROR) << "broke up";
     return (x.str() == "%\n");
@@ -208,7 +208,7 @@ void test_format() {
 
   test::make("Filters appropriate reject log messages", []() {
     std::ostringstream x;
-    Logger<std::ostringstream, DEBUG, basic_fmt, prop_msg> Logger(x);
+    FmtLogger<basic_fmt, prop_msg> Logger(x);
 
     // Filter out strings that contain "g"
     Logger.set_filter([](auto &l) {

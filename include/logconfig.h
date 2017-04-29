@@ -43,7 +43,10 @@ void prop_level(Stream &o, const Line &l) {
   }
 }
 
-// Can avoid the Line parameter in GCC 7 with template <auto>
+// Can avoid the Line parameter in GCC 7 with template <auto> elsewhere
+/**
+ * @brief A Prop that prints the current time to the log stream.
+ */
 template <typename Stream>
 void prop_time(Stream &o, const Line &l) {
   using std::chrono::system_clock;
@@ -99,6 +102,9 @@ using FullLogger =
  */
 template <typename Stream, int threshold = INFO>
 using BasicLogger = Logger<Stream, threshold, basic_fmt, prop_msg>;
+
+template <const char *fmt, Prop<std::ostream>... props>
+using FmtLogger = Logger<std::ostream, INFO, fmt, props...>;
 }
 
 /**
