@@ -1,6 +1,8 @@
 # Clayer
 Logging and analysis facility in C++ using compile time template meta programming.
 
+[![Build Status](https://travis-ci.org/yogeshg/clayer.svg?branch=master)](https://travis-ci.org/yogeshg/clayer)
+
 ## Simple Usage
 Include the following headers in your project that needs logging.
 
