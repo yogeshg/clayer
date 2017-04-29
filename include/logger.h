@@ -77,6 +77,8 @@ template <typename Stream> using Prop = void (*)(Stream &, const Line &);
  * manipulation (modifying the argument) or deletion (returning false).
  *
  * @param Line the line to transform and possibly reject.
+ * @return a boolean specifying whether or not to finally output the line to the
+ * destination stream.
  */
 using Filter = bool (*)(Line &);
 
@@ -275,6 +277,7 @@ public:
    * is enabled.
    *
    * @param s The object to be streamed.
+   * @return The same record, for stringing stream commands.
    */
   template <Streamable S> Record &operator<<(const S &s) {
     if (hash_enabled)
@@ -291,6 +294,7 @@ public:
    * matching this overload.
    *
    * @usage LOG(DEBUG) << hash::on << "Hey";
+   * @return The same record, for stringing stream commands.
    */
   template <bool Val> Record &operator<<(const hash::Flag<Val> &s) {
     hash_enabled = Val;
@@ -361,6 +365,9 @@ public:
    * @param N the level at which to log.
    * @param info Contextual information about the log statement: line, file, and
    * function name.
+   *
+   * @return A Record with the logger's format and specified level that can be
+   * streamed to.
    */
   template <unsigned int N,
             typename std::enable_if<N >= threshold>::type * = nullptr>
@@ -374,6 +381,8 @@ public:
    *
    * @param N logging level, below the threshold of the logger.
    * @param info Ignored.
+   *
+   * @return A NoRecord that does nothing when you stream to it.
    */
   template <unsigned int N,
             typename std::enable_if<N<threshold>::type * = nullptr> NoRecord
