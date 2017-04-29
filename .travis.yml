@@ -2,14 +2,7 @@
 # sudo: required
 # dist: trusty
 
-language: cpp
 sudo: false
-dist: trusty
-compiler:
-- gcc
-os:
-- linux
-
 
 # Blacklist
 branches:
@@ -32,19 +25,15 @@ addons:
       - doxygen-latex
       - doxygen-gui
       - graphviz
-      - g++-6
-      - gcc-6
+      # - g++-6
+      # - gcc-6
 
 # Build your code e.g. by calling make
 script:
-  - echo "make-ing now"
-  - make all
+  - echo "dummy make"
 
 # Generate and deploy documentation
 after_success:
   - cd $TRAVIS_BUILD_DIR
   - chmod +x genDocsAndDeploy.sh
   - ./genDocsAndDeploy.sh
-
-notifications:
-  email: false
