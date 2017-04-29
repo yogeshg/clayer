@@ -41,3 +41,6 @@ bin/*
 
 # Ignore Mac specific files
 .DS_Store
+
+# Ignore Logs
+.log
