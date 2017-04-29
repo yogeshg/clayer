@@ -27,7 +27,7 @@ addons:
 
 # Build your code e.g. by calling make
 script:
-  - echo "dummy make"
+  - make all
 
 # Generate and deploy documentation
 after_success:
