@@ -27,6 +27,9 @@ addons:
 
 # Build your code e.g. by calling make
 script:
+  - g++ --version
+  - g++-6 --version
+  - alias g++=$(which g++-6)
   - make all
 
 # Generate and deploy documentation
