@@ -14,6 +14,25 @@ namespace clayer {
 namespace logger {
 
 /**
+ * @brief A Stream is something that implements << for strings at the very
+ * least. More generally it can implement << for any type, but for we require <<
+ * for strings given the context in a logging library.
+ */
+template <typename T> concept bool Stream = requires(T o, std::string s) {
+  { o << s } -> T &;
+};
+
+/**
+ * @brief Reproduced in property.h, something is Streamable if an ostream can
+ * stream it. We don't refer to our Stream concept above because practically in
+ * our library every Stream forwards to some underlying ostream.
+ */
+template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
+  { s << o } -> std::ostream &;
+};
+
+
+/**
  * @brief A plain-old-data container for the fixed code context of a log record.
  * Necessary to propagate context information from the predefined macros.
  * Auxiliary, short-lived class with life-time the duration of the log command.
@@ -149,11 +168,6 @@ namespace hash {
   const Flag<true> &on = Flag<true>::inst;
   const Flag<false> &off = Flag<false>::inst;
 }
-
-template <typename T>
-concept bool Streamable = requires (std::ostream s, T t) {
-  { s << t } -> std::ostream&;
-};
 
 /**
  * @brief A catch-all class for storing a log line record and printing it
@@ -319,6 +333,12 @@ public:
  *
  * @remark As with the Record definition, Prop is a fixed type alias as auto
  * template parameters aren't possible in GCC yet.
+ *
+ * @remark We tried to pinpoint a concept for Stream but failed because the only
+ * reasonable description for Stream would be that it implements the stream
+ * operator, so it might make sense to require a Stream to be able to << a a
+ * string, but even then some streams may only work on particular types, for
+ * example a bit or number stream.
  */
 template <typename Stream, int threshold, const char *fmt,
           Prop<Stream>... props>

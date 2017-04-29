@@ -1,4 +1,7 @@
-
+/**
+ * Google logging performance test - multiple threads dumping log messages. Need
+ * glog installed.
+ */
 #include <thread>
 #include <vector>
 #include <utility>
