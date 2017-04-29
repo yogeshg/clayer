@@ -1,6 +1,6 @@
 # This will run on Travis' 'new' container-based infrastructure
-sudo: required
-dist: trusty
+# sudo: required
+# dist: trusty
 
 sudo: false
 
@@ -25,12 +25,12 @@ addons:
       - doxygen-latex
       - doxygen-gui
       - graphviz
-      - g++-6
-      - gcc-6
+      # - g++-6
+      # - gcc-6
 
 # Build your code e.g. by calling make
 script:
-  - make
+  - echo "dummy make"
 
 # Generate and deploy documentation
 after_success:
