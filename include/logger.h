@@ -232,14 +232,19 @@ class Record {
 
   template <typename T, typename... Targs>
   inline void print_fmt(T head, Targs... tail) {
-    while (*format != '\0') {
-      if (*(format++) == '%') {
+    const char *new_pos = format;
+    while (*new_pos != '\0') {
+      if (*new_pos == '%') {
+        stream.write(format, new_pos - format);
         head(stream, line);
+
+        format = new_pos+1;
         print_fmt(tail...);
         return;
       }
-      stream << *(format - 1);
+      ++new_pos;
     }
+    print_fmt();
   }
 
 public:
