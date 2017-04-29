@@ -7,7 +7,7 @@
 
 #include <fstream>
 #include <iostream>
-#include <unordered_map>
+#include <map>
 #include <set>
 #include <string>
 
@@ -109,11 +109,11 @@ template <log_properties... p> class DomainStat {
 
 public:
   /**
-   * @brief This is a hashmap that maps from a certain log_property typed string
+   * @brief This is a map that maps from a certain log_property typed string
    * to a VectorStat object containing floats. We maintain this map to keep the
    * result of the analysis.
    */
-  std::unordered_map<std::string, util::VectorStat<float>> domain_stats;
+  std::map<std::string, util::VectorStat<float>> domain_stats;
 
   /**
    * @brief This is the default constructor that does nothing.
