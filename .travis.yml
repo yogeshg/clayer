@@ -12,7 +12,7 @@ branches:
 # Environment variables
 env:
   global:
-    - GH_REPO_NAME: Clayer
+    - GH_REPO_NAME: clayer
     - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
     - GH_REPO_REF: github.com/yogeshg/clayer.git
 

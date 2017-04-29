@@ -92,6 +92,8 @@ public:
  *
  * @param desc The test description.
  * @param test The test procedure.
+ *
+ * @return The constructed Test.
  */
 template <Testable F>
 Test<F> make(const std::string &desc, const F &test) {
