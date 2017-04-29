@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 ################################################################################
 # Title         : generateDocumentationAndDeploy.sh
 # Date created  : 2016/02/22
