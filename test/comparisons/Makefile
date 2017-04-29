@@ -5,3 +5,6 @@ boost: boost.cpp
 
 glog: glog.cpp
 	g++ --std=c++1z -fconcepts -lpthread -O3 glog.cpp -lglog -o glog
+
+clean:
+	rm -rf glog boost
