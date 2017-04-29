@@ -33,4 +33,3 @@ script:
 after_success:
   - cd $TRAVIS_BUILD_DIR
   - chmod +x genDocsAndDeploy.sh
-  - ./genDocsAndDeploy.sh
