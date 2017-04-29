@@ -272,6 +272,10 @@ void read_props(LogRecord &p, PS ps) {
  * 
  * @param p log record to read into
  * @param s string to read from
+ * @param format_regex the regular expression to match the line with; it should
+ * contain as many matching groups (excluding the default group) as there are
+ * properties in the template argument; each group will be parsed into the
+ * respective property
  */
 template <log_properties... I>
 void parse_props(LogRecord &p, std::string &line, 
