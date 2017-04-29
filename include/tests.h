@@ -9,6 +9,7 @@
 #include "logger.h"
 
 namespace test {
+// Logger related configuration below: custom properties and Logger
 using namespace logger;
 
 enum Status { PASS, FAIL };
@@ -40,15 +41,26 @@ void prop_stat(Stream &o, const Line &l) {
 }
 
 /**
- * @brief Format and corresponding logger TestLogger for test output.
+ * @brief Format for test output.
  */
 constexpr const char min_fmt[] = R"([%] % - "%")";
+
+/**
+ * @brief Corresponding logger for test output.
+ */
 Logger<std::ostream, NOTSET, min_fmt, prop_testno, prop_stat, prop_msg>
     TestLogger(std::cout);
+}
 
+namespace test {
+// Core testing classes and other definitions.
+
+/**
+ * @brief Something is Testable in the context of our library if it can report
+ * success/failure through a function call.
+ */
 template <typename T>
 concept bool Testable = requires (T t) {
-  { t() } -> bool;
   { std::is_convertible<decltype(t()), bool>::value == true };
 };
 
