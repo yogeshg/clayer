@@ -21,7 +21,10 @@ namespace analyser {
    * containing all the numbers inside that line.
    *
    * @param line The string we want the function to parse.
+   *
    * @param maxtoken Maximum number of tokens to parse.
+   *
+   * @return a vector containing float numbers extracted from line.
    */
 std::vector<float> get_numbers (const std::string& line, const int maxtokens=100) {
     std::vector<float> numbers;
@@ -139,6 +142,8 @@ public:
      * the output ostream.
      *
      * @param s A std::ostream object that DomainStat will print to.
+     *
+     * @return std::ostream object that the function takes in.
      */
   std::ostream &to_string(std::ostream &s) {
     util::to_string(s, domain_stats.begin(), domain_stats.end(), ",\n");
@@ -153,6 +158,8 @@ public:
  * @param s An std::ostream typed stream object to print to
  *
  * @param stat A DomainStat object to print.
+ *
+ * @return std::ostream object that the function takes in.
  */
 std::ostream &operator<<(std::ostream &s, auto stat) {
   return stat.to_string(s);
