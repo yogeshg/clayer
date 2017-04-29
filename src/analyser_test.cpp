@@ -42,18 +42,27 @@ int run(std::string filename) {
 
   // print frequency distribution of deposit function, balance number
   std::cout << "frequency distribution of deposit function, balance number : \n";
-  const auto fd1 = func_stats.domain_stats["deposit"].stats[0].freq_dist;
+  const auto& fd1 = func_stats.domain_stats["src/atm.cpp deposit "].stats[0].freq_dist;
   util::to_string(std::cout, fd1.begin(), fd1.end()) << std::endl;
 
   // print frequency distribution of withdraw function, balance number
   std::cout << "frequency distribution of withdraw function, balance number : \n";
-  const auto fd2 = func_stats.domain_stats["withdraw"].stats[0].freq_dist;
+  const auto& fd2 = func_stats.domain_stats["src/atm.cpp withdraw "].stats[0].freq_dist;
   util::to_string(std::cout, fd2.begin(), fd2.end()) << std::endl;
 
   // print stats by thread names
   std::cout << "stats by thread names : \n";
   auto thread_stat = analyser::DomainStat<log_properties::THREAD>(recs);
   std::cout << thread_stat << std::endl;
+
+  auto time_stats = analyser::DomainStat<log_properties::TIME>(recs);
+  for(auto& p : time_stats.domain_stats) {
+    std::cout << p.first << " " << p.second.stats[0].mean <<" " << "\n";
+  }
+  auto func_time_stats = analyser::DomainStat<log_properties::FUNC, log_properties::TIME>(recs);
+  for(auto& p : func_time_stats.domain_stats) {
+    std::cout << p.first << " " << p.second.stats[0].num <<" " << "\n";
+  }
 
   return 0;
 }
