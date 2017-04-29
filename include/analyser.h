@@ -35,12 +35,24 @@ std::vector<float> get_numbers (const std::string& line, const int maxtokens=100
 }
 
 
+/**
+ * @brief Parses a log file into log records and also provides a set of states if required
+ */
 class Parser {
   std::vector<LogRecord> records;
 
 public:
+  /**
+   * @brief Reads log properties from a file according to the log format regex supplied
+   * @param filename name of the file to read from
+   * @param log_format the regular expression to match the line with; it should
+   * contain as many matching groups (excluding the default group) as there are
+   * properties in the template argument; each group will be parsed into the
+   * respective property
+   * @return const reference to the records thus read
+   */
   template <log_properties... I>
-  const std::vector<LogRecord> read_file(std::string filename, std::regex log_format) {
+  const std::vector<LogRecord>& read_file(std::string filename, std::regex log_format) {
     records.clear();
     std::ifstream f(filename);
     for (std::string line; std::getline(f, line);) {
@@ -52,6 +64,10 @@ public:
     return records;
   }
 
+  /**
+   * @brief creates a set of states identified in the log records
+   * @return the set thus created
+   */
   std::set<LogRecord::State> get_states() {
     std::set<LogRecord::State> states;
     for (auto r : records) {
