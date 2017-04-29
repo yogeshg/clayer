@@ -29,10 +29,8 @@ addons:
 script:
   - g++ --version
   - g++-6 --version
-
-  - alias g++=$(which g++-6)
-  - which g++
-  - which g++-6
+  - sudo rm -rf /usr/bin/g++
+  - sudo ln -s /usr/bin/g++-6 /usr/bin/g++
   - make all
 
 # Generate and deploy documentation
