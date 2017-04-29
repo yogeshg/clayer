@@ -32,8 +32,8 @@ addons:
       - doxygen-latex
       - doxygen-gui
       - graphviz
-      # - g++-6
-      # - gcc-6
+      - g++-6
+      - gcc-6
 
 # Build your code e.g. by calling make
 script:
