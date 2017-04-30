@@ -1,13 +1,6 @@
 # This will run on Travis' 'new' container-based infrastructure
-# sudo: required
-# dist: trusty
-
-sudo: false
-
-# Blacklist
-branches:
-  only:
-    - master
+sudo: required
+dist: trusty
 
 # Environment variables
 env:
@@ -19,18 +12,22 @@ env:
 # Install dependencies
 addons:
   apt:
+    sources:
+      ubuntu-toolchain-r-test
     packages:
       - doxygen
       - doxygen-doc
       - doxygen-latex
       - doxygen-gui
       - graphviz
-      # - g++-6
-      # - gcc-6
+      - g++-6
+      - gcc-6
 
 # Build your code e.g. by calling make
 script:
-  - echo "dummy make"
+  - sudo rm -rf /usr/bin/g++
+  - sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+  - make all
 
 # Generate and deploy documentation
 after_success:
