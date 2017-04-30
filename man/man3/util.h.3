@@ -1,0 +1,65 @@
+.TH "/home/travis/build/yogeshg/clayer/include/util.h" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/include/util.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <iostream>\fP
+.br
+\fC#include <string>\fP
+.br
+\fC#include <tuple>\fP
+.br
+\fC#include <type_traits>\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBclayer::util::Stat< T >\fP"
+.br
+.ti -1c
+.RI "class \fBclayer::util::VectorStat< T >\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBclayer\fP"
+.br
+.ti -1c
+.RI "\fBclayer::util\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<class Tuple , std::size_t N> std::ostream & \fBclayer::util::to_string\fP (std::ostream &ss, const Tuple &t, const std::string sep=',')"
+.br
+.ti -1c
+.RI "template<class Tuple , std::size_t N, typename std::enable_if<(N >  = 2> std::ostream & \fBclayer::util::to_string\fP (std::ostream &ss, const Tuple &t, const std::string sep=',')"
+.br
+.ti -1c
+.RI "template<class\&.\&.\&. Args> std::ostream & \fBclayer::util::to_string\fP (std::ostream &ss, const std::tuple< Args\&.\&.\&.> &t, const std::string sep=',', const std::string st='(', const std::string end=')')"
+.br
+.ti -1c
+.RI "template<typename T , typename U > std::ostream & \fBclayer::util::to_string\fP (std::ostream &os, std::pair< T, U > p)"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBclayer::util::to_string\fP (std::ostream &os, T begin, T end, const std::string sep=',', const std::string start='(', const std::string stop=')')"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBclayer::util::operator<<\fP (std::ostream &s, Stat< T > stat)"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBclayer::util::operator<<\fP (std::ostream &os, VectorStat< T > vector_stat)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

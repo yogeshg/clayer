@@ -1,0 +1,83 @@
+.TH "clayer::util::Stat< T >" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::util::Stat< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <util\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStat\fP (T p=1, int oc=100, float of=0\&.1)"
+.br
+.ti -1c
+.RI "T \fBbucket\fP (T x)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (T record)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "T \fBmax\fP"
+.br
+.ti -1c
+.RI "T \fBmin\fP"
+.br
+.ti -1c
+.RI "int \fBnum\fP"
+.br
+.ti -1c
+.RI "float \fBmean\fP"
+.br
+.ti -1c
+.RI "std::map< T, int > \fBfreq_dist\fP"
+.br
+.ti -1c
+.RI "const T \fBprecision\fP"
+.br
+.ti -1c
+.RI "int \fBoutlier_count\fP"
+.br
+.ti -1c
+.RI "float \fBoutlier_fraction\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBclayer::util::Stat\fP< T >::\fBStat\fP (Tp = \fC1\fP, intoc = \fC100\fP, floatof = \fC0\&.1\fP)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBclayer::util::Stat\fP< T >::add (Trecord)\fC [inline]\fP"
+
+.SS "template<typename T > T \fBclayer::util::Stat\fP< T >::bucket (Tx)\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T > std::map<T, int> \fBclayer::util::Stat\fP< T >::freq_dist"
+
+.SS "template<typename T > T \fBclayer::util::Stat\fP< T >::max"
+
+.SS "template<typename T > float \fBclayer::util::Stat\fP< T >::mean"
+
+.SS "template<typename T > T \fBclayer::util::Stat\fP< T >::min"
+
+.SS "template<typename T > int \fBclayer::util::Stat\fP< T >::num"
+
+.SS "template<typename T > int \fBclayer::util::Stat\fP< T >::outlier_count"
+
+.SS "template<typename T > float \fBclayer::util::Stat\fP< T >::outlier_fraction"
+
+.SS "template<typename T > const T \fBclayer::util::Stat\fP< T >::precision"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

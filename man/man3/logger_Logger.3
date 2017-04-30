@@ -1,0 +1,87 @@
+.TH "logger::Logger< Stream, threshold, fmt, props >" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::Logger< Stream, threshold, fmt, props > \- 
+.PP
+The wrapper/aggregator class for logging commands\&. Template-parameterized by format and logging threshold for compile-time configuration\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLogger\fP (\fBStream\fP &s)"
+.br
+.RI "\fIConstructs a logger from a stream\&. \fP"
+.ti -1c
+.RI "void \fBset_filter\fP (\fBFilter\fP f)"
+.br
+.RI "\fISet the filter for the log\&. \fP"
+.ti -1c
+.RI "template<unsigned int N, typename std::enable_if< N >  = threshold> ::type props \fBlog\fP (\fBContextInfo\fP info)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "template<unsigned int N, typename std::enable_if< N >  = threshold> ::type \fBStream\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Stream, int threshold, const char * fmt, Prop< Stream >\&.\&.\&. props>class logger::Logger< Stream, threshold, fmt, props >"
+The wrapper/aggregator class for logging commands\&. Template-parameterized by format and logging threshold for compile-time configuration\&. 
+
+
+.PP
+\fBRemarks:\fP
+.RS 4
+As with the \fBRecord\fP definition, Prop is a fixed type alias as auto template parameters aren't possible in GCC yet\&.
+.PP
+We tried to pinpoint a concept for Stream but failed because the only reasonable description for Stream would be that it implements the stream operator, so it might make sense to require a Stream to be able to << a a string, but even then some streams may only work on particular types, for example a bit or number stream\&. 
+.RE
+.PP
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Stream, int threshold, const char * fmt, Prop< Stream >\&.\&.\&. props> \fBlogger::Logger\fP< \fBStream\fP, threshold, fmt, props >::\fBLogger\fP (\fBStream\fP &s)\fC [inline]\fP"
+
+.PP
+Constructs a logger from a stream\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP The stream to which to log\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Stream, int threshold, const char * fmt, Prop< Stream >\&.\&.\&. props> template<unsigned int N, typename std::enable_if< N >  = threshold> ::type props \fBlogger::Logger\fP< \fBStream\fP, threshold, fmt, props >::log (\fBContextInfo\fPinfo)\fC [inline]\fP"
+
+.SS "template<typename Stream, int threshold, const char * fmt, Prop< Stream >\&.\&.\&. props> void \fBlogger::Logger\fP< \fBStream\fP, threshold, fmt, props >::set_filter (\fBFilter\fPf)\fC [inline]\fP"
+
+.PP
+Set the filter for the log\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIA\fP boolean function taking in a reference to a \fBLine\fP and outputting a boolean, so it can modify and report whether to finally output or not\&. 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Stream, int threshold, const char * fmt, Prop< Stream >\&.\&.\&. props> template<unsigned int N, typename std::enable_if< N >  = threshold> ::type \fBlogger::Logger\fP< Stream, threshold, fmt, props >::Stream"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

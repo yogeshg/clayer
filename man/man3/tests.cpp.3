@@ -1,0 +1,93 @@
+.TH "/home/travis/build/yogeshg/clayer/src/tests.cpp" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/src/tests.cpp \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'tests\&.h'\fP
+.br
+\fC#include 'analyser\&.h'\fP
+.br
+\fC#include 'logconfig\&.h'\fP
+.br
+\fC#include 'logger\&.h'\fP
+.br
+\fC#include 'property\&.h'\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <regex>\fP
+.br
+\fC#include <unordered_map>\fP
+.br
+\fC#include <vector>\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBlogger\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "using \fBlogger::MyLogger\fP = Logger< std::ostringstream, DEBUG, my_format, prop_time, prop_level, prop_thread, prop_file, prop_func, prop_line, prop_msg >"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBtest_basic\fP ()"
+.br
+.RI "\fIBasic sanity checks for the logging library and static thresholds\&. \fP"
+.ti -1c
+.RI "void \fBtest_props\fP ()"
+.br
+.RI "\fITests for correctness of the Prop functions that output contextual information\&. \fP"
+.ti -1c
+.RI "void \fBtest_format\fP ()"
+.br
+.RI "\fITests for correctness of the formatting and substitution procedure\&. \fP"
+.ti -1c
+.RI "void \fBtest_analyse\fP ()"
+.br
+.ti -1c
+.RI "int \fBmain\fP ()"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char \fBlogger::my_format\fP [] = '[%] %[%:%(%:%)]: [%]'"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "int main ()"
+
+.SS "void test_analyse ()"
+
+.SS "void test_basic ()"
+
+.PP
+Basic sanity checks for the logging library and static thresholds\&. 
+.SS "void test_format ()"
+
+.PP
+Tests for correctness of the formatting and substitution procedure\&. 
+.SS "void test_props ()"
+
+.PP
+Tests for correctness of the Prop functions that output contextual information\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

@@ -1,0 +1,79 @@
+.TH "/home/travis/build/yogeshg/clayer/include/tests.h" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/include/tests.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <iostream>\fP
+.br
+\fC#include <type_traits>\fP
+.br
+\fC#include 'logconfig\&.h'\fP
+.br
+\fC#include 'logger\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBtest::Test< F >\fP"
+.br
+.RI "\fIA simple class to represent a unit test\&. \fP"
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBtest\fP"
+.br
+.RI "\fITiny test suite application that associates test procedures with labels and reports results of the test using our logger\&. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBtest::Status\fP { \fBtest::PASS\fP, \fBtest::FAIL\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream > void \fBtest::prop_testno\fP (Stream &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA custom Prop that prints out the fraction of passing tests so far by keeping an internal counter\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBtest::prop_stat\fP (Stream &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA custom Prop that repurposes the info level to report the success status of the test associated with the log\&. \fP"
+.ti -1c
+.RI "\fBLogger\fP< std::ostream, NOTSET, 
+.br
+min_fmt, prop_testno, 
+.br
+prop_stat, prop_msg > \fBtest::TestLogger\fP (std::cout)"
+.br
+.RI "\fICorresponding logger for test output\&. \fP"
+.ti -1c
+.RI "template<Testable F> Test< F > \fBtest::make\fP (const std::string &desc, const F &test)"
+.br
+.RI "\fIHelper function for creating a test without specifying the procedure type\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char \fBtest::min_fmt\fP [] = R'([%] % - '%')'"
+.br
+.RI "\fIFormat for test output\&. \fP"
+.ti -1c
+.RI "template<typename T > concept bool \fBtest::Testable\fP"
+.br
+.RI "\fISomething is Testable in the context of our library if it can report success/failure through a function call\&. \fP"
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

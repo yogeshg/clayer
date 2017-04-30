@@ -1,0 +1,58 @@
+.TH "/home/travis/build/yogeshg/clayer/include/analyser.h" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/include/analyser.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <fstream>\fP
+.br
+\fC#include <iostream>\fP
+.br
+\fC#include <map>\fP
+.br
+\fC#include <set>\fP
+.br
+\fC#include <string>\fP
+.br
+\fC#include 'property\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBclayer::analyser::Parser\fP"
+.br
+.RI "\fIParses a log file into log records and also provides a set of states if required\&. \fP"
+.ti -1c
+.RI "class \fBclayer::analyser::DomainStat< p >\fP"
+.br
+.RI "\fIThis is a class that provides querying functionalities on \fBLogRecord\fP objects\&. We construct a \fBDomainStat\fP object based on a series of log_properties, taken in template arguments and group by the \fBLogRecord\fP objects based on such log_properties\&. \fP"
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBclayer\fP"
+.br
+.ti -1c
+.RI "\fBclayer::analyser\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::vector< float > \fBclayer::analyser::get_numbers\fP (const std::string &line, const int maxtokens=100)"
+.br
+.RI "\fIParse a string and given the maximum number of tokens, return a vector containing all the numbers inside that line\&. \fP"
+.ti -1c
+.RI "std::ostream & \fBclayer::analyser::operator<<\fP (std::ostream &s, auto stat)"
+.br
+.RI "\fIStream out operator overwrite to allow convinent extraction of the result that \fBDomainStat\fP obtained from its analysis\&. \fP"
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

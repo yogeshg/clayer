@@ -1,0 +1,4 @@
+<map id="clayer::LogRecord" name="clayer::LogRecord">
+<area shape="rect" id="node2" href="$structclayer_1_1_run_context.html" title="Log properties that are inferred when the code is run . " alt="" coords="5,5,139,32"/>
+<area shape="rect" id="node3" href="$structclayer_1_1_code_context.html" title="Log properties that can be inferred from code. " alt="" coords="163,5,305,32"/>
+</map>

@@ -1,0 +1,116 @@
+.TH "/home/travis/build/yogeshg/clayer/include/logconfig.h" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/include/logconfig.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <chrono>\fP
+.br
+\fC#include <fstream>\fP
+.br
+\fC#include <iomanip>\fP
+.br
+\fC#include <iostream>\fP
+.br
+\fC#include <thread>\fP
+.br
+\fC#include 'logger\&.h'\fP
+.br
+
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBlogger\fP"
+.br
+.in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBLOG\fP(severity)   \fBCLOG\fP(LOG, severity)"
+.br
+.ti -1c
+.RI "#define \fBCLOG\fP(instance, severity)   \fBCLOGL\fP(instance, logger::severity)"
+.br
+.ti -1c
+.RI "#define \fBCLOGL\fP(instance, severity)   instance\&.log<severity>({__FILE__, __func__, __LINE__, severity})"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream , int threshold = INFO> using \fBlogger::FullLogger\fP = Logger< Stream, threshold, full_fmt, prop_date, prop_time, prop_level, prop_thread, prop_file, prop_func, prop_line, prop_msg, prop_hash >"
+.br
+.RI "\fIA sample logger that prints full contextual information along with each message\&. \fP"
+.ti -1c
+.RI "template<typename Stream , int threshold = INFO> using \fBlogger::BasicLogger\fP = Logger< Stream, threshold, basic_fmt, prop_msg >"
+.br
+.RI "\fIA sample logger that prints just the log message\&. \fP"
+.ti -1c
+.RI "template<const char * fmt, Prop< std::ostream >\&.\&.\&. props> using \fBlogger::FmtLogger\fP = Logger< std::ostream, INFO, fmt, props\&.\&.\&.>"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBlogger::Severity\fP { \fBlogger::NOTSET\fP = 0, \fBlogger::DEBUG\fP = 10, \fBlogger::INFO\fP = 20, \fBlogger::WARNING\fP = 30, \fBlogger::ERROR\fP = 40, \fBlogger::CRITICAL\fP = 50 }"
+.br
+.RI "\fISample severity levels for logging commands and classes\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream > void \fBlogger::prop_level\fP (Stream &o, const Line &l)"
+.br
+.RI "\fIA Prop that prints out a string corresponding to the severity level for a given \fBLine\fP\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBlogger::prop_time\fP (Stream &o, const Line &l)"
+.br
+.RI "\fIA Prop that prints the current time to the log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBlogger::prop_date\fP (Stream &o, const Line &l)"
+.br
+.RI "\fIA Prop that prints the current date to the log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBlogger::prop_thread\fP (Stream &o, const Line &l)"
+.br
+.RI "\fIA Prop that prints an identifier for the current thread to the log stream\&. \fP"
+.ti -1c
+.RI "\fBlogger::FullLogger\fP< std::ostream > \fBLOG\fP (std::clog)"
+.br
+.RI "\fIA default logger LOG, along with macros to call loggers with pre-populated contexts\&. Macros are necessary since there's no other way to hook into the filename/function name/line number of the calling site\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char \fBlogger::full_fmt\fP []"
+.br
+.RI "\fISample format strings: one with placeholders for several Props, the other for just a single Prop\&. \fP"
+.ti -1c
+.RI "constexpr const char \fBlogger::basic_fmt\fP [] = '%'"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define CLOG(instance, severity)   \fBCLOGL\fP(instance, logger::severity)"
+
+.SS "#define CLOGL(instance, severity)   instance\&.log<severity>({__FILE__, __func__, __LINE__, severity})"
+
+.SS "#define LOG(severity)   \fBCLOG\fP(LOG, severity)"
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBlogger::FullLogger\fP<std::ostream> LOG (std::clog)"
+
+.PP
+A default logger LOG, along with macros to call loggers with pre-populated contexts\&. Macros are necessary since there's no other way to hook into the filename/function name/line number of the calling site\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

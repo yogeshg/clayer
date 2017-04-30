@@ -1,0 +1,286 @@
+.TH "logger" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBhash\fP"
+.br
+.RI "\fIFunctionality related to specifying if a component of a log message should influence the hash of the message or not\&. \fP"
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBContextInfo\fP"
+.br
+.RI "\fIA plain-old-data container for the fixed code context of a log record\&. Necessary to propagate context information from the predefined macros\&. Auxiliary, short-lived class with life-time the duration of the log command\&. \fP"
+.ti -1c
+.RI "struct \fBLine\fP"
+.br
+.RI "\fIA structure representing all the information about a particular logging line\&. Includes contextual and message information\&. \fP"
+.ti -1c
+.RI "class \fBRecord\fP"
+.br
+.RI "\fIA catch-all class for storing a log line record and printing it according to a format\&. \fP"
+.ti -1c
+.RI "class \fBNoRecord\fP"
+.br
+.RI "\fIA record that eats and throws away objects streamed to it\&. Used for compile-time filtering\&. Can also be used as a no-op streamer\&. \fP"
+.ti -1c
+.RI "class \fBLogger\fP"
+.br
+.RI "\fIThe wrapper/aggregator class for logging commands\&. Template-parameterized by format and logging threshold for compile-time configuration\&. \fP"
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream , int threshold = INFO> using \fBFullLogger\fP = \fBLogger\fP< \fBStream\fP, threshold, \fBfull_fmt\fP, \fBprop_date\fP, \fBprop_time\fP, \fBprop_level\fP, \fBprop_thread\fP, \fBprop_file\fP, \fBprop_func\fP, \fBprop_line\fP, \fBprop_msg\fP, \fBprop_hash\fP >"
+.br
+.RI "\fIA sample logger that prints full contextual information along with each message\&. \fP"
+.ti -1c
+.RI "template<typename Stream , int threshold = INFO> using \fBBasicLogger\fP = \fBLogger\fP< \fBStream\fP, threshold, \fBbasic_fmt\fP, \fBprop_msg\fP >"
+.br
+.RI "\fIA sample logger that prints just the log message\&. \fP"
+.ti -1c
+.RI "template<const char * fmt, Prop< std::ostream >\&.\&.\&. props> using \fBFmtLogger\fP = \fBLogger\fP< std::ostream, \fBINFO\fP, fmt, props\&.\&.\&.>"
+.br
+.ti -1c
+.RI "template<typename Stream > using \fBProp\fP = void(*)(\fBStream\fP &, const \fBLine\fP &)"
+.br
+.RI "\fIProp represents contextual properties printable in logs as part of the formatting\&. \fP"
+.ti -1c
+.RI "using \fBFilter\fP = bool(*)(\fBLine\fP &)"
+.br
+.RI "\fIFilter represents post-processing on Lines that could entail content manipulation (modifying the argument) or deletion (returning false)\&. \fP"
+.ti -1c
+.RI "using \fBMyLogger\fP = \fBLogger\fP< std::ostringstream, \fBDEBUG\fP, \fBmy_format\fP, \fBprop_time\fP, \fBprop_level\fP, \fBprop_thread\fP, \fBprop_file\fP, \fBprop_func\fP, \fBprop_line\fP, \fBprop_msg\fP >"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBSeverity\fP { \fBNOTSET\fP = 0, \fBDEBUG\fP = 10, \fBINFO\fP = 20, \fBWARNING\fP = 30, \fBERROR\fP = 40, \fBCRITICAL\fP = 50 }"
+.br
+.RI "\fISample severity levels for logging commands and classes\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream > void \fBprop_level\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints out a string corresponding to the severity level for a given \fBLine\fP\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_time\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the current time to the log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_date\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the current date to the log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_thread\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints an identifier for the current thread to the log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_msg\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the message component to a log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_hash\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the hash identifier in hexadecimal of a log to a log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_func\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the function name to a log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_file\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the filename to a log stream\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_line\fP (\fBStream\fP &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA Prop that prints the line number to a log stream\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char \fBfull_fmt\fP []"
+.br
+.RI "\fISample format strings: one with placeholders for several Props, the other for just a single Prop\&. \fP"
+.ti -1c
+.RI "constexpr const char \fBbasic_fmt\fP [] = '%'"
+.br
+.ti -1c
+.RI "template<typename T > concept bool \fBStream\fP"
+.br
+.RI "\fIA Stream is something that implements << for strings at the very least\&. More generally it can implement << for any type, but for we require << for strings given the context in a logging library\&. \fP"
+.ti -1c
+.RI "template<typename T > concept bool \fBStreamable\fP"
+.br
+.RI "\fIReproduced in \fBproperty\&.h\fP, something is Streamable if an ostream can stream it\&. We don't refer to our Stream concept above because practically in our library every Stream forwards to some underlying ostream\&. \fP"
+.ti -1c
+.RI "constexpr const char \fBmy_format\fP [] = '[%] %[%:%(%:%)]: [%]'"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Additional sample definitions, class instantiations, and macro definitions for easier use\&.
+.PP
+Class and function definitions to facilitate logging and formatting\&. 
+.SH "Typedef Documentation"
+.PP 
+.SS "template<typename Stream , int threshold = INFO> using \fBlogger::BasicLogger\fP = typedef \fBLogger\fP<\fBStream\fP, threshold, \fBbasic_fmt\fP, \fBprop_msg\fP>"
+
+.PP
+A sample logger that prints just the log message\&. \fBBasicLogger<std::clog, DEBUG>\fP logger; \fBCLOG(logger, WARN)\fP << 'hi'; 
+.SS "using \fBlogger::Filter\fP = typedef bool (*)(\fBLine\fP &)"
+
+.PP
+Filter represents post-processing on Lines that could entail content manipulation (modifying the argument) or deletion (returning false)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fI\fBLine\fP\fP the line to transform and possibly reject\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a boolean specifying whether or not to finally output the line to the destination stream\&. 
+.RE
+.PP
+
+.SS "template<const char * fmt, Prop< std::ostream >\&.\&.\&. props> using \fBlogger::FmtLogger\fP = typedef \fBLogger\fP<std::ostream, \fBINFO\fP, fmt, props\&.\&.\&.>"
+
+.SS "template<typename Stream , int threshold = INFO> using \fBlogger::FullLogger\fP = typedef \fBLogger\fP<\fBStream\fP, threshold, \fBfull_fmt\fP, \fBprop_date\fP, \fBprop_time\fP, \fBprop_level\fP, \fBprop_thread\fP, \fBprop_file\fP, \fBprop_func\fP, \fBprop_line\fP, \fBprop_msg\fP, \fBprop_hash\fP>"
+
+.PP
+A sample logger that prints full contextual information along with each message\&. \fBFullLogger<std::clog, DEBUG>\fP my_logger; \fBCLOG(my_logger, WARN)\fP << 'hi'; 
+.SS "using \fBlogger::MyLogger\fP = typedef \fBLogger\fP<std::ostringstream, \fBDEBUG\fP, \fBmy_format\fP, \fBprop_time\fP, \fBprop_level\fP, \fBprop_thread\fP, \fBprop_file\fP, \fBprop_func\fP, \fBprop_line\fP, \fBprop_msg\fP>"
+
+.SS "template<typename Stream > using \fBlogger::Prop\fP = typedef void (*)(\fBStream\fP &, const \fBLine\fP &)"
+
+.PP
+Prop represents contextual properties printable in logs as part of the formatting\&. 
+.PP
+\fBRemarks:\fP
+.RS 4
+As a side note, most of the Props defined in this file extract information from the \fBLine\fP directly, while custom Props would often supply additional contextual information\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIStream\fP the logging stream to output to\&. 
+.br
+\fI\fBLine\fP\fP the line containing the information to output to the stream\&. 
+.RE
+.PP
+
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBlogger::Severity\fP"
+
+.PP
+Sample severity levels for logging commands and classes\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fINOTSET \fP\fP
+.TP
+\fB\fIDEBUG \fP\fP
+.TP
+\fB\fIINFO \fP\fP
+.TP
+\fB\fIWARNING \fP\fP
+.TP
+\fB\fIERROR \fP\fP
+.TP
+\fB\fICRITICAL \fP\fP
+.SH "Function Documentation"
+.PP 
+.SS "template<typename Stream > void logger::prop_date (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the current date to the log stream\&. 
+.SS "template<typename Stream > void logger::prop_file (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the filename to a log stream\&. 
+.SS "template<typename Stream > void logger::prop_func (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the function name to a log stream\&. 
+.SS "template<typename Stream > void logger::prop_hash (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the hash identifier in hexadecimal of a log to a log stream\&. 
+.SS "template<typename Stream > void logger::prop_level (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints out a string corresponding to the severity level for a given \fBLine\fP\&. 
+.SS "template<typename Stream > void logger::prop_line (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the line number to a log stream\&. 
+.SS "template<typename Stream > void logger::prop_msg (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the message component to a log stream\&. 
+.SS "template<typename Stream > void logger::prop_thread (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints an identifier for the current thread to the log stream\&. 
+.SS "template<typename Stream > void logger::prop_time (Stream &o, const Line &l)"
+
+.PP
+A Prop that prints the current time to the log stream\&. 
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr const char logger::basic_fmt[] = '%'"
+
+.SS "constexpr const char logger::full_fmt[]"
+\fBInitial value:\fP
+.PP
+.nf
+=
+    "\033[1;31m[% %]\033[0m %[Thread %:%(%:%)]: [%] [%]"
+.fi
+.PP
+Sample format strings: one with placeholders for several Props, the other for just a single Prop\&. 
+.SS "constexpr const char logger::my_format[] = '[%] %[%:%(%:%)]: [%]'"
+
+.SS "template<typename T > concept bool logger::Stream"
+\fBInitial value:\fP
+.PP
+.nf
+= requires(T o, std::string s) {
+  { o << s } -> T &;
+}
+.fi
+.PP
+A Stream is something that implements << for strings at the very least\&. More generally it can implement << for any type, but for we require << for strings given the context in a logging library\&. 
+.SS "template<typename T > concept bool logger::Streamable"
+\fBInitial value:\fP
+.PP
+.nf
+= requires(T o, std::ostream &s) {
+  { s << o } -> std::ostream &;
+}
+.fi
+.PP
+Reproduced in \fBproperty\&.h\fP, something is Streamable if an ostream can stream it\&. We don't refer to our Stream concept above because practically in our library every Stream forwards to some underlying ostream\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

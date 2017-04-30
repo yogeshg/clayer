@@ -1,0 +1,113 @@
+.TH "clayer::RunContext" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::RunContext \- 
+.PP
+Log properties that are inferred when the code is run \&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <property\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRunContext\fP ()=default"
+.br
+.RI "\fIdefault constructs all the members \fP"
+.ti -1c
+.RI "\fBRunContext\fP (const std::string &a, const std::string &b, const std::string &c)"
+.br
+.RI "\fIConstructs the members from explicitly given values\&. \fP"
+.ti -1c
+.RI "decltype(auto) \fBtie\fP () const "
+.br
+.RI "\fIReturns a tuple of all the members\&. \fP"
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBRunContext\fP &rhs) const "
+.br
+.RI "\fICompares two \fBRunContext\fP using their tuple representation\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBdate\fP"
+.br
+.ti -1c
+.RI "std::string \fBthread\fP"
+.br
+.ti -1c
+.RI "std::string \fBtime\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Log properties that are inferred when the code is run \&. 
+
+These can be used to answer 'when' in the runtime was the log generated\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "clayer::RunContext::RunContext ()\fC [default]\fP"
+
+.PP
+default constructs all the members 
+.SS "clayer::RunContext::RunContext (const std::string &a, const std::string &b, const std::string &c)\fC [inline]\fP"
+
+.PP
+Constructs the members from explicitly given values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP date 
+.br
+\fIb\fP time 
+.br
+\fIc\fP thread identifier 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "bool clayer::RunContext::operator< (const \fBRunContext\fP &rhs) const\fC [inline]\fP"
+
+.PP
+Compares two \fBRunContext\fP using their tuple representation\&. first compares date, if same then compare function thread, if same then time\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrhs\fP \fBRunContext\fP to be compared with\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+if the lhs is smaller than the rhs\&. 
+.RE
+.PP
+
+.SS "decltype(auto) clayer::RunContext::tie () const\fC [inline]\fP"
+
+.PP
+Returns a tuple of all the members\&. This returns a serialisable representation that can be used to print or order this class
+.PP
+\fBReturns:\fP
+.RS 4
+a tuple with all the constituents 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string clayer::RunContext::date"
+
+.SS "std::string clayer::RunContext::thread"
+
+.SS "std::string clayer::RunContext::time"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

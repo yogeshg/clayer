@@ -1,0 +1,62 @@
+.TH "logger::Line" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::Line \- 
+.PP
+A structure representing all the information about a particular logging line\&. Includes contextual and message information\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLine\fP (const \fBContextInfo\fP &i)"
+.br
+.RI "\fIConstructs a \fBLine\fP from a \fBContextInfo\fP with initial empty message and hash values\&. A \fBContextInfo\fP is necessary to provide the initial state of the \fBLine\fP\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBContextInfo\fP \fBinfo\fP"
+.br
+.ti -1c
+.RI "std::ostringstream \fBmessage\fP"
+.br
+.ti -1c
+.RI "intptr_t \fBhash\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A structure representing all the information about a particular logging line\&. Includes contextual and message information\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "logger::Line::Line (const \fBContextInfo\fP &i)\fC [inline]\fP"
+
+.PP
+Constructs a \fBLine\fP from a \fBContextInfo\fP with initial empty message and hash values\&. A \fBContextInfo\fP is necessary to provide the initial state of the \fBLine\fP\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIi\fP The filename, function name, line number, and severity level information\&. 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "intptr_t logger::Line::hash"
+
+.SS "\fBContextInfo\fP logger::Line::info"
+
+.SS "std::ostringstream logger::Line::message"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

@@ -1,0 +1,127 @@
+.TH "clayer::CodeContext" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::CodeContext \- 
+.PP
+Log properties that can be inferred from code\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <property\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCodeContext\fP ()=default"
+.br
+.RI "\fIdefault constructs all the members \fP"
+.ti -1c
+.RI "\fBCodeContext\fP (const std::string &a, const std::string &b, const std::string &c, const int &d, const std::string &e)"
+.br
+.RI "\fIConstructs the members from explicitly given values\&. \fP"
+.ti -1c
+.RI "decltype(auto) \fBtie\fP () const "
+.br
+.RI "\fIReturns a tuple of all the members\&. \fP"
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBCodeContext\fP &rhs) const "
+.br
+.RI "\fICompares two \fBCodeContext\fP using their tuple representation\&. \fP"
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBfile\fP"
+.br
+.ti -1c
+.RI "std::string \fBfunc\fP"
+.br
+.ti -1c
+.RI "std::string \fBlevel\fP"
+.br
+.ti -1c
+.RI "int \fBline\fP"
+.br
+.ti -1c
+.RI "std::string \fBhash\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Log properties that can be inferred from code\&. 
+
+These can be used to answer 'where' in the code base is this log generated from\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "clayer::CodeContext::CodeContext ()\fC [default]\fP"
+
+.PP
+default constructs all the members 
+.SS "clayer::CodeContext::CodeContext (const std::string &a, const std::string &b, const std::string &c, const int &d, const std::string &e)\fC [inline]\fP"
+
+.PP
+Constructs the members from explicitly given values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP file name 
+.br
+\fIb\fP function name 
+.br
+\fIc\fP severity level 
+.br
+\fId\fP line number 
+.br
+\fIe\fP hash value of the log, typically xor of memory locations of records 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "bool clayer::CodeContext::operator< (const \fBCodeContext\fP &rhs) const\fC [inline]\fP"
+
+.PP
+Compares two \fBCodeContext\fP using their tuple representation\&. first compares file name, if same then compare function name, if same then level and so on\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrhs\fP \fBCodeContext\fP to be compared with\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+if the lhs is smaller than the rhs\&. 
+.RE
+.PP
+
+.SS "decltype(auto) clayer::CodeContext::tie () const\fC [inline]\fP"
+
+.PP
+Returns a tuple of all the members\&. This returns a serialisable representation that can be used to print or order this class
+.PP
+\fBReturns:\fP
+.RS 4
+a tuple with all the constituents 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string clayer::CodeContext::file"
+
+.SS "std::string clayer::CodeContext::func"
+
+.SS "std::string clayer::CodeContext::hash"
+
+.SS "std::string clayer::CodeContext::level"
+
+.SS "int clayer::CodeContext::line"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

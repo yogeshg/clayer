@@ -1,0 +1,55 @@
+.TH "test::Test< F >" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test::Test< F > \- 
+.PP
+A simple class to represent a unit test\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tests\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTest\fP (const std::string &desc, const F &test)"
+.br
+.RI "\fIConstructs the test from a description and a procedure\&. \fP"
+.ti -1c
+.RI "void \fBoperator()\fP ()"
+.br
+.RI "\fIRuns the test and reports using our logger if it passed or failed\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<Testable F>class test::Test< F >"
+A simple class to represent a unit test\&. 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<Testable F> \fBtest::Test\fP< F >::\fBTest\fP (const std::string &desc, const F &test)\fC [inline]\fP"
+
+.PP
+Constructs the test from a description and a procedure\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdesc\fP The description of the test\&. 
+.br
+\fItest\fP The procedure to run for the test\&. 
+.RE
+.PP
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<Testable F> void \fBtest::Test\fP< F >::operator() ()\fC [inline]\fP"
+
+.PP
+Runs the test and reports using our logger if it passed or failed\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

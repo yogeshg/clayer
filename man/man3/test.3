@@ -1,0 +1,127 @@
+.TH "test" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+test \- 
+.PP
+Tiny test suite application that associates test procedures with labels and reports results of the test using our logger\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBTest\fP"
+.br
+.RI "\fIA simple class to represent a unit test\&. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBStatus\fP { \fBPASS\fP, \fBFAIL\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Stream > void \fBprop_testno\fP (Stream &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA custom Prop that prints out the fraction of passing tests so far by keeping an internal counter\&. \fP"
+.ti -1c
+.RI "template<typename Stream > void \fBprop_stat\fP (Stream &o, const \fBLine\fP &l)"
+.br
+.RI "\fIA custom Prop that repurposes the info level to report the success status of the test associated with the log\&. \fP"
+.ti -1c
+.RI "\fBLogger\fP< std::ostream, NOTSET, 
+.br
+\fBmin_fmt\fP, \fBprop_testno\fP, 
+.br
+\fBprop_stat\fP, prop_msg > \fBTestLogger\fP (std::cout)"
+.br
+.RI "\fICorresponding logger for test output\&. \fP"
+.ti -1c
+.RI "template<Testable F> \fBTest\fP< F > \fBmake\fP (const std::string &desc, const F &test)"
+.br
+.RI "\fIHelper function for creating a test without specifying the procedure type\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "constexpr const char \fBmin_fmt\fP [] = R'([%] % - '%')'"
+.br
+.RI "\fIFormat for test output\&. \fP"
+.ti -1c
+.RI "template<typename T > concept bool \fBTestable\fP"
+.br
+.RI "\fISomething is Testable in the context of our library if it can report success/failure through a function call\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Tiny test suite application that associates test procedures with labels and reports results of the test using our logger\&. 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBtest::Status\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIPASS \fP\fP
+.TP
+\fB\fIFAIL \fP\fP
+.SH "Function Documentation"
+.PP 
+.SS "template<Testable F> \fBTest\fP<F> test::make (const std::string &desc, const F &test)"
+
+.PP
+Helper function for creating a test without specifying the procedure type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdesc\fP The test description\&. 
+.br
+\fItest\fP The test procedure\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The constructed \fBTest\fP\&. 
+.RE
+.PP
+
+.SS "template<typename Stream > void test::prop_stat (Stream &o, const \fBLine\fP &l)"
+
+.PP
+A custom Prop that repurposes the info level to report the success status of the test associated with the log\&. 
+.SS "template<typename Stream > void test::prop_testno (Stream &o, const \fBLine\fP &l)"
+
+.PP
+A custom Prop that prints out the fraction of passing tests so far by keeping an internal counter\&. 
+.SS "\fBLogger\fP<std::ostream, NOTSET, \fBmin_fmt\fP, \fBprop_testno\fP, \fBprop_stat\fP, prop_msg> test::TestLogger (std::cout)"
+
+.PP
+Corresponding logger for test output\&. 
+.SH "Variable Documentation"
+.PP 
+.SS "constexpr const char test::min_fmt[] = R'([%] % - '%')'"
+
+.PP
+Format for test output\&. 
+.SS "template<typename T > concept bool test::Testable"
+\fBInitial value:\fP
+.PP
+.nf
+= requires (T t) {
+  { std::is_convertible<decltype(t()), bool>::value == true };
+}
+.fi
+.PP
+Something is Testable in the context of our library if it can report success/failure through a function call\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

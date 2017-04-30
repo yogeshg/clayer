@@ -1,0 +1,73 @@
+.TH "clayer::analyser" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::analyser \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBParser\fP"
+.br
+.RI "\fIParses a log file into log records and also provides a set of states if required\&. \fP"
+.ti -1c
+.RI "class \fBDomainStat\fP"
+.br
+.RI "\fIThis is a class that provides querying functionalities on \fBLogRecord\fP objects\&. We construct a \fBDomainStat\fP object based on a series of log_properties, taken in template arguments and group by the \fBLogRecord\fP objects based on such log_properties\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::vector< float > \fBget_numbers\fP (const std::string &line, const int maxtokens=100)"
+.br
+.RI "\fIParse a string and given the maximum number of tokens, return a vector containing all the numbers inside that line\&. \fP"
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &s, auto stat)"
+.br
+.RI "\fIStream out operator overwrite to allow convinent extraction of the result that \fBDomainStat\fP obtained from its analysis\&. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "std::vector<float> clayer::analyser::get_numbers (const std::string &line, const intmaxtokens = \fC100\fP)"
+
+.PP
+Parse a string and given the maximum number of tokens, return a vector containing all the numbers inside that line\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIline\fP The string we want the function to parse\&.
+.br
+\fImaxtoken\fP Maximum number of tokens to parse\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a vector containing float numbers extracted from line\&. 
+.RE
+.PP
+
+.SS "std::ostream& clayer::analyser::operator<< (std::ostream &s, autostat)"
+
+.PP
+Stream out operator overwrite to allow convinent extraction of the result that \fBDomainStat\fP obtained from its analysis\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP An std::ostream typed stream object to print to
+.br
+\fIstat\fP A \fBDomainStat\fP object to print\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+std::ostream object that the function takes in\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

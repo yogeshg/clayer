@@ -1,0 +1,151 @@
+.TH "clayer::LogRecord" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::LogRecord \- 
+.PP
+Each line in a log file can be considered a Log Record\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <property\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBState\fP = std::pair< \fBCodeContext\fP, \fBRunContext\fP >"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLogRecord\fP ()=default"
+.br
+.RI "\fIdefault constructs all the members \fP"
+.ti -1c
+.RI "\fBState\fP \fBget_state\fP ()"
+.br
+.RI "\fInumbers in the message of the log record \fP"
+.ti -1c
+.RI "decltype(auto) \fBtie\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBCodeContext\fP \fBcode\fP"
+.br
+.ti -1c
+.RI "\fBRunContext\fP \fBrun\fP"
+.br
+.RI "\fICode Context of the log record\&. \fP"
+.ti -1c
+.RI "std::string \fBmessage\fP"
+.br
+.RI "\fIRun Context of the log record\&. \fP"
+.ti -1c
+.RI "std::vector< float > \fBnumbers\fP"
+.br
+.RI "\fImessage of the log record \fP"
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &s, const \fBLogRecord\fP &c)"
+.br
+.RI "\fIprints \fBLogRecord\fP c to an out-stream ss \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Each line in a log file can be considered a Log Record\&. 
+
+Object of this class contains all the information that can be retrieved from a log 
+.SH "Member Typedef Documentation"
+.PP 
+.SS "using \fBclayer::LogRecord::State\fP =  std::pair<\fBCodeContext\fP, \fBRunContext\fP>"
+
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "clayer::LogRecord::LogRecord ()\fC [default]\fP"
+
+.PP
+default constructs all the members 
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBState\fP clayer::LogRecord::get_state ()\fC [inline]\fP"
+
+.PP
+numbers in the message of the log record State of a log record is something that which you can use to 'Group By' 
+.PP
+\fBReturns:\fP
+.RS 4
+the state of a log record 
+.RE
+.PP
+\fBSee Also:\fP
+.RS 4
+typename \fBState\fP 
+.RE
+.PP
+
+.SS "decltype(auto) clayer::LogRecord::tie () const\fC [inline]\fP"
+This returns a serialisable representation 
+.PP
+\fBReturns:\fP
+.RS 4
+a tuple of code context and run context 
+.RE
+.PP
+
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "std::ostream& operator<< (std::ostream &s, const \fBLogRecord\fP &c)\fC [friend]\fP"
+
+.PP
+prints \fBLogRecord\fP c to an out-stream ss 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIss\fP reference to a stream to which c should be printed 
+.br
+\fIc\fP \fBLogRecord\fP to be printed to the stream 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+reference to the stream to which c was printed
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIos\fP outstream to stream to 
+.br
+\fIlr\fP log record to stream 
+.RE
+.PP
+
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBCodeContext\fP clayer::LogRecord::code"
+
+.SS "std::string clayer::LogRecord::message"
+
+.PP
+Run Context of the log record\&. 
+.SS "std::vector<float> clayer::LogRecord::numbers"
+
+.PP
+message of the log record 
+.SS "\fBRunContext\fP clayer::LogRecord::run"
+
+.PP
+Code Context of the log record\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

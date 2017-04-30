@@ -1,0 +1,58 @@
+.TH "clayer::util::VectorStat< T >" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::util::VectorStat< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <util\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVectorStat\fP (T p=1, int oc=100, float of=0\&.1)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (std::vector< T > records)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< int, \fBStat\fP< T > > \fBstats\fP"
+.br
+.ti -1c
+.RI "const T \fBprecision\fP"
+.br
+.ti -1c
+.RI "int \fBoutlier_count\fP"
+.br
+.ti -1c
+.RI "float \fBoutlier_fraction\fP"
+.br
+.in -1c
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBclayer::util::VectorStat\fP< T >::\fBVectorStat\fP (Tp = \fC1\fP, intoc = \fC100\fP, floatof = \fC0\&.1\fP)\fC [inline]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBclayer::util::VectorStat\fP< T >::add (std::vector< T >records)\fC [inline]\fP"
+
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T > int \fBclayer::util::VectorStat\fP< T >::outlier_count"
+
+.SS "template<typename T > float \fBclayer::util::VectorStat\fP< T >::outlier_fraction"
+
+.SS "template<typename T > const T \fBclayer::util::VectorStat\fP< T >::precision"
+
+.SS "template<typename T > std::map<int, \fBStat\fP<T> > \fBclayer::util::VectorStat\fP< T >::stats"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

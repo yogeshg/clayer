@@ -7,10 +7,32 @@
 
 var indexSectionsWithContent =
 {
+  0: "abcdefghilmnoprstuvw~",
+  1: "cdflnprstv",
+  2: "clt",
+  3: "alptu",
+  4: "abcdglmoprstvw~",
+  5: "bcdfhilmnoprst",
+  6: "bfmps",
+  7: "ls",
+  8: "cdefhilmnptw",
+  9: "o",
+  10: "cl"
 };
 
 var indexSectionNames =
 {
+  0: "all",
+  1: "classes",
+  2: "namespaces",
+  3: "files",
+  4: "functions",
+  5: "variables",
+  6: "typedefs",
+  7: "enums",
+  8: "enumvalues",
+  9: "related",
+  10: "defines"
 };
 
 function convertToId(search)
@@ -20,7 +42,7 @@ function convertToId(search)
   {
     var c = search.charAt(i);
     var cn = c.charCodeAt(0);
-    if (c.match(/[a-z0-9]/))
+    if (c.match(/[a-z0-9\u0080-\uFFFF]/))
     {
       result+=c;
     }
@@ -325,22 +347,20 @@ function SearchBox(name, resultsPath, inFrame, label)
     var searchValue = this.DOMSearchField().value.replace(/^ +/, "");
 
     var code = searchValue.toLowerCase().charCodeAt(0);
-    var hexCode;
-    if (code<16) 
+    var idxChar = searchValue.substr(0, 1).toLowerCase();
+    if ( 0xD800 <= code && code <= 0xDBFF && searchValue > 1) // surrogate pair
     {
-      hexCode="0"+code.toString(16);
-    }
-    else 
-    {
-      hexCode=code.toString(16);
+      idxChar = searchValue.substr(0, 2);
     }
 
     var resultsPage;
     var resultsPageWithSearch;
     var hasResultsPage;
 
-    if (indexSectionsWithContent[this.searchIndex].charAt(code) == '1')
+    var idx = indexSectionsWithContent[this.searchIndex].indexOf(idxChar);
+    if (idx!=-1)
     {
+       var hexCode=idx.toString(16);
        resultsPage = this.resultsPath + '/' + indexSectionNames[this.searchIndex] + '_' + hexCode + '.html';
        resultsPageWithSearch = resultsPage+'?'+escape(searchValue);
        hasResultsPage = true;

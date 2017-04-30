@@ -1,0 +1,63 @@
+.TH "clayer::analyser::Parser" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::analyser::Parser \- 
+.PP
+Parses a log file into log records and also provides a set of states if required\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <analyser\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<log_properties\&.\&.\&. I> const std::vector< \fBLogRecord\fP > & \fBread_file\fP (std::string filename, std::regex log_format)"
+.br
+.RI "\fIReads log properties from a file according to the log format regex supplied\&. \fP"
+.ti -1c
+.RI "std::set< \fBLogRecord::State\fP > \fBget_states\fP ()"
+.br
+.RI "\fIcreates a set of states identified in the log records \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Parses a log file into log records and also provides a set of states if required\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "std::set<\fBLogRecord::State\fP> clayer::analyser::Parser::get_states ()\fC [inline]\fP"
+
+.PP
+creates a set of states identified in the log records 
+.PP
+\fBReturns:\fP
+.RS 4
+the set thus created 
+.RE
+.PP
+
+.SS "template<log_properties\&.\&.\&. I> const std::vector<\fBLogRecord\fP>& clayer::analyser::Parser::read_file (std::stringfilename, std::regexlog_format)\fC [inline]\fP"
+
+.PP
+Reads log properties from a file according to the log format regex supplied\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilename\fP name of the file to read from 
+.br
+\fIlog_format\fP the regular expression to match the line with; it should contain as many matching groups (excluding the default group) as there are properties in the template argument; each group will be parsed into the respective property 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+const reference to the records thus read 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

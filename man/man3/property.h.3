@@ -1,0 +1,161 @@
+.TH "/home/travis/build/yogeshg/clayer/include/property.h" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/home/travis/build/yogeshg/clayer/include/property.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <iostream>\fP
+.br
+\fC#include <regex>\fP
+.br
+\fC#include <set>\fP
+.br
+\fC#include <sstream>\fP
+.br
+\fC#include <tuple>\fP
+.br
+\fC#include 'util\&.h'\fP
+.br
+
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBclayer::CodeContext\fP"
+.br
+.RI "\fILog properties that can be inferred from code\&. \fP"
+.ti -1c
+.RI "struct \fBclayer::RunContext\fP"
+.br
+.RI "\fILog properties that are inferred when the code is run \&. \fP"
+.ti -1c
+.RI "class \fBclayer::LogRecord\fP"
+.br
+.RI "\fIEach line in a log file can be considered a Log Record\&. \fP"
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBclayer\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBclayer::log_properties\fP { \fBclayer::FILE\fP, \fBclayer::FUNC\fP, \fBclayer::LEVEL\fP, \fBclayer::LINE\fP, \fBclayer::DATE\fP, \fBclayer::TIME\fP, \fBclayer::THREAD\fP, \fBclayer::HASH\fP, \fBclayer::MESG\fP }"
+.br
+.RI "\fI[items that are contained in a log record] \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::ostream & \fBclayer::operator<<\fP (std::ostream &ss, const CodeContext &c)"
+.br
+.RI "\fIprints \fBCodeContext\fP c to an out-stream ss \fP"
+.ti -1c
+.RI "std::ostream & \fBclayer::operator<<\fP (std::ostream &ss, const RunContext &r)"
+.br
+.RI "\fIprints \fBRunContext\fP c to an out-stream ss \fP"
+.ti -1c
+.RI "template<log_properties N> void \fBclayer::read_prop\fP (LogRecord &p, const std::string &s)"
+.br
+.RI "\fIreads the property (on which the function is templates) into a log record p from a string s \fP"
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< FILE >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< FUNC >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< LEVEL >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< LINE >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< HASH >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< DATE >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< TIME >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< THREAD >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBclayer::read_prop< MESG >\fP (LogRecord &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<StringRef PS> void \fBclayer::read_props\fP (LogRecord &p, PS)"
+.br
+.ti -1c
+.RI "template<StringRef PS, log_properties head, log_properties\&.\&.\&. I> void \fBclayer::read_props\fP (LogRecord &p, PS ps)"
+.br
+.ti -1c
+.RI "template<log_properties\&.\&.\&. I> void \fBclayer::parse_props\fP (LogRecord &p, std::string &line, std::regex format_regex=std::regex('(\&.*)\\\\((\&.*):(\&.*)\\\\):(\&.*)'))"
+.br
+.RI "\fIreads all the properties into a log record p from a string s \fP"
+.ti -1c
+.RI "template<log_properties prop> decltype(auto) \fBclayer::get_prop\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< FILE >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< FUNC >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< LEVEL >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< LINE >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< DATE >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< TIME >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBclayer::get_prop< THREAD >\fP (const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<typename T  = void> std::ostream & \fBclayer::get_props\fP (std::ostream &, const LogRecord &)"
+.br
+.RI "\fIgets all the properties from a log record p and streams to an outstream \fP"
+.ti -1c
+.RI "template<> std::ostream & \fBclayer::get_props\fP (std::ostream &os, const LogRecord &rec)"
+.br
+.ti -1c
+.RI "template<log_properties head, log_properties\&.\&.\&. I> std::ostream & \fBclayer::get_props\fP (std::ostream &os, const LogRecord &rec)"
+.br
+.RI "\fIgets all the properties from a log record p and streams to an outstream \fP"
+.ti -1c
+.RI "std::ostream & \fBclayer::operator<<\fP (std::ostream &os, const LogRecord &lr)"
+.br
+.RI "\fIstreams a log record to an outstream \fP"
+.ti -1c
+.RI "std::ostream & \fBclayer::operator<<\fP (std::ostream &os, const std::pair< CodeContext, RunContext > &p)"
+.br
+.RI "\fIstreams the state of a log record to an outstream \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > concept bool \fBclayer::Streamable\fP"
+.br
+.ti -1c
+.RI "template<typename T > concept bool \fBclayer::StringRef\fP"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

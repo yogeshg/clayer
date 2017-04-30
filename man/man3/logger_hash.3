@@ -1,0 +1,41 @@
+.TH "logger::hash" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::hash \- 
+.PP
+Functionality related to specifying if a component of a log message should influence the hash of the message or not\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBFlag\fP"
+.br
+.RI "\fITemplate class for template overloading hash settings in logger stream operators\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const \fBFlag\fP< true > & \fBon\fP = \fBFlag\fP<true>::inst"
+.br
+.ti -1c
+.RI "const \fBFlag\fP< false > & \fBoff\fP = \fBFlag\fP<false>::inst"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functionality related to specifying if a component of a log message should influence the hash of the message or not\&. 
+.SH "Variable Documentation"
+.PP 
+.SS "const \fBFlag\fP<false>& logger::hash::off = \fBFlag\fP<false>::inst"
+
+.SS "const \fBFlag\fP<true>& logger::hash::on = \fBFlag\fP<true>::inst"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

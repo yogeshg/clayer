@@ -1,0 +1,62 @@
+.TH "clayer::util" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer::util \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBStat\fP"
+.br
+.ti -1c
+.RI "class \fBVectorStat\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<class Tuple , std::size_t N> std::ostream & \fBto_string\fP (std::ostream &ss, const Tuple &t, const std::string sep=',')"
+.br
+.ti -1c
+.RI "template<class Tuple , std::size_t N, typename std::enable_if<(N >  = 2> std::ostream & \fBto_string\fP (std::ostream &ss, const Tuple &t, const std::string sep=',')"
+.br
+.ti -1c
+.RI "template<class\&.\&.\&. Args> std::ostream & \fBto_string\fP (std::ostream &ss, const std::tuple< Args\&.\&.\&.> &t, const std::string sep=',', const std::string st='(', const std::string end=')')"
+.br
+.ti -1c
+.RI "template<typename T , typename U > std::ostream & \fBto_string\fP (std::ostream &os, std::pair< T, U > p)"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBto_string\fP (std::ostream &os, T begin, T end, const std::string sep=',', const std::string start='(', const std::string stop=')')"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBoperator<<\fP (std::ostream &s, \fBStat\fP< T > stat)"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBoperator<<\fP (std::ostream &os, \fBVectorStat\fP< T > vector_stat)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "template<typename T > std::ostream& clayer::util::operator<< (std::ostream &s, Stat< T >stat)"
+
+.SS "template<typename T > std::ostream& clayer::util::operator<< (std::ostream &os, VectorStat< T >vector_stat)"
+
+.SS "template<class Tuple , std::size_t N> std::ostream& clayer::util::to_string (std::ostream &ss, const Tuple &t, const std::stringsep = \fC','\fP)"
+
+.SS "template<class Tuple , std::size_t N, typename std::enable_if<(N >  = 2> std::ostream& clayer::util::to_string (std::ostream &ss, const Tuple &t, const std::stringsep = \fC','\fP)"
+
+.SS "template<class\&.\&.\&. Args> std::ostream& clayer::util::to_string (std::ostream &ss, const std::tuple< Args\&.\&.\&.> &t, const std::stringsep = \fC','\fP, const std::stringst = \fC'('\fP, const std::stringend = \fC')'\fP)"
+
+.SS "template<typename T , typename U > std::ostream& clayer::util::to_string (std::ostream &os, std::pair< T, U >p)"
+
+.SS "template<typename T > std::ostream& clayer::util::to_string (std::ostream &os, Tbegin, Tend, const std::stringsep = \fC','\fP, const std::stringstart = \fC'('\fP, const std::stringstop = \fC')'\fP)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

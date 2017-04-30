@@ -1,0 +1,377 @@
+.TH "clayer" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+clayer \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBanalyser\fP"
+.br
+.ti -1c
+.RI "\fButil\fP"
+.br
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBCodeContext\fP"
+.br
+.RI "\fILog properties that can be inferred from code\&. \fP"
+.ti -1c
+.RI "struct \fBRunContext\fP"
+.br
+.RI "\fILog properties that are inferred when the code is run \&. \fP"
+.ti -1c
+.RI "class \fBLogRecord\fP"
+.br
+.RI "\fIEach line in a log file can be considered a Log Record\&. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBlog_properties\fP { \fBFILE\fP, \fBFUNC\fP, \fBLEVEL\fP, \fBLINE\fP, \fBDATE\fP, \fBTIME\fP, \fBTHREAD\fP, \fBHASH\fP, \fBMESG\fP }"
+.br
+.RI "\fI[items that are contained in a log record] \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &ss, const \fBCodeContext\fP &c)"
+.br
+.RI "\fIprints \fBCodeContext\fP c to an out-stream ss \fP"
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &ss, const \fBRunContext\fP &r)"
+.br
+.RI "\fIprints \fBRunContext\fP c to an out-stream ss \fP"
+.ti -1c
+.RI "template<log_properties N> void \fBread_prop\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.RI "\fIreads the property (on which the function is templates) into a log record p from a string s \fP"
+.ti -1c
+.RI "template<> void \fBread_prop< FILE >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< FUNC >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< LEVEL >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< LINE >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< HASH >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< DATE >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< TIME >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< THREAD >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<> void \fBread_prop< MESG >\fP (\fBLogRecord\fP &p, const std::string &s)"
+.br
+.ti -1c
+.RI "template<StringRef PS> void \fBread_props\fP (\fBLogRecord\fP &p, PS)"
+.br
+.ti -1c
+.RI "template<StringRef PS, log_properties head, log_properties\&.\&.\&. I> void \fBread_props\fP (\fBLogRecord\fP &p, PS ps)"
+.br
+.ti -1c
+.RI "template<log_properties\&.\&.\&. I> void \fBparse_props\fP (\fBLogRecord\fP &p, std::string &line, std::regex format_regex=std::regex('(\&.*)\\\\((\&.*):(\&.*)\\\\):(\&.*)'))"
+.br
+.RI "\fIreads all the properties into a log record p from a string s \fP"
+.ti -1c
+.RI "template<log_properties prop> decltype(auto) \fBget_prop\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< FILE >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< FUNC >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< LEVEL >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< LINE >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< DATE >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< TIME >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<> decltype(auto) \fBget_prop< THREAD >\fP (const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<typename T  = void> std::ostream & \fBget_props\fP (std::ostream &, const \fBLogRecord\fP &)"
+.br
+.RI "\fIgets all the properties from a log record p and streams to an outstream \fP"
+.ti -1c
+.RI "template<> std::ostream & \fBget_props\fP (std::ostream &os, const \fBLogRecord\fP &rec)"
+.br
+.ti -1c
+.RI "template<log_properties head, log_properties\&.\&.\&. I> std::ostream & \fBget_props\fP (std::ostream &os, const \fBLogRecord\fP &rec)"
+.br
+.RI "\fIgets all the properties from a log record p and streams to an outstream \fP"
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBLogRecord\fP &lr)"
+.br
+.RI "\fIstreams a log record to an outstream \fP"
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const std::pair< \fBCodeContext\fP, \fBRunContext\fP > &p)"
+.br
+.RI "\fIstreams the state of a log record to an outstream \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > concept bool \fBStreamable\fP"
+.br
+.ti -1c
+.RI "template<typename T > concept bool \fBStringRef\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class and function definitions to perform analysis on raw logging output
+.PP
+Classes and functions useful for Log Properties 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBclayer::log_properties\fP"
+
+.PP
+[items that are contained in a log record] 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIFILE \fP\fP
+.TP
+\fB\fIFUNC \fP\fP
+File name (\fBCodeContext\fP) 
+.TP
+\fB\fILEVEL \fP\fP
+Function name (\fBCodeContext\fP) 
+.TP
+\fB\fILINE \fP\fP
+Severity level name (\fBCodeContext\fP) 
+.TP
+\fB\fIDATE \fP\fP
+Line number (\fBCodeContext\fP) 
+.TP
+\fB\fITIME \fP\fP
+Date on which a Log Record is created (\fBRunContext\fP) 
+.TP
+\fB\fITHREAD \fP\fP
+Time at which a Log Record is created (\fBRunContext\fP) 
+.TP
+\fB\fIHASH \fP\fP
+Thread in which a \fBLogRecord\fP is created (\fBRunContext\fP) 
+.TP
+\fB\fIMESG \fP\fP
+Added by the user\&. 
+.SH "Function Documentation"
+.PP 
+.SS "template<log_properties prop> decltype(auto) clayer::get_prop (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBDATE\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBFILE\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBFUNC\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBLEVEL\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBLINE\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBTHREAD\fP > (const LogRecord &rec)"
+
+.SS "template<> decltype(auto) \fBclayer::get_prop\fP< \fBTIME\fP > (const LogRecord &rec)"
+
+.SS "template<typename T  = void> std::ostream& clayer::get_props (std::ostream &os, const LogRecord &rec)"
+
+.PP
+gets all the properties from a log record p and streams to an outstream reads only the properties on which the function is templates and in the order that the template appears in
+.PP
+\fBParameters:\fP
+.RS 4
+\fIos\fP outstream to stream to 
+.br
+\fIrec\fP log record to get from 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+outstream that has been written to 
+.RE
+.PP
+
+.SS "template<> std::ostream& clayer::get_props (std::ostream &os, const LogRecord &rec)"
+
+.SS "template<log_properties head, log_properties\&.\&.\&. I> std::ostream& clayer::get_props (std::ostream &os, const LogRecord &rec)"
+
+.PP
+gets all the properties from a log record p and streams to an outstream reads only the properties on which the function is templates and in the order that the template appears in
+.PP
+\fBParameters:\fP
+.RS 4
+\fIos\fP outstream to stream to 
+.br
+\fIrec\fP log record to get from 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+outstream that has been written to 
+.RE
+.PP
+
+.SS "std::ostream& clayer::operator<< (std::ostream &ss, const CodeContext &c)"
+
+.PP
+prints \fBCodeContext\fP c to an out-stream ss 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIss\fP reference to a stream to which c should be printed 
+.br
+\fIc\fP \fBCodeContext\fP to be printed to the stream 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+reference to the stream to which c was printed 
+.RE
+.PP
+
+.SS "std::ostream& clayer::operator<< (std::ostream &ss, const RunContext &r)"
+
+.PP
+prints \fBRunContext\fP c to an out-stream ss 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIss\fP reference to a stream to which c should be printed 
+.br
+\fIc\fP \fBRunContext\fP to be printed to the stream 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+reference to the stream to which c was printed 
+.RE
+.PP
+
+.SS "std::ostream& clayer::operator<< (std::ostream &os, const LogRecord &lr)"
+
+.PP
+streams a log record to an outstream prints \fBLogRecord\fP c to an out-stream ss
+.PP
+\fBParameters:\fP
+.RS 4
+\fIos\fP outstream to stream to 
+.br
+\fIlr\fP log record to stream 
+.RE
+.PP
+
+.SS "std::ostream& clayer::operator<< (std::ostream &os, const std::pair< CodeContext, RunContext > &p)"
+
+.PP
+streams the state of a log record to an outstream 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIos\fP outstream to stream to 
+.br
+\fIp\fP state of a log record 
+.RE
+.PP
+
+.SS "template<log_properties\&.\&.\&. I> void clayer::parse_props (LogRecord &p, std::string &line, std::regexformat_regex = \fCstd::regex('(\&.*)\\\\((\&.*):(\&.*)\\\\):(\&.*)')\fP)"
+
+.PP
+reads all the properties into a log record p from a string s reads only the properties on which the function is templates and in the order that the template appears in
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp\fP log record to read into 
+.br
+\fIs\fP string to read from 
+.br
+\fIformat_regex\fP the regular expression to match the line with; it should contain as many matching groups (excluding the default group) as there are properties in the template argument; each group will be parsed into the respective property 
+.RE
+.PP
+
+.SS "template<log_properties N> void clayer::read_prop (LogRecord &p, const std::string &s)"
+
+.PP
+reads the property (on which the function is templates) into a log record p from a string s 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp\fP log record to read into 
+.br
+\fIs\fP string to read from 
+.RE
+.PP
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBDATE\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBFILE\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBFUNC\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBHASH\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBLEVEL\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBLINE\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBMESG\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBTHREAD\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<> void \fBclayer::read_prop\fP< \fBTIME\fP > (LogRecord &p, const std::string &s)"
+
+.SS "template<StringRef PS> void clayer::read_props (LogRecord &p, PS)"
+
+.SS "template<StringRef PS, log_properties head, log_properties\&.\&.\&. I> void clayer::read_props (LogRecord &p, PSps)"
+
+.SH "Variable Documentation"
+.PP 
+.SS "template<typename T > concept bool clayer::Streamable"
+\fBInitial value:\fP
+.PP
+.nf
+= requires(T o, std::ostream &s) {
+  { s << o } -> std::ostream &;
+}
+.fi
+.SS "template<typename T > concept bool clayer::StringRef"
+\fBInitial value:\fP
+.PP
+.nf
+= requires(T o) {
+  { *o } -> std::string;
+}
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

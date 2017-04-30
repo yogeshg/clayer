@@ -1,0 +1,110 @@
+.TH "logger::Record< fmt, Stream, props >" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::Record< fmt, Stream, props > \- 
+.PP
+A catch-all class for storing a log line record and printing it according to a format\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRecord\fP (\fBStream\fP &s, \fBContextInfo\fP input_info, std::mutex &mutex, \fBFilter\fP filter)"
+.br
+.RI "\fIConstructs a \fBRecord\fP from relevant information\&. \fP"
+.ti -1c
+.RI "\fB~Record\fP ()"
+.br
+.RI "\fILocks the stream mutex and dumps the local buffer to the stream, after applying the final filter\&. In the class's standard usage, Records live only as rvalues without any names, so that they're destroyed at the end of the log statement\&. \fP"
+.ti -1c
+.RI "template<Streamable S> \fBRecord\fP & \fBoperator<<\fP (const S &s)"
+.br
+.RI "\fIStream an object to the local buffer\&. Accepts anything a stringstream would accept\&. Also modifies the hash identifier if the option is enabled\&. \fP"
+.ti -1c
+.RI "template<bool Val> \fBRecord\fP & \fBoperator<<\fP (const \fBhash::Flag\fP< Val > &s)"
+.br
+.RI "\fISet the flag that determines whether or not subsequent objects to be streamed should influence the hash or not\&. Similar to std::hex\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<const char * fmt, typename Stream, Prop< Stream >\&.\&.\&. props>class logger::Record< fmt, Stream, props >"
+A catch-all class for storing a log line record and printing it according to a format\&. 
+
+The cornerstone of the logging library\&. This class takes contextual information about a log call, along with auxiliary structures like a mutex and a filter, and provides a way to stream message data to the log\&. When its time comes (at the end of the logging command, if used properly), it'll flush its local buffer into the stream passed to it\&.
+.PP
+\fBRemarks:\fP
+.RS 4
+This hints at why Prop must be a type alias instead of a concept\&. \fBRecord\fP takes in instances of Prop as template parameters, and there's no way to take in instances of variable types as template parameters (no template for template parameters) as of yet (If Prop were a concept, props would have to be a list of types)\&. A similar problem necessitates puting Stream as an explicit template parameter\&. This would be resolved by a proposal approved for C++17 to be implemented in GCC 7 [1]\&.
+.RE
+.PP
+[1] www\&.open-std\&.org/jtc1/sc22/wg21/docs/papers/2016/p0127r1\&.html 
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<const char * fmt, typename Stream , Prop< Stream >\&.\&.\&. props> \fBlogger::Record\fP< fmt, \fBStream\fP, props >::\fBRecord\fP (\fBStream\fP &s, \fBContextInfo\fPinput_info, std::mutex &mutex, \fBFilter\fPfilter)\fC [inline]\fP"
+
+.PP
+Constructs a \fBRecord\fP from relevant information\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP the destination to which to stream the record output\&. 
+.br
+\fIinput_info\fP the contextual information about the log command\&. 
+.br
+\fImutex\fP the lock to control synchronization to the output stream\&. 
+.br
+\fIfilter\fP the post-processing filter for the log message\&. 
+.RE
+.PP
+
+.SS "template<const char * fmt, typename Stream , Prop< Stream >\&.\&.\&. props> \fBlogger::Record\fP< fmt, \fBStream\fP, props >::~\fBRecord\fP ()\fC [inline]\fP"
+
+.PP
+Locks the stream mutex and dumps the local buffer to the stream, after applying the final filter\&. In the class's standard usage, Records live only as rvalues without any names, so that they're destroyed at the end of the log statement\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<const char * fmt, typename Stream , Prop< Stream >\&.\&.\&. props> template<Streamable S> \fBRecord\fP& \fBlogger::Record\fP< fmt, \fBStream\fP, props >::operator<< (const S &s)\fC [inline]\fP"
+
+.PP
+Stream an object to the local buffer\&. Accepts anything a stringstream would accept\&. Also modifies the hash identifier if the option is enabled\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP The object to be streamed\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The same record, for stringing stream commands\&. 
+.RE
+.PP
+
+.SS "template<const char * fmt, typename Stream , Prop< Stream >\&.\&.\&. props> template<bool Val> \fBRecord\fP& \fBlogger::Record\fP< fmt, \fBStream\fP, props >::operator<< (const \fBhash::Flag\fP< Val > &s)\fC [inline]\fP"
+
+.PP
+Set the flag that determines whether or not subsequent objects to be streamed should influence the hash or not\&. Similar to std::hex\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Either \fBhash::on\fP or \fBhash::off\fP; they're the only instances of types matching this overload\&.
+.RE
+.PP
+\fBLOG(DEBUG)\fP << \fBhash::on\fP << 'Hey'; 
+.PP
+\fBReturns:\fP
+.RS 4
+The same record, for stringing stream commands\&. 
+.RE
+.PP
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

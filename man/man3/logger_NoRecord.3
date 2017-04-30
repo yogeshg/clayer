@@ -1,0 +1,31 @@
+.TH "logger::NoRecord" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::NoRecord \- 
+.PP
+A record that eats and throws away objects streamed to it\&. Used for compile-time filtering\&. Can also be used as a no-op streamer\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > \fBNoRecord\fP & \fBoperator<<\fP (const T &s)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A record that eats and throws away objects streamed to it\&. Used for compile-time filtering\&. Can also be used as a no-op streamer\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > \fBNoRecord\fP& logger::NoRecord::operator<< (const T &s)\fC [inline]\fP"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.

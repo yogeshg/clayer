@@ -1,0 +1,46 @@
+.TH "logger::ContextInfo" 3 "Sun Apr 30 2017" "Clayer" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+logger::ContextInfo \- 
+.PP
+A plain-old-data container for the fixed code context of a log record\&. Necessary to propagate context information from the predefined macros\&. Auxiliary, short-lived class with life-time the duration of the log command\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <logger\&.h>\fP
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBfile\fP"
+.br
+.ti -1c
+.RI "const char * \fBfn\fP"
+.br
+.ti -1c
+.RI "int \fBline\fP"
+.br
+.ti -1c
+.RI "int \fBlevel\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A plain-old-data container for the fixed code context of a log record\&. Necessary to propagate context information from the predefined macros\&. Auxiliary, short-lived class with life-time the duration of the log command\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "const char* logger::ContextInfo::file"
+
+.SS "const char* logger::ContextInfo::fn"
+
+.SS "int logger::ContextInfo::level"
+
+.SS "int logger::ContextInfo::line"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Clayer from the source code\&.
