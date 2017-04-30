@@ -1,0 +1,36 @@
+# This will run on Travis' 'new' container-based infrastructure
+sudo: required
+dist: trusty
+
+# Environment variables
+env:
+  global:
+    - GH_REPO_NAME: clayer
+    - DOXYFILE: $TRAVIS_BUILD_DIR/Doxyfile
+    - GH_REPO_REF: github.com/yogeshg/clayer.git
+
+# Install dependencies
+addons:
+  apt:
+    sources:
+      ubuntu-toolchain-r-test
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+      - g++-6
+      - gcc-6
+
+# Build your code e.g. by calling make
+script:
+  - sudo rm -rf /usr/bin/g++
+  - sudo ln -s /usr/bin/g++-6 /usr/bin/g++
+  - make all
+
+# Generate and deploy documentation
+after_success:
+  - cd $TRAVIS_BUILD_DIR
+  - chmod +x genDocsAndDeploy.sh
+ # - ./genDocsAndDeploy.sh
