@@ -10,6 +10,7 @@
 #include <mutex>
 #include <type_traits>
 
+namespace clayer {
 namespace logger {
 
 /**
@@ -411,5 +412,5 @@ public:
   }
 };
 }
-
+}
 #endif /*__LOGGER_H__*/

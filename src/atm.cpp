@@ -4,6 +4,7 @@
 #include "logger.h"
 #include <unistd.h>
 
+using namespace clayer;
 
 const int iterations = 1000;
 void withdraw(int &account) {

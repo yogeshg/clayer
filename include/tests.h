@@ -10,7 +10,7 @@
 
 namespace test {
 // Logger related configuration below: custom properties and Logger
-using namespace logger;
+using namespace clayer::logger;
 
 enum Status { PASS, FAIL };
 
