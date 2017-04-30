@@ -27,13 +27,17 @@ addons:
 
 # Build your code e.g. by calling make
 script:
+
   - g++ --version
   - g++-6 --version
   - sudo rm -rf /usr/bin/g++
   - sudo ln -s /usr/bin/g++-6 /usr/bin/g++
   - make all
 
+
 # Generate and deploy documentation
 after_success:
   - cd $TRAVIS_BUILD_DIR
   - chmod +x genDocsAndDeploy.sh
+#  - ./genDocsAndDeploy.sh
+

@@ -1,3 +1,6 @@
+/**
+ * Performance test - multiple threads dumping log messages
+ */
 #include <thread>
 #include <vector>
 #include <utility>

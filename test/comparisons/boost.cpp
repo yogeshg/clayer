@@ -1,3 +1,7 @@
+/**
+ * Boost logger performance test - multiple threads dumping log messages. Need
+ * boost::log installed.
+ */
 #include <thread>
 #include <vector>
 #include <utility>
@@ -11,8 +15,9 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/support/date_time.hpp>
-const int iterations = 1000*50;
-const int thread_count = 1;
+
+const int iterations = 1000;
+const int thread_count = 50;
 void worker() {
   for (int i = 0; i < iterations; i++) {
     BOOST_LOG_TRIVIAL(debug) << "DEBUG message";
@@ -26,11 +31,13 @@ namespace expr = boost::log::expressions;
 int main(int, char*[])
 {
   using namespace boost::log;
-  /*boost::log::add_file_log(
+  /* not writing to file
+  boost::log::add_file_log(
       keywords::file_name = "boost.log",
       keywords::format = (expr::stream << expr::attr<unsigned int>("LineID")
                                        << ": <" << trivial::severity
-                                       << "> " << expr::smessage));*/
+                                       << "> " << expr::smessage));
+  */
 
   BOOST_LOG_TRIVIAL(info) << "Begin the performance test";
   std::vector<std::thread> worker_threads;
