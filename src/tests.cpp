@@ -21,7 +21,7 @@
  * Helper function for string tests.
  */
 static bool contains(std::string str, std::string substr) {
-    return str.find(substr)!=std::string::npos;
+  return str.find(substr) != std::string::npos;
 }
 
 namespace logger {

@@ -31,7 +31,7 @@ enum log_properties {
   LEVEL,          /// Severity level name (CodeContext)
   LINE,           /// Line number (CodeContext)
 
-// NAME
+  // NAME
   DATE,           /// Date on which a Log Record is created (RunContext)
   TIME,           /// Time at which a Log Record is created (RunContext)
   THREAD,         /// Thread in which a LogRecord is created (RunContext)
@@ -59,22 +59,23 @@ struct CodeContext {
 
   /**
    * @brief Constructs the members from explicitly given values
-   * 
+   *
    * @param a file name
    * @param b function name
    * @param c severity level
    * @param d line number
-   * @param e hash value of the log, typically xor of memory locations of records
+   * @param e hash value of the log, typically xor of memory locations of
+   * records
    */
   CodeContext(const std::string &a, const std::string &b, const std::string &c,
-            const int &d, const std::string &e)
+              const int &d, const std::string &e)
       : file(a), func(b), level(c), line(d), hash(e) {}
 
   /**
    * @brief Returns a tuple of all the members
    * @details This returns a serialisable representation that can be used to
    * print or order this class
-   * 
+   *
    * @returns a tuple with all the constituents
    */
   decltype(auto) tie() const { return std::tie(file, func, level, line, hash); }
@@ -83,7 +84,7 @@ struct CodeContext {
    * @brief Compares two CodeContext using their tuple representation
    * @details first compares file name, if same then compare function name,
    * if same then level and so on.
-   * 
+   *
    * @param rhs CodeContext to be compared with.
    * @return if the lhs is smaller than the rhs.
    */
@@ -92,7 +93,7 @@ struct CodeContext {
 
 /**
  * @brief prints CodeContext c to an out-stream ss
- * 
+ *
  * @param ss reference to a stream to which c should be printed
  * @param c CodeContext to be printed to the stream
  * @return reference to the stream to which c was printed
@@ -118,20 +119,19 @@ struct RunContext {
 
   /**
    * @brief Constructs the members from explicitly given values
-   * 
+   *
    * @param a date
    * @param b time
    * @param c thread identifier
-   */  
+   */
   RunContext(const std::string &a, const std::string &b, const std::string &c)
       : date(a), thread(b), time(c) {}
-
 
   /**
    * @brief Returns a tuple of all the members
    * @details This returns a serialisable representation that can be used to
    * print or order this class
-   * 
+   *
    * @returns a tuple with all the constituents
    */
   decltype(auto) tie() const { return std::tie(date, thread, time); }
@@ -140,17 +140,16 @@ struct RunContext {
    * @brief Compares two RunContext using their tuple representation
    * @details first compares date, if same then compare function thread,
    * if same then time.
-   * 
+   *
    * @param rhs RunContext to be compared with.
    * @return if the lhs is smaller than the rhs.
    */
   bool operator<(const RunContext &rhs) const { return tie() < rhs.tie(); }
 };
 
-
 /**
  * @brief prints RunContext c to an out-stream ss
- * 
+ *
  * @param ss reference to a stream to which c should be printed
  * @param c RunContext to be printed to the stream
  * @return reference to the stream to which c was printed
@@ -166,7 +165,6 @@ std::ostream &operator<<(std::ostream &ss, const RunContext &r) {
  */
 class LogRecord {
 public:
-
   using State = std::pair<CodeContext, RunContext>;
 
   /**
@@ -176,28 +174,27 @@ public:
 
   /**
    * @brief prints LogRecord c to an out-stream ss
-   * 
+   *
    * @param ss reference to a stream to which c should be printed
    * @param c LogRecord to be printed to the stream
    * @return reference to the stream to which c was printed
    */
   friend std::ostream &operator<<(std::ostream &s, const LogRecord &c);
 
-  CodeContext code;               /// Code Context of the log record
-  RunContext run;                 /// Run Context of the log record
-  std::string message;            /// message of the log record
-  std::vector<float> numbers;     /// numbers in the message of the log record
+  CodeContext code;           /// Code Context of the log record
+  RunContext run;             /// Run Context of the log record
+  std::string message;        /// message of the log record
+  std::vector<float> numbers; /// numbers in the message of the log record
 
   /**
-   * @brief State of a log record is something that which you can use to 'Group By'
+   * @brief State of a log record is something that which you can use to 'Group
+   * By'
    * @return the state of a log record
    * @see typename State
    */
   State get_state() { return std::make_pair(code, run); }
 
   // decltype(auto) tie() const { return std::tie(code, message); }
-
-
 
   /**
    * @details This returns a serialisable representation
@@ -214,7 +211,7 @@ private:
 /**
  * @brief reads the property (on which the function is templates) into
  * a log record p from a string s
- * 
+ *
  * @param p log record to read into
  * @param s string to read from
  */
@@ -269,7 +266,7 @@ void read_props(LogRecord &p, PS ps) {
  * @brief reads all the properties into a log record p from a string s
  * @details reads only the properties on which the function is templates
  * and in the order that the template appears in
- * 
+ *
  * @param p log record to read into
  * @param s string to read from
  * @param format_regex the regular expression to match the line with; it should
@@ -278,7 +275,8 @@ void read_props(LogRecord &p, PS ps) {
  * respective property
  */
 template <log_properties... I>
-void parse_props(LogRecord &p, std::string &line, 
+void parse_props(
+    LogRecord &p, std::string &line,
     std::regex format_regex = std::regex("(.*)\\((.*):(.*)\\):(.*)")) {
   std::smatch m;
   std::regex_match(line, m, format_regex);
@@ -286,52 +284,64 @@ void parse_props(LogRecord &p, std::string &line,
   read_props<std::smatch::iterator, I...>(p, m.begin() + 1);
 }
 
+// * LogRecord can be generated by a CodeContext - "Where", or a RunContext -
+// "When"
 
+template <log_properties prop> decltype(auto) get_prop(const LogRecord &rec);
 
-// * LogRecord can be generated by a CodeContext - "Where", or a RunContext - "When"
+template <> decltype(auto) get_prop<FILE>(const LogRecord &rec) {
+  return rec.code.file;
+}
+template <> decltype(auto) get_prop<FUNC>(const LogRecord &rec) {
+  return rec.code.func;
+}
+template <> decltype(auto) get_prop<LEVEL>(const LogRecord &rec) {
+  return rec.code.level;
+}
+template <> decltype(auto) get_prop<LINE>(const LogRecord &rec) {
+  return rec.code.line;
+}
+template <> decltype(auto) get_prop<DATE>(const LogRecord &rec) {
+  return rec.run.date;
+}
+template <> decltype(auto) get_prop<TIME>(const LogRecord &rec) {
+  return rec.run.time;
+}
+template <> decltype(auto) get_prop<THREAD>(const LogRecord &rec) {
+  return rec.run.thread;
+}
 
-template<log_properties prop> decltype(auto) get_prop(const LogRecord& rec);
+template <typename T = void>
+std::ostream &get_props(std::ostream &, const LogRecord &);
 
-template<> decltype(auto) get_prop<FILE>(const LogRecord& rec) {return rec.code.file;}
-template<> decltype(auto) get_prop<FUNC>(const LogRecord& rec) {return rec.code.func;}
-template<> decltype(auto) get_prop<LEVEL>(const LogRecord& rec) {return rec.code.level;}
-template<> decltype(auto) get_prop<LINE>(const LogRecord& rec) {return rec.code.line;}
-template<> decltype(auto) get_prop<DATE>(const LogRecord& rec) {return rec.run.date;}
-template<> decltype(auto) get_prop<TIME>(const LogRecord& rec) {return rec.run.time;}
-template<> decltype(auto) get_prop<THREAD>(const LogRecord& rec) {return rec.run.thread;}
-
-template<typename T = void>
-std::ostream&  get_props(std::ostream&, const LogRecord&);
-
-template<>
-std::ostream&  get_props<>(std::ostream& os, const LogRecord& rec){
-    return os;
+template <> std::ostream &get_props<>(std::ostream &os, const LogRecord &rec) {
+  return os;
 }
 
 /**
- * @brief gets all the properties from a log record p and streams to an outstream
+ * @brief gets all the properties from a log record p and streams to an
+ * outstream
  * @details reads only the properties on which the function is templates
  * and in the order that the template appears in
- * 
+ *
  * @param os outstream to stream to
  * @param rec log record to get from
  * @returns outstream that has been written to
  */
-template<log_properties head, log_properties... I>
-std::ostream&  get_props(std::ostream& os, const LogRecord& rec) {
-    os << get_prop<head>(rec)<<" ";
-    get_props<I...>(os, rec);
-    return os;
+template <log_properties head, log_properties... I>
+std::ostream &get_props(std::ostream &os, const LogRecord &rec) {
+  os << get_prop<head>(rec) << " ";
+  get_props<I...>(os, rec);
+  return os;
 }
 
 // std::ostream& get_props_test(std::ostream& os, const LogRecord& rec) {
 //   return get_props<FILE, FUNC>(os, rec);
 // }
 
-
 /**
  * @brief streams a log record to an outstream
- * 
+ *
  * @param os outstream to stream to
  * @param lr log record to stream
  */
@@ -341,12 +351,12 @@ std::ostream &operator<<(std::ostream &os, const LogRecord &lr) {
 
 /**
  * @brief streams the state of a log record to an outstream
- * 
+ *
  * @param os outstream to stream to
  * @param p state of a log record
  */
 std::ostream &operator<<(std::ostream &os,
-                          const std::pair<CodeContext, RunContext> &p){
+                         const std::pair<CodeContext, RunContext> &p) {
 
   return util::to_string(os, std::tuple<CodeContext, RunContext>(p));
 }

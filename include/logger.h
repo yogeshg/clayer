@@ -30,7 +30,6 @@ template <typename T> concept bool Streamable = requires(T o, std::ostream &s) {
   { s << o } -> std::ostream &;
 };
 
-
 /**
  * @brief A plain-old-data container for the fixed code context of a log record.
  * Necessary to propagate context information from the predefined macros.
@@ -112,8 +111,7 @@ template <typename Stream> void prop_msg(Stream &o, const Line &l) {
  * @brief A Prop that prints the hash identifier in hexadecimal of a log to a
  * log stream.
  */
-template <typename Stream>
-void prop_hash(Stream &o, const Line &l) {
+template <typename Stream> void prop_hash(Stream &o, const Line &l) {
   auto f = o.flags();
   o << std::hex << std::showbase << l.hash;
   o.flags(f);
@@ -145,27 +143,28 @@ template <typename Stream> void prop_line(Stream &o, const Line &l) {
  * should influence the hash of the message or not.
  */
 namespace hash {
-  /**
-   * @brief Template class for template overloading hash settings in logger
-   * stream operators.
-   * 
-   * @remark Private constructor so that only one instance of each class exists.
-   */
-  template <bool Val> class Flag {
-    Flag() {}
-  public:
-    const static Flag<Val> inst;
-  };
+/**
+ * @brief Template class for template overloading hash settings in logger
+ * stream operators.
+ *
+ * @remark Private constructor so that only one instance of each class exists.
+ */
+template <bool Val> class Flag {
+  Flag() {}
 
-  /**
-   * @brief Static singleton instances for the two boolean hash configuration
-   * states.
-   *
-   * @usage LOG(INFO) << hash::on << "Amount: " << hash::off << 20 << std::endl;
-   */
-  template <bool Val> const Flag<Val> Flag<Val>::inst;
-  const Flag<true> &on = Flag<true>::inst;
-  const Flag<false> &off = Flag<false>::inst;
+public:
+  const static Flag<Val> inst;
+};
+
+/**
+ * @brief Static singleton instances for the two boolean hash configuration
+ * states.
+ *
+ * @usage LOG(INFO) << hash::on << "Amount: " << hash::off << 20 << std::endl;
+ */
+template <bool Val> const Flag<Val> Flag<Val>::inst;
+const Flag<true> &on = Flag<true>::inst;
+const Flag<false> &off = Flag<false>::inst;
 }
 
 /**
@@ -242,9 +241,7 @@ class Record {
    * @param head The next Prop argument to print.
    * @param tail The remaining Prop arguments.
    */
-  inline void print_fmt() {
-    stream << format;
-  }
+  inline void print_fmt() { stream << format; }
 
   template <typename T, typename... Targs>
   inline void print_fmt(T head, Targs... tail) {
@@ -374,9 +371,7 @@ public:
    * @param A boolean function taking in a reference to a Line and outputting a
    * boolean, so it can modify and report whether to finally output or not.
    */
-  void set_filter(Filter f) {
-    filter = f;
-  }
+  void set_filter(Filter f) { filter = f; }
 
   /**
    * @brief Constructs a logging record from contextual information when the

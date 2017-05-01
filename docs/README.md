@@ -1,1 +1,1 @@
-Documentation is in javadoc format and in the logging code (see e.g. logger.h, logconfig.h). Doxygen wouldn't play nice given our unorthodox library structure.
+Documentation is in javadoc format and in the logging code (see e.g. logger.h, logconfig.h). It's also viewable on the `gh-pages` branch and in the wiki.
