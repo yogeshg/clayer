@@ -107,28 +107,28 @@ Generating code for file /home/travis/build/yogeshg/clayer/include/tests.h...
 Generating code for file /home/travis/build/yogeshg/clayer/include/util.h...
 Generating file documentation...
 Generating docs for file /home/travis/build/yogeshg/clayer/include/analyser.h...
-Generating docs fo/home/travis/build/yogeshg/clayer/include/property.h:152: warning: argument 'c' of command @param is not found in the argument list of clayer::operator<<(std::ostream &ss, const RunContext &r)
-/home/travis/build/yogeshg/clayer/include/property.h:152: warning: The following parameters of clayer::operator<<(std::ostream &ss, const RunContext &r) are not documented:
+Generating docs fo/home/travis/build/yogeshg/clayer/include/property.h:151: warning: argument 'c' of command @param is not found in the argument list of clayer::operator<<(std::ostream &ss, const RunContext &r)
+/home/travis/build/yogeshg/clayer/include/property.h:151: warning: The following parameters of clayer::operator<<(std::ostream &ss, const RunContext &r) are not documented:
   parameter 'r'
-/home/travis/build/yogeshg/clayer/include/property.h:271: warning: argument 's' of command @param is not found in the argument list of clayer::parse_props(LogRecord &p, std::string &line, std::regex format_regex=std::regex("(.*)\\((.*):(.*)\\):(.*)"))
-/home/travis/build/yogeshg/clayer/include/property.h:271: warning: The following parameters of clayer::parse_props(LogRecord &p, std::string &line, std::regex format_regex=std::regex("(.*)\\((.*):(.*)\\):(.*)")) are not documented:
+/home/travis/build/yogeshg/clayer/include/property.h:268: warning: argument 's' of command @param is not found in the argument list of clayer::parse_props(LogRecord &p, std::string &line, std::regex format_regex=std::regex("(.*)\\((.*):(.*)\\):(.*)"))
+/home/travis/build/yogeshg/clayer/include/property.h:268: warning: The following parameters of clayer::parse_props(LogRecord &p, std::string &line, std::regex format_regex=std::regex("(.*)\\((.*):(.*)\\):(.*)")) are not documented:
   parameter 'line'
-/home/travis/build/yogeshg/clayer/include/property.h:333: warning: argument 'ss' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
-/home/travis/build/yogeshg/clayer/include/property.h:333: warning: argument 'os' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
-/home/travis/build/yogeshg/clayer/include/property.h:333: warning: argument 'lr' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
-/home/travis/build/yogeshg/clayer/include/property.h:333: warning: The following parameters of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c) are not documented:
+/home/travis/build/yogeshg/clayer/include/property.h:343: warning: argument 'ss' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
+/home/travis/build/yogeshg/clayer/include/property.h:343: warning: argument 'os' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
+/home/travis/build/yogeshg/clayer/include/property.h:343: warning: argument 'lr' of command @param is not found in the argument list of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c)
+/home/travis/build/yogeshg/clayer/include/property.h:343: warning: The following parameters of clayer::LogRecord::operator<<(std::ostream &s, const LogRecord &c) are not documented:
   parameter 's'
 /home/travis/build/yogeshg/clayer/include/analyser.h:20: warning: argument 'maxtoken' of command @param is not found in the argument list of clayer::analyser::get_numbers(const std::string &line, const int maxtokens=100)
 /home/travis/build/yogeshg/clayer/include/analyser.h:20: warning: The following parameters of clayer::analyser::get_numbers(const std::string &line, const int maxtokens=100) are not documented:
   parameter 'maxtokens'
 /home/travis/build/yogeshg/clayer/include/logconfig.h:99: warning: Found unknown command `\usage'
 /home/travis/build/yogeshg/clayer/include/logconfig.h:88: warning: Found unknown command `\usage'
-/home/travis/build/yogeshg/clayer/include/logger.h:172: warning: Found unknown command `\detailed'
-/home/travis/build/yogeshg/clayer/include/logger.h:307: warning: Found unknown command `\usage'
-/home/travis/build/yogeshg/clayer/include/logger.h:372: warning: argument 'A' of command @param is not found in the argument list of logger::Logger< Stream, threshold, fmt, props >::set_filter(Filter f)
-/home/travis/build/yogeshg/clayer/include/logger.h:372: warning: The following parameters of logger::Logger::set_filter(Filter f) are not documented:
+/home/travis/build/yogeshg/clayer/include/logger.h:171: warning: Found unknown command `\detailed'
+/home/travis/build/yogeshg/clayer/include/logger.h:304: warning: Found unknown command `\usage'
+/home/travis/build/yogeshg/clayer/include/logger.h:369: warning: argument 'A' of command @param is not found in the argument list of logger::Logger< Stream, threshold, fmt, props >::set_filter(Filter f)
+/home/travis/build/yogeshg/clayer/include/logger.h:369: warning: The following parameters of logger::Logger::set_filter(Filter f) are not documented:
   parameter 'f'
-/home/travis/build/yogeshg/clayer/include/logger.h:161: warning: Found unknown command `\usage'
+/home/travis/build/yogeshg/clayer/include/logger.h:160: warning: Found unknown command `\usage'
 r file /home/travis/build/yogeshg/clayer/include/logconfig.h...
 Generating docs for file /home/travis/build/yogeshg/clayer/include/logger.h...
 Generating docs for file /home/travis/build/yogeshg/clayer/include/property.h...
